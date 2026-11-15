@@ -216,9 +216,9 @@ export const MyFarms: React.FC = () => {
   const farms: MyFarmRecord[] = useMemo(
     () =>
       rawFarms.map((rf) =>
-        buildAssessedFarmRecord(rf, fields, observations, tasks)
+        buildAssessedFarmRecord(rf, fields, observations, tasks, snapshots)
       ),
-    [rawFarms, fields, observations, tasks]
+    [rawFarms, fields, observations, tasks, snapshots]
   );
 
   // Sync active farm record to localStorage so Home, Header & Deep Analysis stay coherent

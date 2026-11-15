@@ -131,6 +131,7 @@ export interface SoilLandProfile {
   moistureDate: string;
   phStatus: SoilPhStatus;
   phValue: number | null;
+  bufferPh?: number | null;
   phTestDate: string;
   organicMatterPct: number | null;
   drainage: DrainageRate;
@@ -310,6 +311,7 @@ export interface SavedFarmSnapshot {
     phValue: number | null;
     mappedAreaHa: number;
   };
+  observations?: string[];
   recommendations: string[];
   report?: FarmAnalysisReport;
 }

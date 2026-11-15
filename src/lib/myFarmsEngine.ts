@@ -8,14 +8,17 @@ import lettuceImg from '../assets/images/crop_lettuce_1790789274802.jpg';
 import { findCropCatalogItem } from '../data/farmCropCatalog';
 import { AreaUnit, FarmProfile } from '../types/farm';
 import {
-  FarmObservationItem,
-  FarmTaskItem,
-  MyFarmAssessment,
   MyFarmRecord,
   PortfolioFieldRecord,
   PortfolioStatus,
   RotationCandidateOption,
 } from '../types/myFarms';
+import { daysSinceIso } from './snapshotAssessment';
+export {
+  buildAssessedFarmRecord,
+  daysSinceIso,
+  type ServerRawFarmDto,
+} from './snapshotAssessment';
 import {
   createEmptyFarmProfile,
   deleteFarmProfile,
@@ -26,8 +29,6 @@ import {
 } from './farmStorage';
 import { computeRingCentroid, computeRingGeodesicAreaM2, closeRing } from './mapGeometry';
 import { LonLat } from '../types/maps';
-
-const STALE_DAYS_THRESHOLD = 14;
 
 export function resolveCropThumbnail(cropIdOrName?: string | null): string {
   const key = (cropIdOrName || '').toLowerCase().trim().replace(/\s+/g, '_');
@@ -70,13 +71,6 @@ export function formatStatusLabel(status: PortfolioStatus): string {
   }
 }
 
-export function daysSinceIso(iso: string | null): number | null {
-  if (!iso) return null;
-  const ms = Date.parse(iso);
-  if (!Number.isFinite(ms)) return null;
-  return Math.max(0, Math.floor((Date.now() - ms) / 86400000));
-}
-
 export function formatRelativeDate(iso: string | null): string {
   if (!iso) return 'Never assessed';
   const days = daysSinceIso(iso);
@@ -85,219 +79,6 @@ export function formatRelativeDate(iso: string | null): string {
   if (days === 1) return 'Yesterday';
   if (days < 30) return `${days}d ago`;
   return new Date(iso).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
-}
-
-export interface ServerRawFarmDto {
-  id: string;
-  name: string;
-  primaryCrop: string | null;
-  locationLabel: string;
-  regionLabel: string;
-  country: string;
-  timezone: string;
-  centroid: { lat: number; lon: number } | null;
-  geometry: MyFarmRecord['geometry'];
-  areaUnit: AreaUnit;
-  declaredAreaHa: number | null;
-  mappedAreaHa: number;
-  perimeterM: number;
-  hasBoundary: boolean;
-  areaGapNote: string | null;
-  hasFieldOverlapWarning: boolean;
-  overlapWarningDetail: string | null;
-  isPrivate: boolean;
-  isDraft: boolean;
-  archivedAt: string | null;
-  notes: string;
-  versionNumber: number;
-  activePlan: MyFarmRecord['activePlan'];
-  recommendedPlanId: string | null;
-  recommendedPlanTitle: string | null;
-  soil: MyFarmRecord['soil'];
-  water: MyFarmRecord['water'];
-  planningHorizon: MyFarmRecord['planningHorizon'];
-  priorities: string[];
-  challenges: string[];
-  lastAssessedAt: string | null;
-  suitabilityScore: number | null;
-  mapHealthStatus?: 'healthy' | 'moderate' | 'at_risk' | 'no_data';
-  mapExplanation?: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-/**
- * Shared deterministic status + completeness + worst-field preservation engine.
- * Ensures a high score on 90% of a farm NEVER masks a severe soil/water/hazard alert on one field.
- */
-export function buildAssessedFarmRecord(
-  raw: ServerRawFarmDto,
-  allFields: PortfolioFieldRecord[],
-  observations: FarmObservationItem[],
-  tasks: FarmTaskItem[]
-): MyFarmRecord {
-  const farmFields = allFields.filter((f) => f.farmId === raw.id);
-  const openTasks = tasks.filter((t) => t.farmId === raw.id && !t.completed);
-  const highPriorityTasks = openTasks.filter((t) => t.priority === 'high');
-
-  const checks: Array<{ ok: boolean; label: string }> = [
-    { ok: Boolean(raw.centroid), label: 'Coordinates' },
-    { ok: raw.soil.texture !== 'Unknown' && Boolean(raw.soil.texture), label: 'Soil texture' },
-    { ok: raw.soil.moistureStatus !== 'unknown' && raw.soil.moisturePct !== null, label: 'Soil moisture' },
-    { ok: raw.soil.phStatus === 'tested' && raw.soil.phValue !== null, label: 'Soil pH' },
-    { ok: raw.water.sources.length > 0 && raw.water.sources[0] !== 'Unknown', label: 'Water source' },
-    { ok: Boolean(raw.water.reliability) && raw.water.reliability !== 'Unknown', label: 'Water reliability' },
-    { ok: Boolean(raw.primaryCrop || farmFields.some((f) => f.cropName)), label: 'Primary crop' },
-    { ok: raw.hasBoundary, label: 'Mapped boundary' },
-  ];
-  const completenessPct = Math.round((checks.filter((c) => c.ok).length / checks.length) * 100);
-  const missingLabels = checks.filter((c) => !c.ok).map((c) => c.label);
-
-  const staleReasons: string[] = [];
-  const ageDays = daysSinceIso(raw.lastAssessedAt);
-  if (ageDays !== null && ageDays > STALE_DAYS_THRESHOLD) {
-    staleReasons.push(`Last full assessment is ${ageDays} days old (> ${STALE_DAYS_THRESHOLD}-day freshness window).`);
-  }
-  for (const ff of farmFields) {
-    if (ff.staleCalculations.length > 0) {
-      staleReasons.push(`${ff.name}: ${ff.staleCalculations[0]}`);
-    }
-  }
-  if (raw.hasFieldOverlapWarning && raw.overlapWarningDetail) {
-    staleReasons.push(raw.overlapWarningDetail);
-  }
-
-  // Evaluate alerts & worst field without averaging them away
-  let activeAlertsCount = highPriorityTasks.length + (raw.hasFieldOverlapWarning ? 1 : 0);
-  let criticalAlertsCount = 0;
-  let worstFieldId: string | null = null;
-  let worstFieldName: string | null = null;
-  let worstFieldReason: string | null = null;
-
-  if (raw.soil.moistureStatus !== 'unknown' && raw.soil.moisturePct !== null && raw.soil.moisturePct < 19) {
-    criticalAlertsCount++;
-    activeAlertsCount++;
-    worstFieldReason = `Low topsoil moisture (${raw.soil.moisturePct}% VWC)`;
-  }
-  if (
-    raw.water.dailyCapacityKnown &&
-    raw.water.dailyCapacityM3 !== null &&
-    raw.water.estimatedDailyDemandM3 !== null &&
-    raw.water.estimatedDailyDemandM3 > raw.water.dailyCapacityM3 * 1.15
-  ) {
-    criticalAlertsCount++;
-    activeAlertsCount++;
-    worstFieldReason = worstFieldReason
-      ? `${worstFieldReason}; water demand (${raw.water.estimatedDailyDemandM3} m³/d) exceeds supply (${raw.water.dailyCapacityM3} m³/d)`
-      : `Daily demand (${raw.water.estimatedDailyDemandM3} m³/d) exceeds supply (${raw.water.dailyCapacityM3} m³/d)`;
-  }
-
-  for (const ff of farmFields) {
-    if (ff.status === 'Needs Review' || ff.activeAlertsCount > 0 || ff.criticalAlert) {
-      activeAlertsCount += Math.max(1, ff.activeAlertsCount);
-      if (!worstFieldId) {
-        worstFieldId = ff.id;
-        worstFieldName = ff.name;
-        worstFieldReason = ff.criticalAlert || `${ff.name} flagged Needs Review`;
-      }
-    }
-  }
-
-  const score = raw.suitabilityScore;
-  const hasAnyAssessment = raw.lastAssessedAt !== null && score !== null;
-
-  let status: PortfolioStatus;
-  let freshnessState: MyFarmAssessment['freshnessState'];
-
-  if (raw.archivedAt) {
-    status = 'archived';
-    freshnessState = hasAnyAssessment ? (staleReasons.length > 0 ? 'stale' : 'fresh') : 'unassessed';
-  } else if (!hasAnyAssessment) {
-    status = raw.isDraft || completenessPct >= 25 ? (completenessPct >= 38 ? 'partial' : 'not_assessed') : 'not_assessed';
-    freshnessState = completenessPct >= 38 ? 'partial' : 'unassessed';
-  } else if (criticalAlertsCount > 0 || (score !== null && score < 45)) {
-    status = 'alert';
-    freshnessState = staleReasons.length > 0 ? 'stale' : 'fresh';
-  } else if (staleReasons.length > 0) {
-    status = 'needs_refresh';
-    freshnessState = 'stale';
-  } else if (activeAlertsCount > 0 || (score !== null && score < 72)) {
-    status = 'needs_attention';
-    freshnessState = 'fresh';
-  } else {
-    status = 'good';
-    freshnessState = 'fresh';
-  }
-
-  const confidencePct = hasAnyAssessment
-    ? Math.max(25, Math.min(96, Math.round(completenessPct * 0.85 + (observations.some((o) => o.farmId === raw.id) ? 10 : 0) - (staleReasons.length > 0 ? 14 : 0))))
-    : Math.round(completenessPct * 0.4);
-
-  const summary =
-    raw.mapExplanation ||
-    (status === 'good'
-      ? `Soil, moisture, and climate signals support ${raw.primaryCrop || 'current crop rotation'}.`
-      : status === 'alert'
-        ? worstFieldReason || 'Critical moisture or irrigation capacity constraint requires attention.'
-        : status === 'needs_refresh'
-          ? staleReasons[0] || 'Assessment exceeds freshness window; re-run recommended.'
-          : status === 'needs_attention'
-            ? worstFieldReason || 'Moderate moisture or supply variability detected.'
-            : missingLabels.length > 0
-              ? `Missing ${missingLabels.slice(0, 3).join(', ').toLowerCase()} before full scoring.`
-              : 'Ready to run climate and soil assessment.');
-
-  const assessment: MyFarmAssessment = {
-    status,
-    freshnessState,
-    score,
-    confidencePct,
-    completenessPct,
-    assessedAt: raw.lastAssessedAt,
-    activeAlertsCount,
-    criticalAlertsCount,
-    summary,
-    worstFieldId,
-    worstFieldName,
-    worstFieldReason,
-    staleReasons,
-  };
-
-  return {
-    id: raw.id,
-    name: raw.name,
-    primaryCrop: raw.primaryCrop,
-    locationLabel: raw.locationLabel,
-    regionLabel: raw.regionLabel,
-    country: raw.country,
-    timezone: raw.timezone,
-    centroid: raw.centroid,
-    geometry: raw.geometry,
-    areaUnit: raw.areaUnit,
-    declaredAreaHa: raw.declaredAreaHa,
-    mappedAreaHa: raw.mappedAreaHa,
-    perimeterM: raw.perimeterM,
-    hasBoundary: raw.hasBoundary,
-    areaGapNote: raw.areaGapNote,
-    hasFieldOverlapWarning: raw.hasFieldOverlapWarning,
-    overlapWarningDetail: raw.overlapWarningDetail,
-    isPrivate: raw.isPrivate,
-    isDraft: raw.isDraft,
-    archivedAt: raw.archivedAt,
-    notes: raw.notes,
-    versionNumber: raw.versionNumber,
-    activePlan: raw.activePlan,
-    recommendedPlanId: raw.recommendedPlanId,
-    recommendedPlanTitle: raw.recommendedPlanTitle,
-    soil: raw.soil,
-    water: raw.water,
-    planningHorizon: raw.planningHorizon,
-    priorities: raw.priorities,
-    challenges: raw.challenges,
-    assessment,
-    createdAt: raw.createdAt,
-    updatedAt: raw.updatedAt,
-  };
 }
 
 export interface PortfolioAggregateSummary {

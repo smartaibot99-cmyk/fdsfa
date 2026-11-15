@@ -3,13 +3,22 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { z } from 'zod';
+import { validateSnapshotPayload } from '../src/lib/snapshotAssessment';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const DATA_DIR = path.resolve(__dirname, '..', '.data');
-const MAPS_STORE_PATH = path.join(DATA_DIR, 'maps-workspace.json');
-const PORTFOLIO_STORE_PATH = path.join(DATA_DIR, 'my-farms-portfolio.json');
+function getDataDir(): string {
+  return process.env.ANCHOR_DATA_DIR
+    ? path.resolve(process.env.ANCHOR_DATA_DIR)
+    : path.resolve(__dirname, '..', '.data');
+}
+function getMapsStorePath(): string {
+  return path.join(getDataDir(), 'maps-workspace.json');
+}
+function getPortfolioStorePath(): string {
+  return path.join(getDataDir(), 'my-farms-portfolio.json');
+}
 
 const EARTH_RADIUS_M = 6371008.8;
 const DEG_TO_RAD = Math.PI / 180;
@@ -335,6 +344,7 @@ interface FarmMetaExtension {
     moistureDate: string;
     phStatus: 'tested' | 'not_tested';
     phValue: number | null;
+    bufferPh?: number | null;
     phTestDate: string;
     organicMatterPct: number | null;
     drainage: string;
@@ -394,7 +404,7 @@ interface PortfolioStore {
 }
 
 function writeJsonAtomic(filePath: string, data: unknown): void {
-  fs.mkdirSync(DATA_DIR, { recursive: true });
+  fs.mkdirSync(path.dirname(filePath), { recursive: true });
   const tmp = `${filePath}.${process.pid}.tmp`;
   fs.writeFileSync(tmp, JSON.stringify(data, null, 2), 'utf8');
   fs.renameSync(tmp, filePath);
@@ -402,10 +412,11 @@ function writeJsonAtomic(filePath: string, data: unknown): void {
 
 function readMapsStore(): MapsWorkspaceStoreRaw {
   try {
-    if (!fs.existsSync(MAPS_STORE_PATH)) {
+    const mapsPath = getMapsStorePath();
+    if (!fs.existsSync(mapsPath)) {
       return { farms: [], fields: [], discoveryOptIns: [], messages: [], blockedPublicIds: [] };
     }
-    const raw = fs.readFileSync(MAPS_STORE_PATH, 'utf8');
+    const raw = fs.readFileSync(mapsPath, 'utf8');
     const parsed = JSON.parse(raw) as Partial<MapsWorkspaceStoreRaw>;
     return {
       farms: Array.isArray(parsed.farms) ? parsed.farms : [],
@@ -1025,12 +1036,13 @@ function getDefaultPortfolioStore(): PortfolioStore {
 
 function readPortfolioStore(): PortfolioStore {
   try {
-    if (!fs.existsSync(PORTFOLIO_STORE_PATH)) {
+    const portfolioPath = getPortfolioStorePath();
+    if (!fs.existsSync(portfolioPath)) {
       const def = getDefaultPortfolioStore();
-      writeJsonAtomic(PORTFOLIO_STORE_PATH, def);
+      writeJsonAtomic(portfolioPath, def);
       return def;
     }
-    const raw = fs.readFileSync(PORTFOLIO_STORE_PATH, 'utf8');
+    const raw = fs.readFileSync(portfolioPath, 'utf8');
     const parsed = JSON.parse(raw) as Partial<PortfolioStore>;
     const def = getDefaultPortfolioStore();
     return {
@@ -1049,11 +1061,11 @@ function readPortfolioStore(): PortfolioStore {
 }
 
 function writePortfolioStore(store: PortfolioStore): void {
-  writeJsonAtomic(PORTFOLIO_STORE_PATH, store);
+  writeJsonAtomic(getPortfolioStorePath(), store);
 }
 
 function writeMapsStore(store: MapsWorkspaceStoreRaw): void {
-  writeJsonAtomic(MAPS_STORE_PATH, store);
+  writeJsonAtomic(getMapsStorePath(), store);
 }
 
 function defaultMetaForMapFarm(farm: StoredMapFarm): FarmMetaExtension {
@@ -1428,7 +1440,8 @@ export function createMyFarmsRouter(): express.Router {
         moistureMethod: sIn.moistureMethod ?? '',
         moistureDate: sIn.moistureDate ?? '',
         phStatus: sIn.phStatus ?? 'not_tested',
-        phValue: typeof sIn.phValue === 'number' ? sIn.phValue : null,
+        phValue: typeof sIn.phValue === 'number' && Number.isFinite(sIn.phValue) ? sIn.phValue : null,
+        bufferPh: typeof sIn.bufferPh === 'number' && Number.isFinite(sIn.bufferPh) ? sIn.bufferPh : null,
         phTestDate: sIn.phTestDate ?? '',
         organicMatterPct: typeof sIn.organicMatterPct === 'number' ? sIn.organicMatterPct : null,
         drainage: typeof sIn.drainage === 'string' && sIn.drainage ? sIn.drainage : 'Unknown',
@@ -2261,23 +2274,59 @@ export function createMyFarmsRouter(): express.Router {
   });
 
   router.post('/farms/:farmId/snapshots', (req, res) => {
-    const port = readPortfolioStore();
-    const body = (req.body ?? {}) as Record<string, unknown>;
-    const snap = {
-      id: `snap-${Date.now()}-${Math.random().toString(36).slice(2, 5)}`,
-      farmId: req.params.farmId,
-      generatedAt: new Date().toISOString(),
-      ...body,
-    };
-    port.snapshots = [snap, ...port.snapshots];
-    const meta = port.farmMeta[req.params.farmId];
-    if (meta) {
-      meta.lastAssessedAt = snap.generatedAt;
-      if (typeof body.suitabilityScore === 'number') {
-        meta.suitabilityScore = body.suitabilityScore;
-      }
-      meta.updatedAt = snap.generatedAt;
+    const validation = validateSnapshotPayload(req.body);
+    if (!validation.ok) {
+      res.status(400).json({ error: validation.error, issues: validation.issues });
+      return;
     }
+
+    const farmId = req.params.farmId;
+    const maps = readMapsStore();
+    const port = readPortfolioStore();
+    const mapFarm = maps.farms.find((f) => f.id === farmId && !f.deletedAt) ?? null;
+    const existingMeta = port.farmMeta[farmId] && !port.farmMeta[farmId].deletedAt ? port.farmMeta[farmId] : null;
+    if (!mapFarm && !existingMeta) {
+      res.status(404).json({ error: 'Farm not found.' });
+      return;
+    }
+
+    const d = validation.data;
+    if (d.operationId && port.appliedOpIds.includes(d.operationId)) {
+      res.json(buildUnifiedPortfolioPayload());
+      return;
+    }
+
+    const generatedAt = new Date().toISOString();
+    const snap: Record<string, unknown> = {
+      id: `snap-${Date.now()}-${Math.random().toString(36).slice(2, 5)}`,
+      farmId,
+      fieldId: d.fieldId ?? null,
+      fieldName: d.fieldName,
+      generatedAt,
+      modelVersion: d.modelVersion,
+      triggerReason: d.triggerReason,
+      suitabilityScore: d.suitabilityScore,
+      confidencePct: d.confidencePct,
+      completenessPct: d.completenessPct,
+      weatherWindowSummary: d.weatherWindowSummary,
+      dataAvailability: d.dataAvailability,
+      keyMetrics: d.keyMetrics,
+      ...(d.observations && d.observations.length > 0 ? { observations: d.observations } : {}),
+      recommendations: d.recommendations,
+    };
+
+    // Prepend new immutable snapshot without mutating any previously saved snapshots
+    port.snapshots = [snap, ...port.snapshots];
+    const meta = existingMeta ?? (mapFarm ? defaultMetaForMapFarm(mapFarm) : null);
+    if (meta) {
+      meta.lastAssessedAt = generatedAt;
+      if (typeof d.suitabilityScore === 'number' && Number.isFinite(d.suitabilityScore)) {
+        meta.suitabilityScore = d.suitabilityScore;
+      }
+      meta.updatedAt = generatedAt;
+      port.farmMeta[farmId] = meta;
+    }
+    if (d.operationId) port.appliedOpIds.push(d.operationId);
     writePortfolioStore(port);
     res.status(201).json({ snapshot: snap, portfolio: buildUnifiedPortfolioPayload() });
   });

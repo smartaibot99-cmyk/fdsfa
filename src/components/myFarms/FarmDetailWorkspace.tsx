@@ -59,6 +59,12 @@ import {
   formatRelativeDate,
   resolveCropThumbnail,
 } from '../../lib/myFarmsEngine';
+import {
+  buildFreshSnapshotPayload,
+  evaluateSoilPhForSnapshot,
+  isFiniteNumber,
+  validateSnapshotPayload,
+} from '../../lib/snapshotAssessment';
 import { useDisplayPrefs } from '../../context/DisplayPrefsContext';
 import { fetchLiveFarmWeather, LiveWeatherReading } from '../../services/weather';
 import { fetchNasaPowerClimatology } from '../../services/nasaPower';
@@ -295,6 +301,17 @@ export const FarmDetailWorkspace: React.FC<FarmDetailWorkspaceProps> = ({
   const [compareLeftId, setCompareLeftId] = useState<string>(farmSnapshots[1]?.id ?? farmSnapshots[0]?.id ?? '');
   const [compareRightId, setCompareRightId] = useState<string>(farmSnapshots[0]?.id ?? '');
   const [runningSnapshot, setRunningSnapshot] = useState(false);
+  const [snapshotError, setSnapshotError] = useState<string | null>(null);
+
+  const overviewPhEval = useMemo(
+    () =>
+      evaluateSoilPhForSnapshot(
+        farm.soil.phStatus,
+        farm.soil.phValue,
+        farm.soil.bufferPh ?? null
+      ),
+    [farm.soil.phStatus, farm.soil.phValue, farm.soil.bufferPh]
+  );
 
   useEffect(() => {
     setCompareRightId(farmSnapshots[0]?.id ?? '');
@@ -384,16 +401,17 @@ export const FarmDetailWorkspace: React.FC<FarmDetailWorkspaceProps> = ({
   const handleCreateFreshSnapshot = async () => {
     if (!isOnline) return;
     setRunningSnapshot(true);
+    setSnapshotError(null);
     try {
       const todayIso = new Date().toISOString().slice(0, 10);
       let weatherSummary = 'No coordinates set; baseline profile check only.';
       let meanTemp: number | null = null;
       let precip: number | null = null;
-      let et0: number | null = null;
+      const et0: number | null = null;
       let nasaAvail: 'available' | 'unavailable' = 'unavailable';
       let meteoAvail: 'available' | 'unavailable' = 'unavailable';
       let eonetAvail: 'available' | 'unavailable' = 'unavailable';
-      let hazardPenalty = 0;
+      let nearbyHazardCount = 0;
 
       if (farm.centroid) {
         const [pRes, wRes, eRes] = await Promise.allSettled([
@@ -404,87 +422,52 @@ export const FarmDetailWorkspace: React.FC<FarmDetailWorkspaceProps> = ({
         if (pRes.status === 'fulfilled') {
           nasaAvail = 'available';
           const p = pRes.value;
-          meanTemp = p.meanMaxC !== null && p.meanMinC !== null ? Number(((p.meanMaxC + p.meanMinC) / 2).toFixed(1)) : null;
-          precip = p.meanPrecipMm;
-          weatherSummary = `NASA POWER (${p.yearsAnalyzed.length}y window): ${p.meanMaxC?.toFixed(1) ?? '—'}/${p.meanMinC?.toFixed(1) ?? '—'} °C, ${p.meanPrecipMm?.toFixed(2) ?? '—'} mm/d.`;
+          meanTemp =
+            isFiniteNumber(p.meanMaxC) && isFiniteNumber(p.meanMinC)
+              ? Number(((p.meanMaxC + p.meanMinC) / 2).toFixed(1))
+              : null;
+          precip = isFiniteNumber(p.meanPrecipMm) ? p.meanPrecipMm : null;
+          weatherSummary = `NASA POWER (${p.yearsAnalyzed.length}y window): ${isFiniteNumber(p.meanMaxC) ? p.meanMaxC.toFixed(1) : '—'}/${isFiniteNumber(p.meanMinC) ? p.meanMinC.toFixed(1) : '—'} °C, ${isFiniteNumber(p.meanPrecipMm) ? p.meanPrecipMm.toFixed(2) : '—'} mm/d.`;
         }
         if (wRes.status === 'fulfilled') {
           meteoAvail = 'available';
           setLiveWeather(wRes.value);
-          if (meanTemp === null) meanTemp = wRes.value.tempC;
-          if (precip === null) precip = wRes.value.precipMm;
+          if (meanTemp === null && isFiniteNumber(wRes.value.tempC)) meanTemp = wRes.value.tempC;
+          if (precip === null && isFiniteNumber(wRes.value.precipMm)) precip = wRes.value.precipMm;
         }
         if (eRes.status === 'fulfilled') {
           eonetAvail = 'available';
-          if (eRes.value.nearbyEvents.length > 0) hazardPenalty = 10;
+          nearbyHazardCount = eRes.value.nearbyEvents.length;
         }
       }
 
-      // Compute deterministic suitability honestly (or null if too incomplete)
-      const moisture = farm.soil.moistureStatus !== 'unknown' ? farm.soil.moisturePct : null;
-      const ph = farm.soil.phStatus === 'tested' ? farm.soil.phValue : null;
-      const hasEnough = farm.centroid !== null && (moisture !== null || ph !== null || farm.soil.texture !== 'Unknown');
-
-      let score: number | null = null;
-      if (hasEnough) {
-        let s = 74;
-        if (moisture !== null) {
-          if (moisture >= 24 && moisture <= 42) s += 10;
-          else if (moisture < 19) s -= 24;
-          else s -= 8;
-        }
-        if (ph !== null) {
-          if (ph >= 6.0 && ph <= 7.2) s += 6;
-          else if (ph < 5.3 || ph > 8.2) s -= 12;
-        }
-        if (farm.water.reliability === 'Frequently limited' || farm.water.reliability === 'Highly unreliable') s -= 16;
-        else if (farm.water.reliability === 'Always available') s += 5;
-        s -= hazardPenalty;
-        score = Math.max(12, Math.min(96, Math.round(s)));
-      }
-
-      const recs: string[] = [];
-      if (moisture !== null && moisture < 21) {
-        recs.push(`Moisture deficit (${moisture}% VWC): prioritize drought-tolerant varieties or pre-dawn drip pulses.`);
-      }
-      if (ph === null) recs.push('Soil pH untested: submit composite 0–20 cm cores before next fertiliser cycle.');
-      if (farm.water.reliability === 'Frequently limited') {
-        recs.push('Align peak-ET crop stage outside constrained supply months.');
-      }
-      if (recs.length === 0) {
-        recs.push('Current moisture, soil, and climate indicators remain within balanced thresholds.');
-      }
-
-      await onCreateSnapshot({
-        fieldId: null,
-        fieldName: 'Whole Farm',
-        modelVersion: 'power-eonet-v2.1',
-        triggerReason: 'Manual My Farms assessment refresh',
-        suitabilityScore: score,
-        confidencePct: farm.assessment.confidencePct,
-        completenessPct: farm.assessment.completenessPct,
+      const snapshotDraft = buildFreshSnapshotPayload({
+        farm,
+        farmFields,
+        farmObservations,
+        meanTempC: meanTemp,
+        precipMmDay: precip,
+        et0MmDay: et0,
         weatherWindowSummary: weatherSummary,
         dataAvailability: {
           nasaPower: nasaAvail,
           openMeteo: meteoAvail,
           nasaEonet: eonetAvail,
-          soilLab:
-            farm.soil.moistureStatus === 'measured' || farm.soil.phStatus === 'tested'
-              ? 'measured'
-              : farm.soil.moistureStatus === 'estimated'
-                ? 'estimated'
-                : 'missing',
         },
-        keyMetrics: {
-          meanTempC: meanTemp,
-          precipMmDay: precip,
-          et0MmDay: et0,
-          soilMoisturePct: moisture,
-          phValue: ph,
-          mappedAreaHa: farm.mappedAreaHa,
-        },
-        recommendations: recs,
+        nearbyHazardCount,
+        modelVersion: 'power-eonet-v2.1',
+        triggerReason: 'Manual My Farms assessment refresh',
       });
+
+      const validation = validateSnapshotPayload(snapshotDraft);
+      if (!validation.ok) {
+        setSnapshotError(validation.error);
+        return;
+      }
+
+      await onCreateSnapshot(snapshotDraft as unknown as Record<string, unknown>);
+    } catch (err) {
+      setSnapshotError(err instanceof Error ? err.message : 'Unable to save assessment snapshot.');
     } finally {
       setRunningSnapshot(false);
     }
@@ -600,7 +583,7 @@ export const FarmDetailWorkspace: React.FC<FarmDetailWorkspaceProps> = ({
                     {farm.assessment.score !== null ? `${farm.assessment.score}/100` : 'Unassessed'}
                   </div>
                   <div className="text-[11px] text-[var(--text-secondary)] mt-0.5 tabular-nums">
-                    Data confidence {farm.assessment.confidencePct}%
+                    Scientific confidence {farm.assessment.confidencePct}%
                   </div>
                 </div>
 
@@ -620,7 +603,7 @@ export const FarmDetailWorkspace: React.FC<FarmDetailWorkspaceProps> = ({
                     {farm.assessment.completenessPct}%
                   </div>
                   <div className="text-[11px] text-[var(--text-secondary)] mt-0.5">
-                    {formatRelativeDate(farm.assessment.assessedAt)}
+                    {formatRelativeDate(farm.assessment.assessedAt)} · core fields
                   </div>
                 </div>
 
@@ -669,8 +652,8 @@ export const FarmDetailWorkspace: React.FC<FarmDetailWorkspaceProps> = ({
                     <div>
                       <span className="text-[var(--text-secondary)]">Soil pH: </span>
                       <strong className="text-[var(--text-primary)] tabular-nums">
-                        {farm.soil.phStatus === 'tested' && farm.soil.phValue !== null
-                          ? farm.soil.phValue.toFixed(1)
+                        {farm.soil.phStatus === 'tested' && isFiniteNumber(farm.soil.phValue)
+                          ? `${farm.soil.phValue.toFixed(1)} · ${overviewPhEval.shortLabel}`
                           : 'Not tested'}
                       </strong>
                     </div>
@@ -679,6 +662,11 @@ export const FarmDetailWorkspace: React.FC<FarmDetailWorkspaceProps> = ({
                       <strong className="text-[var(--text-primary)]">{farm.water.reliability}</strong>
                     </div>
                   </div>
+                  {snapshotError && (
+                    <div className="text-xs text-rose-600 dark:text-rose-400 pt-1">
+                      Snapshot validation error: {snapshotError}
+                    </div>
+                  )}
                 </div>
 
                 <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-surface)] p-4 space-y-3">
@@ -1750,6 +1738,12 @@ export const FarmDetailWorkspace: React.FC<FarmDetailWorkspaceProps> = ({
                 </div>
               )}
 
+              {snapshotError && (
+                <div className="rounded-xl border border-rose-500/40 bg-rose-500/10 p-3 text-rose-700 dark:text-rose-300">
+                  Snapshot rejected: {snapshotError}
+                </div>
+              )}
+
               <div className="space-y-2.5">
                 {farmSnapshots.length === 0 ? (
                   <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-surface)] p-6 text-center text-[var(--text-secondary)]">
@@ -1757,7 +1751,7 @@ export const FarmDetailWorkspace: React.FC<FarmDetailWorkspaceProps> = ({
                   </div>
                 ) : (
                   farmSnapshots.map((s) => (
-                    <div key={s.id} className="rounded-xl border border-[var(--border)] bg-[var(--bg-surface)] p-4 space-y-2">
+                    <div key={s.id} className="rounded-xl border border-[var(--border)] bg-[var(--bg-surface)] p-4 space-y-2.5">
                       <div className="flex flex-wrap items-center justify-between gap-2">
                         <div>
                           <span className="font-bold text-[var(--text-primary)] tabular-nums">
@@ -1766,11 +1760,26 @@ export const FarmDetailWorkspace: React.FC<FarmDetailWorkspaceProps> = ({
                           <span className="text-[var(--text-secondary)]"> · {s.triggerReason} · {s.modelVersion}</span>
                         </div>
                         <div className="font-bold text-[var(--text-primary)] tabular-nums">
-                          {s.suitabilityScore !== null ? `Score ${s.suitabilityScore}/100` : 'Unassessed'} · {s.confidencePct}% confidence
+                          {s.suitabilityScore !== null ? `Score ${s.suitabilityScore}/100` : 'Unassessed'} · {s.confidencePct}% scientific confidence · {s.completenessPct}% completeness
                         </div>
                       </div>
                       <p className="text-[var(--text-secondary)]">{s.weatherWindowSummary}</p>
-                      <div className="space-y-1 pt-1">
+                      {s.observations && s.observations.length > 0 && (
+                        <div className="space-y-1 pt-1 border-t border-[var(--border)]">
+                          <div className="text-[11px] font-bold uppercase tracking-wide text-[var(--text-secondary)]">
+                            Observations
+                          </div>
+                          {s.observations.map((obs, idx) => (
+                            <div key={idx} className="text-[var(--text-secondary)] leading-relaxed">
+                              · {obs}
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                      <div className="space-y-1 pt-1 border-t border-[var(--border)]">
+                        <div className="text-[11px] font-bold uppercase tracking-wide text-[var(--text-secondary)]">
+                          Recommendations
+                        </div>
                         {s.recommendations.map((r, i) => (
                           <div key={i} className="flex items-start gap-1.5 text-[var(--text-primary)]">
                             <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
