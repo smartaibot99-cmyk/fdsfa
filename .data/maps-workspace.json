@@ -1,0 +1,1101 @@
+{
+  "farms": [
+    {
+      "id": "farm-1794685748314-7ppi",
+      "name": "Smoke Test Block Renamed",
+      "crop": "Wheat",
+      "locationLabel": "44.852°, -123.151°",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -123.155,
+              44.855
+            ],
+            [
+              -123.148,
+              44.855
+            ],
+            [
+              -123.148,
+              44.85
+            ],
+            [
+              -123.155,
+              44.85
+            ],
+            [
+              -123.155,
+              44.855
+            ]
+          ]
+        ]
+      },
+      "areaM2": 306800,
+      "areaHa": 30.68,
+      "perimeterM": 2216,
+      "centroid": {
+        "lat": 44.8525,
+        "lon": -123.1515
+      },
+      "labelPoint": {
+        "lat": 44.8525,
+        "lon": -123.1515
+      },
+      "healthStatus": "no_data",
+      "assessment": {
+        "farmId": "farm-1794685748314-7ppi",
+        "status": "no_data",
+        "score": null,
+        "assessedAt": "2026-11-14T19:49:08.314Z",
+        "assessmentVersion": "power-eonet-v2",
+        "confidence": 0,
+        "explanation": "Newly added farm; awaiting climate and soil assessment."
+      },
+      "versionNumber": 2,
+      "boundaryHistory": [
+        {
+          "versionNumber": 1,
+          "geometry": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [
+                  -123.155,
+                  44.855
+                ],
+                [
+                  -123.148,
+                  44.855
+                ],
+                [
+                  -123.148,
+                  44.85
+                ],
+                [
+                  -123.155,
+                  44.85
+                ],
+                [
+                  -123.155,
+                  44.855
+                ]
+              ]
+            ]
+          },
+          "areaM2": 306800,
+          "changedAt": "2026-11-14T19:49:08.314Z",
+          "changeReason": "Created from My Farms"
+        }
+      ],
+      "createdAt": "2026-11-14T19:49:08.314Z",
+      "updatedAt": "2026-11-14T19:49:08.325Z",
+      "deletedAt": "2026-11-14T19:49:08.351Z"
+    },
+    {
+      "id": "farm-1794667794212-jcpg",
+      "name": "Smoke Test Parcel",
+      "crop": "Oats",
+      "locationLabel": "44.858°, -123.157°",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -123.16,
+              44.86
+            ],
+            [
+              -123.155,
+              44.86
+            ],
+            [
+              -123.155,
+              44.856
+            ],
+            [
+              -123.16,
+              44.856
+            ],
+            [
+              -123.16,
+              44.86
+            ]
+          ]
+        ]
+      },
+      "areaM2": 175290,
+      "areaHa": 17.5,
+      "perimeterM": 1678,
+      "centroid": {
+        "lat": 44.858,
+        "lon": -123.1575
+      },
+      "labelPoint": {
+        "lat": 44.858,
+        "lon": -123.1575
+      },
+      "healthStatus": "no_data",
+      "assessment": {
+        "farmId": "farm-1794667794212-jcpg",
+        "status": "no_data",
+        "score": null,
+        "assessedAt": "2026-11-14T14:49:54.212Z",
+        "assessmentVersion": "power-eonet-v2",
+        "confidence": 0,
+        "explanation": "Awaiting initial soil and climate assessment."
+      },
+      "versionNumber": 1,
+      "boundaryHistory": [
+        {
+          "versionNumber": 1,
+          "geometry": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [
+                  -123.16,
+                  44.86
+                ],
+                [
+                  -123.155,
+                  44.86
+                ],
+                [
+                  -123.155,
+                  44.856
+                ],
+                [
+                  -123.16,
+                  44.856
+                ],
+                [
+                  -123.16,
+                  44.86
+                ]
+              ]
+            ]
+          },
+          "areaM2": 175290,
+          "changedAt": "2026-11-14T14:49:54.212Z",
+          "changeReason": "Initial boundary created"
+        }
+      ],
+      "createdAt": "2026-11-14T14:49:54.212Z",
+      "updatedAt": "2026-11-14T14:49:54.212Z",
+      "deletedAt": "2026-11-14T14:49:54.229Z"
+    },
+    {
+      "id": "farm-green-valley",
+      "name": "Green Valley Farm",
+      "crop": "Wheat",
+      "locationLabel": "Willamette River Bend, OR",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -123.1496,
+              44.86501
+            ],
+            [
+              -123.13941,
+              44.86155
+            ],
+            [
+              -123.14267,
+              44.85452
+            ],
+            [
+              -123.15411,
+              44.85872
+            ],
+            [
+              -123.15201,
+              44.8627
+            ],
+            [
+              -123.1496,
+              44.86501
+            ]
+          ]
+        ]
+      },
+      "areaM2": 782460,
+      "areaHa": 78.2,
+      "perimeterM": 3521,
+      "centroid": {
+        "lat": 44.8605,
+        "lon": -123.14756
+      },
+      "labelPoint": {
+        "lat": 44.8605,
+        "lon": -123.14756
+      },
+      "healthStatus": "healthy",
+      "assessment": {
+        "farmId": "farm-green-valley",
+        "status": "healthy",
+        "score": 86,
+        "assessedAt": "2026-11-10T09:00:00.000Z",
+        "assessmentVersion": "power-eonet-v2",
+        "confidence": 0.88,
+        "explanation": "Optimal soil moisture (34%), balanced pH (6.6), and low NASA EONET hazard proximity."
+      },
+      "versionNumber": 1,
+      "boundaryHistory": [
+        {
+          "versionNumber": 1,
+          "geometry": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [
+                  -123.1496,
+                  44.86501
+                ],
+                [
+                  -123.13941,
+                  44.86155
+                ],
+                [
+                  -123.14267,
+                  44.85452
+                ],
+                [
+                  -123.15411,
+                  44.85872
+                ],
+                [
+                  -123.15201,
+                  44.8627
+                ],
+                [
+                  -123.1496,
+                  44.86501
+                ]
+              ]
+            ]
+          },
+          "areaM2": 782460,
+          "changedAt": "2026-11-10T09:00:00.000Z",
+          "changeReason": "Initial registered farm parcel"
+        }
+      ],
+      "createdAt": "2026-11-10T09:00:00.000Z",
+      "updatedAt": "2026-11-10T09:00:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "farm-riverside",
+      "name": "Riverside Farm",
+      "crop": "Corn",
+      "locationLabel": "Willamette River Bend, OR",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -123.15066,
+              44.85404
+            ],
+            [
+              -123.14226,
+              44.85099
+            ],
+            [
+              -123.1451,
+              44.84291
+            ],
+            [
+              -123.15678,
+              44.84553
+            ],
+            [
+              -123.15481,
+              44.85033
+            ],
+            [
+              -123.15066,
+              44.85404
+            ]
+          ]
+        ]
+      },
+      "areaM2": 896660,
+      "areaHa": 89.7,
+      "perimeterM": 3718,
+      "centroid": {
+        "lat": 44.84876,
+        "lon": -123.149922
+      },
+      "labelPoint": {
+        "lat": 44.848475,
+        "lon": -123.14952
+      },
+      "healthStatus": "moderate",
+      "assessment": {
+        "farmId": "farm-riverside",
+        "status": "moderate",
+        "score": 63,
+        "assessedAt": "2026-11-10T09:00:00.000Z",
+        "assessmentVersion": "power-eonet-v2",
+        "confidence": 0.88,
+        "explanation": "Moderate surface moisture deficit (24%) and warmer afternoon thermal stress."
+      },
+      "versionNumber": 1,
+      "boundaryHistory": [
+        {
+          "versionNumber": 1,
+          "geometry": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [
+                  -123.15066,
+                  44.85404
+                ],
+                [
+                  -123.14226,
+                  44.85099
+                ],
+                [
+                  -123.1451,
+                  44.84291
+                ],
+                [
+                  -123.15678,
+                  44.84553
+                ],
+                [
+                  -123.15481,
+                  44.85033
+                ],
+                [
+                  -123.15066,
+                  44.85404
+                ]
+              ]
+            ]
+          },
+          "areaM2": 896660,
+          "changedAt": "2026-11-10T09:00:00.000Z",
+          "changeReason": "Initial registered farm parcel"
+        }
+      ],
+      "createdAt": "2026-11-10T09:00:00.000Z",
+      "updatedAt": "2026-11-10T09:00:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "farm-highland",
+      "name": "Highland Farm",
+      "crop": "Soybeans",
+      "locationLabel": "Independence Bench, OR",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -123.17524,
+              44.85287
+            ],
+            [
+              -123.16298,
+              44.85741
+            ],
+            [
+              -123.15549,
+              44.85673
+            ],
+            [
+              -123.15844,
+              44.84731
+            ],
+            [
+              -123.17092,
+              44.84879
+            ],
+            [
+              -123.17592,
+              44.8506
+            ],
+            [
+              -123.17524,
+              44.85287
+            ]
+          ]
+        ]
+      },
+      "areaM2": 1201320,
+      "areaHa": 120.1,
+      "perimeterM": 4457,
+      "centroid": {
+        "lat": 44.852285,
+        "lon": -123.166498
+      },
+      "labelPoint": {
+        "lat": 44.85236,
+        "lon": -123.161619
+      },
+      "healthStatus": "at_risk",
+      "assessment": {
+        "farmId": "farm-highland",
+        "status": "at_risk",
+        "score": 38,
+        "assessedAt": "2026-11-10T09:00:00.000Z",
+        "assessmentVersion": "power-eonet-v2",
+        "confidence": 0.88,
+        "explanation": "Elevated drought stress index (17% topsoil moisture) and constrained irrigation reliability."
+      },
+      "versionNumber": 1,
+      "boundaryHistory": [
+        {
+          "versionNumber": 1,
+          "geometry": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [
+                  -123.17524,
+                  44.85287
+                ],
+                [
+                  -123.16298,
+                  44.85741
+                ],
+                [
+                  -123.15549,
+                  44.85673
+                ],
+                [
+                  -123.15844,
+                  44.84731
+                ],
+                [
+                  -123.17092,
+                  44.84879
+                ],
+                [
+                  -123.17592,
+                  44.8506
+                ],
+                [
+                  -123.17524,
+                  44.85287
+                ]
+              ]
+            ]
+          },
+          "areaM2": 1201320,
+          "changedAt": "2026-11-10T09:00:00.000Z",
+          "changeReason": "Initial registered farm parcel"
+        }
+      ],
+      "createdAt": "2026-11-10T09:00:00.000Z",
+      "updatedAt": "2026-11-10T09:00:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "farm-sunrise",
+      "name": "Sunrise Farm",
+      "crop": "Barley",
+      "locationLabel": "North Polk Valley, OR",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -123.13629,
+              44.87433
+            ],
+            [
+              -123.1272,
+              44.87329
+            ],
+            [
+              -123.12803,
+              44.86607
+            ],
+            [
+              -123.13732,
+              44.8671
+            ],
+            [
+              -123.13856,
+              44.87061
+            ],
+            [
+              -123.13629,
+              44.87433
+            ]
+          ]
+        ]
+      },
+      "areaM2": 645380,
+      "areaHa": 64.5,
+      "perimeterM": 3125,
+      "centroid": {
+        "lat": 44.87028,
+        "lon": -123.13348
+      },
+      "labelPoint": {
+        "lat": 44.8702,
+        "lon": -123.131744
+      },
+      "healthStatus": "healthy",
+      "assessment": {
+        "farmId": "farm-sunrise",
+        "status": "healthy",
+        "score": 82,
+        "assessedAt": "2026-11-10T09:00:00.000Z",
+        "assessmentVersion": "power-eonet-v2",
+        "confidence": 0.88,
+        "explanation": "Strong precipitation recharge and favorable root-zone temperature window."
+      },
+      "versionNumber": 1,
+      "boundaryHistory": [
+        {
+          "versionNumber": 1,
+          "geometry": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [
+                  -123.13629,
+                  44.87433
+                ],
+                [
+                  -123.1272,
+                  44.87329
+                ],
+                [
+                  -123.12803,
+                  44.86607
+                ],
+                [
+                  -123.13732,
+                  44.8671
+                ],
+                [
+                  -123.13856,
+                  44.87061
+                ],
+                [
+                  -123.13629,
+                  44.87433
+                ]
+              ]
+            ]
+          },
+          "areaM2": 645380,
+          "changedAt": "2026-11-10T09:00:00.000Z",
+          "changeReason": "Initial registered farm parcel"
+        }
+      ],
+      "createdAt": "2026-11-10T09:00:00.000Z",
+      "updatedAt": "2026-11-10T09:00:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "farm-oakridge",
+      "name": "Oakridge Farm",
+      "crop": "Wheat",
+      "locationLabel": "South Polk Ridge, OR",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -123.17686,
+              44.84186
+            ],
+            [
+              -123.16711,
+              44.84246
+            ],
+            [
+              -123.16609,
+              44.83474
+            ],
+            [
+              -123.17645,
+              44.83434
+            ],
+            [
+              -123.17828,
+              44.8384
+            ],
+            [
+              -123.17686,
+              44.84186
+            ]
+          ]
+        ]
+      },
+      "areaM2": 727930,
+      "areaHa": 72.8,
+      "perimeterM": 3327,
+      "centroid": {
+        "lat": 44.83836,
+        "lon": -123.172958
+      },
+      "labelPoint": {
+        "lat": 44.8384,
+        "lon": -123.170966
+      },
+      "healthStatus": "no_data",
+      "assessment": {
+        "farmId": "farm-oakridge",
+        "status": "no_data",
+        "score": null,
+        "assessedAt": "2026-11-10T09:00:00.000Z",
+        "assessmentVersion": "power-eonet-v2",
+        "confidence": 0,
+        "explanation": "No soil or farm assessment recorded yet."
+      },
+      "versionNumber": 1,
+      "boundaryHistory": [
+        {
+          "versionNumber": 1,
+          "geometry": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [
+                  -123.17686,
+                  44.84186
+                ],
+                [
+                  -123.16711,
+                  44.84246
+                ],
+                [
+                  -123.16609,
+                  44.83474
+                ],
+                [
+                  -123.17645,
+                  44.83434
+                ],
+                [
+                  -123.17828,
+                  44.8384
+                ],
+                [
+                  -123.17686,
+                  44.84186
+                ]
+              ]
+            ]
+          },
+          "areaM2": 727930,
+          "changedAt": "2026-11-10T09:00:00.000Z",
+          "changeReason": "Initial registered farm parcel"
+        }
+      ],
+      "createdAt": "2026-11-10T09:00:00.000Z",
+      "updatedAt": "2026-11-10T09:00:00.000Z",
+      "deletedAt": null
+    }
+  ],
+  "fields": [
+    {
+      "id": "field-gv-1",
+      "farmId": "farm-green-valley",
+      "name": "North Ridge Block 1",
+      "cropId": "wheat",
+      "cropName": "Wheat",
+      "soilSummary": "Loam · 34% moisture · pH 6.6",
+      "waterSummary": "Rain-fed + Drip backup · Usually available",
+      "status": "Active",
+      "currentVersionId": "gv-f1-v1",
+      "versions": [
+        {
+          "geometryVersionId": "gv-f1-v1",
+          "versionNumber": 1,
+          "createdAt": "2026-10-18T14:20:00.000Z",
+          "source": "drawn",
+          "crs": "EPSG:4326",
+          "areaMethod": "WGS84 Spherical Excess (Chamberlain-Duquette)",
+          "grossAreaHectares": 28.616,
+          "netAreaHectares": 28.616,
+          "excludedAreaHectares": 0,
+          "perimeterM": 2167,
+          "centroid": {
+            "lat": 42.03445,
+            "lon": -93.639
+          },
+          "geometry": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [
+                  -93.6428,
+                  42.0365
+                ],
+                [
+                  -93.6352,
+                  42.0365
+                ],
+                [
+                  -93.6352,
+                  42.0324
+                ],
+                [
+                  -93.6428,
+                  42.0324
+                ],
+                [
+                  -93.6428,
+                  42.0365
+                ]
+              ]
+            ]
+          }
+        }
+      ],
+      "staleCalculations": [],
+      "updatedAt": "2026-10-18T14:20:00.000Z"
+    },
+    {
+      "id": "field-gv-2",
+      "farmId": "farm-green-valley",
+      "name": "East Creek Block 2",
+      "cropId": "maize",
+      "cropName": "Maize",
+      "soilSummary": "Loam · 34% moisture · pH 6.6",
+      "waterSummary": "Hybrid drip · Usually available",
+      "status": "Planned",
+      "currentVersionId": "gv-f2-v1",
+      "versions": [
+        {
+          "geometryVersionId": "gv-f2-v1",
+          "versionNumber": 1,
+          "createdAt": "2026-10-18T14:20:00.000Z",
+          "source": "drawn",
+          "crs": "EPSG:4326",
+          "areaMethod": "WGS84 Spherical Excess (Chamberlain-Duquette)",
+          "grossAreaHectares": 23.721,
+          "netAreaHectares": 23.721,
+          "excludedAreaHectares": 0,
+          "perimeterM": 1952,
+          "centroid": {
+            "lat": 42.03445,
+            "lon": -93.63165
+          },
+          "geometry": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [
+                  -93.6348,
+                  42.0365
+                ],
+                [
+                  -93.6285,
+                  42.0365
+                ],
+                [
+                  -93.6285,
+                  42.0324
+                ],
+                [
+                  -93.6348,
+                  42.0324
+                ],
+                [
+                  -93.6348,
+                  42.0365
+                ]
+              ]
+            ]
+          }
+        }
+      ],
+      "staleCalculations": [],
+      "updatedAt": "2026-10-18T14:20:00.000Z"
+    },
+    {
+      "id": "field-gv-3",
+      "farmId": "farm-green-valley",
+      "name": "South Terrace Legumes",
+      "cropId": "peas",
+      "cropName": "Peas",
+      "soilSummary": "Loam · 34% moisture · pH 6.6",
+      "waterSummary": "Legume nitrogen-fixing block",
+      "status": "Planned",
+      "currentVersionId": "gv-f3-v1",
+      "versions": [
+        {
+          "geometryVersionId": "gv-f3-v1",
+          "versionNumber": 1,
+          "createdAt": "2026-10-18T14:20:00.000Z",
+          "source": "drawn",
+          "crs": "EPSG:4326",
+          "areaMethod": "WGS84 Spherical Excess (Chamberlain-Duquette)",
+          "grossAreaHectares": 27.222,
+          "netAreaHectares": 27.222,
+          "excludedAreaHectares": 0,
+          "perimeterM": 2123,
+          "centroid": {
+            "lat": 42.03015,
+            "lon": -93.639
+          },
+          "geometry": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [
+                  -93.6428,
+                  42.0321
+                ],
+                [
+                  -93.6352,
+                  42.0321
+                ],
+                [
+                  -93.6352,
+                  42.0282
+                ],
+                [
+                  -93.6428,
+                  42.0282
+                ],
+                [
+                  -93.6428,
+                  42.0321
+                ]
+              ]
+            ]
+          }
+        }
+      ],
+      "staleCalculations": [],
+      "updatedAt": "2026-10-18T14:20:00.000Z"
+    },
+    {
+      "id": "field-rb-1",
+      "farmId": "farm-riverbend",
+      "name": "Yolo West Parcel",
+      "cropId": "soybean",
+      "cropName": "Soybean",
+      "soilSummary": "Clay loam · 22% moisture (dry) · pH 6.9",
+      "waterSummary": "Canal + Well · Frequently limited",
+      "status": "Needs Review",
+      "currentVersionId": "rb-f1-v1",
+      "versions": [
+        {
+          "geometryVersionId": "rb-f1-v1",
+          "versionNumber": 1,
+          "createdAt": "2026-10-18T14:20:00.000Z",
+          "source": "drawn",
+          "crs": "EPSG:4326",
+          "areaMethod": "WGS84 Spherical Excess (Chamberlain-Duquette)",
+          "grossAreaHectares": 34.928,
+          "netAreaHectares": 34.928,
+          "excludedAreaHectares": 0,
+          "perimeterM": 2417,
+          "centroid": {
+            "lat": 38.54735,
+            "lon": -121.744
+          },
+          "geometry": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [
+                  -121.7482,
+                  38.5495
+                ],
+                [
+                  -121.7398,
+                  38.5495
+                ],
+                [
+                  -121.7398,
+                  38.5452
+                ],
+                [
+                  -121.7482,
+                  38.5452
+                ],
+                [
+                  -121.7482,
+                  38.5495
+                ]
+              ]
+            ]
+          }
+        }
+      ],
+      "staleCalculations": [],
+      "updatedAt": "2026-10-20T09:10:00.000Z"
+    },
+    {
+      "id": "field-rb-2",
+      "farmId": "farm-riverbend",
+      "name": "Canal East Block",
+      "cropId": "sunflower",
+      "cropName": "Sunflower",
+      "soilSummary": "Clay loam · 22% moisture · pH 6.9",
+      "waterSummary": "Drip irrigation · Drought rotation",
+      "status": "Planned",
+      "currentVersionId": "rb-f2-v1",
+      "versions": [
+        {
+          "geometryVersionId": "rb-f2-v1",
+          "versionNumber": 1,
+          "createdAt": "2026-10-18T14:20:00.000Z",
+          "source": "drawn",
+          "crs": "EPSG:4326",
+          "areaMethod": "WGS84 Spherical Excess (Chamberlain-Duquette)",
+          "grossAreaHectares": 29.939,
+          "netAreaHectares": 29.939,
+          "excludedAreaHectares": 0,
+          "perimeterM": 2209,
+          "centroid": {
+            "lat": 38.54735,
+            "lon": -121.7358
+          },
+          "geometry": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [
+                  -121.7394,
+                  38.5495
+                ],
+                [
+                  -121.7322,
+                  38.5495
+                ],
+                [
+                  -121.7322,
+                  38.5452
+                ],
+                [
+                  -121.7394,
+                  38.5452
+                ],
+                [
+                  -121.7394,
+                  38.5495
+                ]
+              ]
+            ]
+          }
+        }
+      ],
+      "staleCalculations": [],
+      "updatedAt": "2026-10-20T09:10:00.000Z"
+    }
+  ],
+  "discoveryOptIns": [
+    {
+      "farmId": "community-ames-1",
+      "publicId": "pub-ames-story-01",
+      "optedIn": true,
+      "displayAlias": "Story Ridge Growers",
+      "cityKey": "ames-ia",
+      "cityName": "Ames, IA",
+      "regionLabel": "Central Iowa Corn Belt",
+      "approximateLat": 42.03,
+      "approximateLon": -93.63,
+      "farmScaleBand": "Medium (10–100 ha)",
+      "sharedCrops": [
+        "Maize",
+        "Soybean",
+        "Cover Rye"
+      ],
+      "sharedPriorities": [
+        "Improving soil health",
+        "Long-term sustainability"
+      ],
+      "irrigationTypeShared": "Hybrid (rainfall and irrigation)",
+      "soilTextureShared": "Loam",
+      "climateScore": 86,
+      "acceptsMessages": true,
+      "updatedAt": "2026-11-01T10:00:00.000Z"
+    },
+    {
+      "farmId": "community-ames-2",
+      "publicId": "pub-ames-skunk-02",
+      "optedIn": true,
+      "displayAlias": "Skunk Valley Collective",
+      "cityKey": "ames-ia",
+      "cityName": "Ames, IA",
+      "regionLabel": "Central Iowa Corn Belt",
+      "approximateLat": 42.03,
+      "approximateLon": -93.63,
+      "farmScaleBand": "Large (> 100 ha)",
+      "sharedCrops": [
+        "Wheat",
+        "Peas",
+        "Maize"
+      ],
+      "sharedPriorities": [
+        "Water conservation",
+        "Crop suitability"
+      ],
+      "irrigationTypeShared": "Rain-fed agriculture",
+      "soilTextureShared": "Silt loam",
+      "climateScore": 84,
+      "acceptsMessages": true,
+      "updatedAt": "2026-11-03T12:30:00.000Z"
+    },
+    {
+      "farmId": "community-ames-3",
+      "publicId": "pub-ames-prairie-03",
+      "optedIn": true,
+      "displayAlias": "Prairie Terrace Co-op",
+      "cityKey": "ames-ia",
+      "cityName": "Ames, IA",
+      "regionLabel": "Central Iowa Corn Belt",
+      "approximateLat": 42.03,
+      "approximateLon": -93.63,
+      "farmScaleBand": "Medium (10–100 ha)",
+      "sharedCrops": [
+        "Soybean",
+        "Oats",
+        "Wheat"
+      ],
+      "sharedPriorities": [
+        "Improving soil health"
+      ],
+      "irrigationTypeShared": "Rain-fed agriculture",
+      "soilTextureShared": "Clay loam",
+      "climateScore": 82,
+      "acceptsMessages": false,
+      "updatedAt": "2026-11-05T08:15:00.000Z"
+    },
+    {
+      "farmId": "community-davis-1",
+      "publicId": "pub-davis-yolo-01",
+      "optedIn": true,
+      "displayAlias": "Capay Edge Farm",
+      "cityKey": "davis-ca",
+      "cityName": "Davis, CA",
+      "regionLabel": "Sacramento Valley",
+      "approximateLat": 38.55,
+      "approximateLon": -121.74,
+      "farmScaleBand": "Medium (10–100 ha)",
+      "sharedCrops": [
+        "Sunflower",
+        "Chickpeas",
+        "Winter Wheat"
+      ],
+      "sharedPriorities": [
+        "Water conservation"
+      ],
+      "irrigationTypeShared": "Drip irrigation",
+      "soilTextureShared": "Clay loam",
+      "climateScore": 76,
+      "acceptsMessages": true,
+      "updatedAt": "2026-11-02T15:00:00.000Z"
+    }
+  ],
+  "messages": [],
+  "blockedPublicIds": []
+}

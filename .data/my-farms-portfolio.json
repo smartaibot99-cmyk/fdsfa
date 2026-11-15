@@ -1,0 +1,747 @@
+{
+  "farmMeta": {
+    "farm-green-valley": {
+      "farmId": "farm-green-valley",
+      "regionLabel": "Willamette Valley, OR",
+      "country": "United States",
+      "timezone": "America/Los_Angeles",
+      "centroid": {
+        "lat": 44.8602,
+        "lon": -123.1462
+      },
+      "areaUnit": "hectares",
+      "declaredAreaHa": 78.5,
+      "isPrivate": true,
+      "isDraft": false,
+      "archivedAt": null,
+      "versionNumber": 1,
+      "notes": "Primary cereal-legume rotational unit with gravity drip backup on East Creek block.",
+      "activePlan": {
+        "planId": "rot-wheat-peas-cover",
+        "title": "Wheat → Peas → Cover Oats",
+        "version": 2,
+        "selectedAt": "2026-11-02T14:15:00.000Z",
+        "selectedBy": "Farm Manager",
+        "cropSequence": [
+          {
+            "cropId": "wheat",
+            "cropName": "Wheat",
+            "cycleLabel": "Cycle 1 (Current)"
+          },
+          {
+            "cropId": "peas",
+            "cropName": "Peas",
+            "cycleLabel": "Cycle 2 (Next)"
+          },
+          {
+            "cropId": "barley",
+            "cropName": "Oats / Barley Cover",
+            "cycleLabel": "Cycle 3 (Restore)"
+          }
+        ],
+        "isRecommendedPlan": true
+      },
+      "recommendedPlanId": "rot-wheat-peas-cover",
+      "recommendedPlanTitle": "Wheat → Peas → Cover Oats",
+      "soil": {
+        "texture": "Silt loam",
+        "moistureStatus": "measured",
+        "moisturePct": 34,
+        "moistureMethod": "TDR Probe",
+        "moistureDate": "2026-11-09",
+        "phStatus": "tested",
+        "phValue": 6.6,
+        "phTestDate": "2026-10-28",
+        "organicMatterPct": 3.8,
+        "drainage": "Moderately",
+        "slopePct": 2.4,
+        "elevationM": 68,
+        "preparationMethods": [
+          "Compost / Organic fertiliser",
+          "No regular preparation"
+        ],
+        "notes": "Uniform silt loam along old river bench."
+      },
+      "water": {
+        "sources": [
+          "Groundwater / Well",
+          "Rainwater collection"
+        ],
+        "reliability": "Usually available",
+        "dailyCapacityKnown": true,
+        "dailyCapacityM3": 185,
+        "qualityTested": "Yes",
+        "ecDsM": 0.48,
+        "salinityPpm": 310,
+        "qualityTestDate": "2026-10-15",
+        "wateringMethod": "Hybrid (rainfall and irrigation)",
+        "irrigationMethod": "Drip irrigation",
+        "irrigationFrequency": "Weekly",
+        "rainfallFrequency": "Several times weekly",
+        "estimatedDailyDemandM3": 142,
+        "demandAssumptionNote": "Based on ~3.2 mm/day autumn ET0 adjusted by cereal Kc 0.85 across irrigated acreage."
+      },
+      "planningHorizon": "Next 2–3 years",
+      "priorities": [
+        "Improving soil health",
+        "Water conservation",
+        "Crop suitability"
+      ],
+      "challenges": [],
+      "lastAssessedAt": "2026-11-10T09:00:00.000Z",
+      "suitabilityScore": 86,
+      "createdAt": "2026-11-10T09:00:00.000Z",
+      "updatedAt": "2026-11-10T09:00:00.000Z"
+    },
+    "farm-riverside": {
+      "farmId": "farm-riverside",
+      "regionLabel": "Willamette Valley, OR",
+      "country": "United States",
+      "timezone": "America/Los_Angeles",
+      "centroid": {
+        "lat": 44.8488,
+        "lon": -123.1496
+      },
+      "areaUnit": "hectares",
+      "declaredAreaHa": 90,
+      "isPrivate": true,
+      "isDraft": false,
+      "archivedAt": null,
+      "versionNumber": 1,
+      "notes": "Monitoring lower bench moisture deficit following warm dry spell.",
+      "activePlan": {
+        "planId": "rot-maize-soy-sunflower",
+        "title": "Maize → Soybean → Sunflower",
+        "version": 1,
+        "selectedAt": "2026-10-15T10:00:00.000Z",
+        "selectedBy": "Farm Manager",
+        "cropSequence": [
+          {
+            "cropId": "maize",
+            "cropName": "Maize",
+            "cycleLabel": "Cycle 1 (Current)"
+          },
+          {
+            "cropId": "soybean",
+            "cropName": "Soybean",
+            "cycleLabel": "Cycle 2 (Next)"
+          },
+          {
+            "cropId": "sunflowers",
+            "cropName": "Sunflower",
+            "cycleLabel": "Cycle 3 (Low Water)"
+          }
+        ],
+        "isRecommendedPlan": false
+      },
+      "recommendedPlanId": "rot-sunflower-lentils-wheat",
+      "recommendedPlanTitle": "Sunflower → Lentils → Winter Wheat (Low Water)",
+      "soil": {
+        "texture": "Clay loam",
+        "moistureStatus": "estimated",
+        "moisturePct": 24,
+        "moistureMethod": "Estimated from ERA5 soil grid + hand feel",
+        "moistureDate": "2026-11-08",
+        "phStatus": "tested",
+        "phValue": 6.9,
+        "phTestDate": "2026-09-12",
+        "organicMatterPct": 2.9,
+        "drainage": "Slowly",
+        "slopePct": 1.8,
+        "elevationM": 61,
+        "preparationMethods": [
+          "Harrowing"
+        ],
+        "notes": "Southern edge drains slower after heavy winter rain."
+      },
+      "water": {
+        "sources": [
+          "River / Stream",
+          "Canal"
+        ],
+        "reliability": "Sometimes limited",
+        "dailyCapacityKnown": true,
+        "dailyCapacityM3": 140,
+        "qualityTested": "No",
+        "ecDsM": null,
+        "salinityPpm": null,
+        "qualityTestDate": "",
+        "wateringMethod": "Artificial irrigation",
+        "irrigationMethod": "Sprinkler irrigation",
+        "irrigationFrequency": "Every 2–3 days",
+        "rainfallFrequency": "Several times monthly",
+        "estimatedDailyDemandM3": 168,
+        "demandAssumptionNote": "Late-cycle maize canopy demand exceeds reliable late-summer pump capacity during dry periods."
+      },
+      "planningHorizon": "Next year",
+      "priorities": [
+        "Water conservation",
+        "Climate resistance"
+      ],
+      "challenges": [
+        "Unpredictable rainfall / drought"
+      ],
+      "lastAssessedAt": "2026-11-08T11:20:00.000Z",
+      "suitabilityScore": 63,
+      "createdAt": "2026-11-10T09:00:00.000Z",
+      "updatedAt": "2026-11-10T09:00:00.000Z"
+    },
+    "farm-highland": {
+      "farmId": "farm-highland",
+      "regionLabel": "Independence Bench, OR",
+      "country": "United States",
+      "timezone": "America/Los_Angeles",
+      "centroid": {
+        "lat": 44.8527,
+        "lon": -123.1656
+      },
+      "areaUnit": "hectares",
+      "declaredAreaHa": 120,
+      "isPrivate": true,
+      "isDraft": false,
+      "archivedAt": null,
+      "versionNumber": 1,
+      "notes": "High-priority moisture stress & seasonal irrigation bottleneck on upper bench.",
+      "activePlan": {
+        "planId": "rot-soy-wheat-fallow",
+        "title": "Soybean → Winter Wheat → Legume Mulch",
+        "version": 1,
+        "selectedAt": "2026-10-01T09:00:00.000Z",
+        "selectedBy": "Farm Manager",
+        "cropSequence": [
+          {
+            "cropId": "soybean",
+            "cropName": "Soybean",
+            "cycleLabel": "Cycle 1 (Current)"
+          },
+          {
+            "cropId": "wheat",
+            "cropName": "Wheat",
+            "cycleLabel": "Cycle 2 (Next)"
+          },
+          {
+            "cropId": "peas",
+            "cropName": "Peas",
+            "cycleLabel": "Cycle 3 (Mulch)"
+          }
+        ],
+        "isRecommendedPlan": false
+      },
+      "recommendedPlanId": "rot-chickpeas-barley-cover",
+      "recommendedPlanTitle": "Chickpeas → Drought-Tolerant Barley → Cover",
+      "soil": {
+        "texture": "Sandy loam",
+        "moistureStatus": "measured",
+        "moisturePct": 17,
+        "moistureMethod": "Handheld capacitance probe",
+        "moistureDate": "2026-11-09",
+        "phStatus": "tested",
+        "phValue": 6.1,
+        "phTestDate": "2026-10-05",
+        "organicMatterPct": 2.1,
+        "drainage": "Quickly",
+        "slopePct": 5.2,
+        "elevationM": 94,
+        "preparationMethods": [
+          "Raised beds"
+        ],
+        "notes": "Coarser sandy loam dries rapidly between irrigation runs."
+      },
+      "water": {
+        "sources": [
+          "Groundwater / Well"
+        ],
+        "reliability": "Frequently limited",
+        "dailyCapacityKnown": true,
+        "dailyCapacityM3": 110,
+        "qualityTested": "Yes",
+        "ecDsM": 0.92,
+        "salinityPpm": 589,
+        "qualityTestDate": "2026-10-02",
+        "wateringMethod": "Hybrid (rainfall and irrigation)",
+        "irrigationMethod": "Drip irrigation",
+        "irrigationFrequency": "Only when required",
+        "rainfallFrequency": "Monthly",
+        "estimatedDailyDemandM3": 195,
+        "demandAssumptionNote": "Well drawdown caps peak daily abstraction below evapotranspiration demand for 120 ha soybeans."
+      },
+      "planningHorizon": "Next season",
+      "priorities": [
+        "Water conservation",
+        "Improving soil health"
+      ],
+      "challenges": [
+        "Limited water supply",
+        "Soil quality decline"
+      ],
+      "lastAssessedAt": "2026-11-10T09:00:00.000Z",
+      "suitabilityScore": 38,
+      "createdAt": "2026-11-10T09:00:00.000Z",
+      "updatedAt": "2026-11-10T09:00:00.000Z"
+    },
+    "farm-sunrise": {
+      "farmId": "farm-sunrise",
+      "regionLabel": "North Polk Valley, OR",
+      "country": "United States",
+      "timezone": "America/Los_Angeles",
+      "centroid": {
+        "lat": 44.8703,
+        "lon": -123.1334
+      },
+      "areaUnit": "hectares",
+      "declaredAreaHa": 64.5,
+      "isPrivate": true,
+      "isDraft": false,
+      "archivedAt": null,
+      "versionNumber": 1,
+      "notes": "Winter-hardy barley block; last full lab & NASA POWER assessment ran > 30 days ago (needs refresh).",
+      "activePlan": null,
+      "recommendedPlanId": "rot-barley-peas-wheat",
+      "recommendedPlanTitle": "Barley → Field Peas → Winter Wheat",
+      "soil": {
+        "texture": "Loam",
+        "moistureStatus": "measured",
+        "moisturePct": 31,
+        "moistureMethod": "Soil moisture probe",
+        "moistureDate": "2026-10-12",
+        "phStatus": "tested",
+        "phValue": 6.5,
+        "phTestDate": "2026-10-12",
+        "organicMatterPct": 3.4,
+        "drainage": "Moderately",
+        "slopePct": 2.1,
+        "elevationM": 72,
+        "preparationMethods": [
+          "Compost / Organic fertiliser"
+        ],
+        "notes": ""
+      },
+      "water": {
+        "sources": [
+          "Rainwater collection",
+          "Groundwater / Well"
+        ],
+        "reliability": "Always available",
+        "dailyCapacityKnown": false,
+        "dailyCapacityM3": null,
+        "qualityTested": "Unknown",
+        "ecDsM": null,
+        "salinityPpm": null,
+        "qualityTestDate": "",
+        "wateringMethod": "Rain-fed agriculture",
+        "irrigationMethod": "Unknown",
+        "irrigationFrequency": "Only when required",
+        "rainfallFrequency": "Several times weekly",
+        "estimatedDailyDemandM3": 95,
+        "demandAssumptionNote": "Estimated rain-fed winter cereal requirement; well backup capacity not yet metered."
+      },
+      "planningHorizon": "Next year",
+      "priorities": [
+        "Increasing yield stability",
+        "Improving soil health"
+      ],
+      "challenges": [],
+      "lastAssessedAt": "2026-10-12T08:00:00.000Z",
+      "suitabilityScore": 82,
+      "createdAt": "2026-10-12T08:00:00.000Z",
+      "updatedAt": "2026-10-12T08:00:00.000Z"
+    },
+    "farm-oakridge": {
+      "farmId": "farm-oakridge",
+      "regionLabel": "South Polk Ridge, OR",
+      "country": "United States",
+      "timezone": "America/Los_Angeles",
+      "centroid": {
+        "lat": 44.8384,
+        "lon": -123.173
+      },
+      "areaUnit": "hectares",
+      "declaredAreaHa": 72.8,
+      "isPrivate": true,
+      "isDraft": false,
+      "archivedAt": null,
+      "versionNumber": 1,
+      "notes": "Newly registered parcel. Soil and water lab parameters remain unentered.",
+      "activePlan": null,
+      "recommendedPlanId": null,
+      "recommendedPlanTitle": null,
+      "soil": {
+        "texture": "Unknown",
+        "moistureStatus": "unknown",
+        "moisturePct": null,
+        "moistureMethod": "",
+        "moistureDate": "",
+        "phStatus": "not_tested",
+        "phValue": null,
+        "phTestDate": "",
+        "organicMatterPct": null,
+        "drainage": "Unknown",
+        "slopePct": null,
+        "elevationM": null,
+        "preparationMethods": [],
+        "notes": ""
+      },
+      "water": {
+        "sources": [
+          "Unknown"
+        ],
+        "reliability": "Unknown",
+        "dailyCapacityKnown": false,
+        "dailyCapacityM3": null,
+        "qualityTested": "Unknown",
+        "ecDsM": null,
+        "salinityPpm": null,
+        "qualityTestDate": "",
+        "wateringMethod": "",
+        "irrigationMethod": "Unknown",
+        "irrigationFrequency": "Unknown",
+        "rainfallFrequency": "Unknown",
+        "estimatedDailyDemandM3": null,
+        "demandAssumptionNote": "Awaiting soil, crop, and water source details."
+      },
+      "planningHorizon": "",
+      "priorities": [],
+      "challenges": [],
+      "lastAssessedAt": null,
+      "suitabilityScore": null,
+      "createdAt": "2026-11-10T09:00:00.000Z",
+      "updatedAt": "2026-11-10T09:00:00.000Z"
+    }
+  },
+  "fieldMeta": {
+    "field-gv-1": {
+      "fieldId": "field-gv-1",
+      "previousCrops": [
+        "Peas",
+        "Barley"
+      ],
+      "activePlanId": "rot-wheat-peas-cover",
+      "activePlanTitle": "Wheat → Peas → Cover Oats",
+      "rotationReviewDue": false,
+      "activeAlertsCount": 0,
+      "lastAssessedAt": "2026-11-10T09:00:00.000Z",
+      "notes": "Healthy vigorous tillering stand."
+    },
+    "field-gv-2": {
+      "fieldId": "field-gv-2",
+      "previousCrops": [
+        "Wheat",
+        "Soybean"
+      ],
+      "activePlanId": "rot-wheat-peas-cover",
+      "activePlanTitle": "Wheat → Peas → Cover Oats",
+      "rotationReviewDue": true,
+      "activeAlertsCount": 1,
+      "lastAssessedAt": "2026-11-10T09:00:00.000Z",
+      "notes": "Check drip header pressure before spring seeding."
+    },
+    "field-gv-3": {
+      "fieldId": "field-gv-3",
+      "previousCrops": [
+        "Maize",
+        "Wheat"
+      ],
+      "activePlanId": "rot-wheat-peas-cover",
+      "activePlanTitle": "Wheat → Peas → Cover Oats",
+      "rotationReviewDue": false,
+      "activeAlertsCount": 0,
+      "lastAssessedAt": "2026-11-10T09:00:00.000Z"
+    }
+  },
+  "decisions": [
+    {
+      "id": "dec-gv-01",
+      "farmId": "farm-green-valley",
+      "fieldId": null,
+      "fieldName": "Whole Farm",
+      "timestamp": "2026-10-18T15:00:00.000Z",
+      "actor": "Farm Manager",
+      "action": "selected",
+      "candidateId": "rot-wheat-peas-cover-v1",
+      "candidateTitle": "Wheat → Soybeans → Rye Cover",
+      "candidateScoreSnapshot": 81,
+      "priorPlan": null,
+      "newPlan": {
+        "planId": "rot-wheat-peas-cover-v1",
+        "title": "Wheat → Soybeans → Rye Cover",
+        "version": 1,
+        "crops": [
+          {
+            "cropId": "wheat",
+            "cropName": "Wheat",
+            "cycleLabel": "Cycle 1"
+          },
+          {
+            "cropId": "soybean",
+            "cropName": "Soybean",
+            "cycleLabel": "Cycle 2"
+          },
+          {
+            "cropId": "barley",
+            "cropName": "Rye Cover",
+            "cycleLabel": "Cycle 3"
+          }
+        ]
+      },
+      "reasonCode": "agronomic_fit",
+      "reasonNote": "Initial autumn cereal establishment aligned with wet winter forecast.",
+      "sourceReportId": "snap-gv-01",
+      "sourceReportDate": "2026-10-18"
+    },
+    {
+      "id": "dec-gv-02",
+      "farmId": "farm-green-valley",
+      "fieldId": null,
+      "fieldName": "Whole Farm",
+      "timestamp": "2026-11-02T14:15:00.000Z",
+      "actor": "Farm Manager",
+      "action": "replaced",
+      "candidateId": "rot-wheat-peas-cover",
+      "candidateTitle": "Wheat → Peas → Cover Oats",
+      "candidateScoreSnapshot": 86,
+      "priorPlan": {
+        "planId": "rot-wheat-peas-cover-v1",
+        "title": "Wheat → Soybeans → Rye Cover",
+        "version": 1,
+        "crops": [
+          {
+            "cropId": "wheat",
+            "cropName": "Wheat",
+            "cycleLabel": "Cycle 1"
+          },
+          {
+            "cropId": "soybean",
+            "cropName": "Soybean",
+            "cycleLabel": "Cycle 2"
+          },
+          {
+            "cropId": "barley",
+            "cropName": "Rye Cover",
+            "cycleLabel": "Cycle 3"
+          }
+        ]
+      },
+      "newPlan": {
+        "planId": "rot-wheat-peas-cover",
+        "title": "Wheat → Peas → Cover Oats",
+        "version": 2,
+        "crops": [
+          {
+            "cropId": "wheat",
+            "cropName": "Wheat",
+            "cycleLabel": "Cycle 1 (Current)"
+          },
+          {
+            "cropId": "peas",
+            "cropName": "Peas",
+            "cycleLabel": "Cycle 2 (Next)"
+          },
+          {
+            "cropId": "barley",
+            "cropName": "Oats / Barley Cover",
+            "cycleLabel": "Cycle 3 (Restore)"
+          }
+        ]
+      },
+      "reasonCode": "water",
+      "reasonNote": "Switched summer soybean cycle to cool-season field peas to cut peak drip irrigation demand by ~24%.",
+      "sourceReportId": "snap-gv-02",
+      "sourceReportDate": "2026-11-02"
+    },
+    {
+      "id": "dec-rb-01",
+      "farmId": "farm-riverside",
+      "fieldId": null,
+      "fieldName": "Whole Farm",
+      "timestamp": "2026-10-15T10:00:00.000Z",
+      "actor": "Farm Manager",
+      "action": "deferred",
+      "candidateId": "rot-sunflower-lentils-wheat",
+      "candidateTitle": "Sunflower → Lentils → Winter Wheat (Low Water)",
+      "candidateScoreSnapshot": 79,
+      "priorPlan": {
+        "planId": "rot-maize-soy-sunflower",
+        "title": "Maize → Soybean → Sunflower",
+        "version": 1,
+        "crops": [
+          {
+            "cropId": "maize",
+            "cropName": "Maize",
+            "cycleLabel": "Cycle 1 (Current)"
+          },
+          {
+            "cropId": "soybean",
+            "cropName": "Soybean",
+            "cycleLabel": "Cycle 2 (Next)"
+          },
+          {
+            "cropId": "sunflowers",
+            "cropName": "Sunflower",
+            "cycleLabel": "Cycle 3 (Low Water)"
+          }
+        ]
+      },
+      "newPlan": null,
+      "reasonCode": "equipment",
+      "reasonNote": "Keeping Maize → Soybean for current contract cycle; header kit for lentils awaits grower co-op delivery.",
+      "sourceReportId": null,
+      "sourceReportDate": null
+    }
+  ],
+  "observations": [
+    {
+      "id": "obs-gv-01",
+      "farmId": "farm-green-valley",
+      "fieldId": "field-gv-1",
+      "fieldName": "North Ridge Block 1",
+      "category": "soil_lab",
+      "title": "Autumn topsoil TDR & composite pH check",
+      "detail": "Moisture stabilized at 34% VWC after 14 mm rainfall; pH measured 6.6 across 6 cores.",
+      "observedAt": "2026-11-09",
+      "provenance": "Measured",
+      "createdAt": "2026-11-09T16:20:00.000Z"
+    },
+    {
+      "id": "obs-hl-01",
+      "farmId": "farm-highland",
+      "fieldId": null,
+      "fieldName": "Whole Farm",
+      "category": "scouting",
+      "title": "Sandy loam bench moisture drawdown alert",
+      "detail": "Probe averaged 17% VWC at 15 cm depth; upper bench rows showing early wilting before afternoon heat.",
+      "observedAt": "2026-11-09",
+      "provenance": "Measured",
+      "createdAt": "2026-11-09T13:10:00.000Z"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "task-gv-01",
+      "farmId": "farm-green-valley",
+      "fieldId": "field-gv-2",
+      "fieldName": "East Creek Block 2",
+      "title": "Inspect drip manifold pressure & flush lateral filters",
+      "category": "irrigation",
+      "dueDate": "2026-11-18",
+      "priority": "normal",
+      "completed": false,
+      "completedAt": null,
+      "createdAt": "2026-11-10T09:00:00.000Z"
+    },
+    {
+      "id": "task-hl-01",
+      "farmId": "farm-highland",
+      "fieldId": null,
+      "fieldName": "Whole Farm",
+      "title": "Shift irrigation set to pre-dawn low-wind window & verify well drawdown",
+      "category": "irrigation",
+      "dueDate": "2026-11-15",
+      "priority": "high",
+      "completed": false,
+      "completedAt": null,
+      "createdAt": "2026-11-10T09:00:00.000Z"
+    },
+    {
+      "id": "task-or-01",
+      "farmId": "farm-oakridge",
+      "fieldId": null,
+      "fieldName": "Whole Farm",
+      "title": "Collect composite soil cores (0–20 cm) for pH & texture lab entry",
+      "category": "soil",
+      "dueDate": "2026-11-20",
+      "priority": "high",
+      "completed": false,
+      "completedAt": null,
+      "createdAt": "2026-11-10T09:00:00.000Z"
+    }
+  ],
+  "irrigationLogs": [
+    {
+      "id": "irr-gv-01",
+      "farmId": "farm-green-valley",
+      "fieldId": "field-gv-1",
+      "fieldName": "North Ridge Block 1",
+      "date": "2026-11-06",
+      "volumeM3": 112,
+      "method": "Drip irrigation",
+      "notes": "Pre-emergence soak across 28.4 ha block.",
+      "createdAt": "2026-11-06T07:30:00.000Z"
+    },
+    {
+      "id": "irr-hl-01",
+      "farmId": "farm-highland",
+      "fieldId": null,
+      "fieldName": "Whole Farm",
+      "date": "2026-11-08",
+      "volumeM3": 105,
+      "method": "Drip irrigation",
+      "notes": "Limited by well recovery rate after 6 hours.",
+      "createdAt": "2026-11-08T06:00:00.000Z"
+    }
+  ],
+  "snapshots": [
+    {
+      "id": "snap-gv-01",
+      "farmId": "farm-green-valley",
+      "fieldId": null,
+      "fieldName": "Whole Farm",
+      "generatedAt": "2026-10-18T14:20:00.000Z",
+      "modelVersion": "power-eonet-v2",
+      "triggerReason": "Baseline onboarding soil + climate run",
+      "suitabilityScore": 81,
+      "confidencePct": 84,
+      "completenessPct": 86,
+      "weatherWindowSummary": "NASA POWER 21-year Oct window: 16.4 °C high / 6.2 °C low, 2.8 mm/day rainfall.",
+      "dataAvailability": {
+        "nasaPower": "available",
+        "openMeteo": "available",
+        "nasaEonet": "available",
+        "soilLab": "measured"
+      },
+      "keyMetrics": {
+        "meanTempC": 11.3,
+        "precipMmDay": 2.8,
+        "et0MmDay": 2.3,
+        "soilMoisturePct": 29,
+        "phValue": 6.6,
+        "mappedAreaHa": 78.3
+      },
+      "recommendations": [
+        "Maintain autumn cereal establishment with residue cover to preserve silt loam structure.",
+        "Schedule legume rotation next cycle to supply 40–60 kg N/ha biologically."
+      ]
+    },
+    {
+      "id": "snap-gv-02",
+      "farmId": "farm-green-valley",
+      "fieldId": null,
+      "fieldName": "Whole Farm",
+      "generatedAt": "2026-11-10T09:00:00.000Z",
+      "modelVersion": "power-eonet-v2.1",
+      "triggerReason": "Post-probe Nov re-assessment & water sensitivity check",
+      "suitabilityScore": 86,
+      "confidencePct": 91,
+      "completenessPct": 94,
+      "weatherWindowSummary": "NASA POWER + Open-Meteo: 14.2 °C high / 5.1 °C low, 3.4 mm/day rainfall, 0 EONET hazards.",
+      "dataAvailability": {
+        "nasaPower": "available",
+        "openMeteo": "available",
+        "nasaEonet": "available",
+        "soilLab": "measured"
+      },
+      "keyMetrics": {
+        "meanTempC": 9.7,
+        "precipMmDay": 3.4,
+        "et0MmDay": 1.9,
+        "soilMoisturePct": 34,
+        "phValue": 6.6,
+        "mappedAreaHa": 78.3
+      },
+      "recommendations": [
+        "Soil moisture recharge improved +5% VWC; Wheat → Peas → Cover Oats scores highest water-efficiency fit.",
+        "Flush East Creek drip filters prior to spring transition."
+      ]
+    }
+  ],
+  "appliedOpIds": []
+}

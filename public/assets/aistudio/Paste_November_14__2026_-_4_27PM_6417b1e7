@@ -1,0 +1,1857 @@
+Complete UI reconstruction specification — Farm Conditions dashboard
+Scope: This description covers exclusively the foreground user interface: card positioning, dimensions, layout, alignment, spacing, internal content, borders, transparency, gradients, glass effects, typography, icons, and component proportions.
+
+The background photograph is excluded entirely. All measurements refer to the supplied 1820 × 818 px reference image. Coordinates are approximate pixel measurements, with (0,0) at the top-left corner.
+
+The interface consists of three major visual structures:
+1. A large Farm Conditions dashboard card on the upper-left.
+2. A separate All Fields card on the upper-right.
+3. A long horizontal Weather card beneath both upper cards.
+The overall composition is a floating, three-panel dashboard. The upper two cards sit side by side, while the weather panel spans almost the entire width underneath them.
+
+1. Overall UI positioning and composition
+Dashboard layout map
+01 — FARM CONDITIONS
+92%
+
+Crop health graph
+
+
+✓ Your crops are in excellent condition!
+
+
+
+02 — ALL FIELDS
+Field 1
+
+Health information
+
+Field 2
+
+Health information
+
+Field 3
+
+Health information
+
+
+
+
+03 — WEATHER INFORMATION
+
+Weather · Humidity · Wind Speed · Location
+
+
+Structural illustration of the three foreground panels, not a replacement screenshot.
+1.1 Exact overall placement
+Component	X	Y	Width	Height
+Farm Conditions	99 px	15 px	1125 px	589 px
+All Fields	1252 px	15 px	519 px	589 px
+Weather	101 px	636 px	1664 px	151 px
+
+The two upper cards have approximately 28 px of horizontal separation.
+
+The weather card starts approximately 32 px below the bottom edge of the upper panels.
+
+The upper panels have the same top and bottom alignment, creating a balanced horizontal composition.
+
+The weather panel spans the combined width of the upper cards and extends slightly beyond their outer edges.
+
+The overall dashboard is inset approximately 100 px from the left edge and 49 px from the right edge.
+
+2. Shared glass-card visual language
+All three panels use the same overall glassmorphism design language, but their internal transparency and tinting differ slightly.
+
+The panels should look like semi-transparent, blue-tinted glass surfaces floating above the interface.
+
+They are not opaque blue rectangles.
+
+Their visual characteristics are:
+- Large rounded corners.
+- Semi-transparent blue and teal surfaces.
+- Stronger cyan illumination around the outside perimeter.
+- A thin, luminous border.
+- A subtle brighter upper-edge reflection.
+- A darker blue-teal interior tint.
+- Soft shadows underneath.
+- A frosted appearance.
+- Visible underlying scenery through the glass.
+- Slightly brighter corners and edge reflections.
+Shared CSS foundation
+.dashboard-glass {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+
+    border: 1px solid rgba(107, 225, 255, 0.76);
+
+    border-radius: 38px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(35, 143, 199, 0.48) 0%,
+            rgba(13, 86, 133, 0.57) 42%,
+            rgba(5, 65, 92, 0.67) 100%
+        );
+
+    backdrop-filter:
+        blur(19px)
+        saturate(145%);
+
+    -webkit-backdrop-filter:
+        blur(19px)
+        saturate(145%);
+
+    box-shadow:
+        0 8px 26px rgba(0, 35, 65, 0.20),
+        0 0 17px rgba(0, 184, 255, 0.15),
+        0 0 32px rgba(0, 205, 222, 0.10),
+        inset 0 1px 2px rgba(255,255,255,0.35),
+        inset 0 -2px 6px rgba(0, 220, 232, 0.15);
+}
+
+
+The values above are starting implementation values; each panel needs its own tint adjustment to match the reference.
+Shared upper-edge reflection
+The panels have a faint light-blue reflection running along the upper edge.
+.dashboard-glass::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+
+    border-radius: inherit;
+    pointer-events: none;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(191, 245, 255, 0.19) 0%,
+            rgba(145, 222, 255, 0.08) 13%,
+            transparent 38%
+        );
+
+    z-index: 0;
+}
+
+
+Important layering rule
+Every panel's decorative overlays must sit behind its actual content.
+.dashboard-glass > * {
+    position: relative;
+    z-index: 1;
+}
+
+
+Do not let the reflection overlays cover text, icons, graphs, or buttons.
+
+3. Upper-left card — Farm Conditions
+Main dashboard panel
+
+
+
+
+
+
+
+
+dribbble.com
+
+
+This is the largest and most visually dominant card.
+
+It occupies approximately 61% of the total upper dashboard width.
+
+Its structure is divided into four main internal regions:
+1. Header row.
+2. Crop health circular gauge.
+3. Crop health analytics graph.
+4. Bottom condition notification banner.
+All four regions are contained within one continuous glass panel. There are no separate opaque cards surrounding the circular gauge or graph.
+3.1 Outer container
+Approximate dimensions:
+Property	Measurement
+X position	99 px
+Y position	15 px
+Width	1125 px
+Height	589 px
+Corner radius	37–40 px
+Internal left padding	29 px
+Internal right padding	28 px
+Internal top padding	31 px
+
+The card has a large rounded rectangular silhouette.
+
+The upper-left and upper-right corners are particularly rounded.
+
+The bottom corners have the same radius.
+Main surface
+The background is a blue-cyan translucent gradient, with a slight darkening toward the bottom.
+.farm-conditions {
+    position: absolute;
+
+    left: 5.44%;
+    top: 1.83%;
+
+    width: 61.81%;
+    height: 72.13%;
+
+    box-sizing: border-box;
+
+    border-radius: 39px;
+
+    padding: 30px 28px;
+
+    background:
+        linear-gradient(
+            140deg,
+            rgba(30, 132, 191, 0.48) 0%,
+            rgba(13, 88, 139, 0.55) 43%,
+            rgba(4, 65, 91, 0.63) 100%
+        );
+
+    backdrop-filter:
+        blur(19px) saturate(145%);
+
+    border:
+        1px solid rgba(115, 230, 255, 0.78);
+
+    box-shadow:
+        0 0 13px rgba(0, 193, 255, 0.22),
+        0 0 28px rgba(0, 193, 255, 0.12),
+        inset 0 1px 2px rgba(255,255,255,0.35);
+}
+
+
+The glass background should be strong enough to make the white typography readable, but not so strong that it hides the underlying scenery.
+3.2 Header row
+The header occupies the uppermost portion of the panel.
+
+It begins approximately 34 px from the left inner edge and 35 px from the top.
+
+The header is arranged horizontally.
+Farm Conditions
+Real-time insights for smarter farming
+
+
+Live
+
+
+Updated: 2 min ago
+
+
+
+Left header group
+Leaf emblem
+- Positioned around X = 134 px, Y = 48 px.
+- Approximately 51 × 53 px.
+- Bright turquoise-green.
+- Stylized leaf silhouette.
+- Internal dark teal vein details.
+- No enclosing circle or square.
+- It is directly placed against the transparent panel.
+Title
+- Text: Farm Conditions
+- Approximately 30 px.
+- Font weight: 600–700.
+- Color: #F5FAFF.
+- Positioned to the right of the leaf.
+- Horizontal gap from leaf: approximately 24 px.
+Subtitle
+- Text: Real-time insights for smarter farming
+- Approximately 19–20 px.
+- Font weight: 400.
+- Color: #C4E0F2.
+- Positioned directly underneath the title.
+- Approximately 4 px vertical separation.
+The title and subtitle share the same left alignment.
+Right header group
+This group is aligned to the right side of the panel.
+
+It contains three elements:
+
+Live indicator
+- A small rounded pill.
+- Approximately 82 × 41 px.
+- Darker teal translucent fill.
+- Small bright mint status dot.
+- Text Live in mint green.
+- Approximately 14 px semibold.
+Update timestamp
+- Text: Updated: 2 min ago
+- Approximately 14 px.
+- Pale blue-white.
+- No enclosing background.
+Refresh button
+- Approximately 32 × 32 px.
+- White-blue circular refresh arrows.
+- No solid button background.
+- Subtle cyan glow.
+The three items are arranged in one horizontal line, vertically centered with the main title.
+3.3 Main content region
+The main content region begins approximately 135 px from the top of the overall card.
+
+It has two primary visual sections:
+- Circular health indicator on the left.
+- Analytical line chart on the right.
+The gauge occupies approximately 340 × 340 px.
+
+The chart occupies approximately 650 × 330 px.
+
+They are visually separated by whitespace rather than a solid vertical divider.
+Internal positioning
+Element	Approximate X	Approximate Y
+Health gauge center	343 px	306 px
+Gauge outer diameter	340 px	340 px
+Chart starting area	548 px	157 px
+Chart ending area	1173 px	423 px
+
+The gauge is horizontally centered within the left portion of the panel.
+
+The graph occupies the middle and right portions of the panel.
+
+4. Circular crop-health gauge
+
+
+
+
+
+
+
+
+
+
+The circular gauge is a large donut-style progress indicator.
+
+It is the main focal point inside the Farm Conditions card.
+4.1 Outer positioning
+- Center X: approximately 344 px.
+- Center Y: approximately 307 px.
+- Outer diameter: approximately 340 px.
+- Outer radius: approximately 170 px.
+The gauge is not inside another rectangular card.
+
+It floats directly inside the main Farm Conditions panel.
+
+There is a subtle circular decorative outline outside the main progress ring.
+4.2 Outer decorative ring
+Behind the main ring is a very faint circular outline.
+
+It has:
+- Approximately 350–365 px diameter.
+- Thin turquoise stroke.
+- Opacity around 0.15–0.25.
+- Small decorative radial markers.
+- A slight cyan glow.
+It should look like a subtle scientific measurement instrument.
+
+It is not a second progress indicator.
+4.3 Main progress ring
+The primary ring is approximately 27–30 px thick.
+
+It has a large circular shape with rounded endpoints.
+
+The ring starts near the upper center and follows approximately 92% of a full circumference, leaving a small unfilled gap around the lower-right/lower region.
+
+The ring uses a turquoise gradient.
+92%
+Crop Health
+
+↑ +3%
+
+
+
+The actual ring should be rendered as an SVG circle rather than a simple CSS border.
+
+Recommended SVG geometry:
+<svg viewBox="0 0 360 360">
+  <defs>
+    <linearGradient id="healthGradient">
+      <stop offset="0%" stopColor="#00D5C6"/>
+      <stop offset="48%" stopColor="#20E9CE"/>
+      <stop offset="100%" stopColor="#00AFCB"/>
+    </linearGradient>
+  </defs>
+
+  <circle
+    cx="180"
+    cy="180"
+    r="151"
+    fill="none"
+    stroke="rgba(0,170,202,0.19)"
+    strokeWidth="27"
+  />
+
+  <circle
+    cx="180"
+    cy="180"
+    r="151"
+    fill="none"
+    stroke="url(#healthGradient)"
+    strokeWidth="27"
+    strokeLinecap="round"
+    strokeDasharray="873 949"
+    transform="rotate(135 180 180)"
+  />
+</svg>
+
+
+The track is darker blue-teal.
+
+The active portion is luminous cyan and turquoise.
+4.4 Inner gauge content
+Everything is center-aligned.
+
+The hierarchy is:
+1. Turquoise leaf icon.
+2. Large 92% number.
+3. Crop Health label.
+4. Upward green arrow and +3%.
+Leaf icon
+- Approximately 39 × 43 px.
+- Bright turquoise.
+- Positioned above the percentage.
+- No background container.
+Percentage
+- Font size: approximately 64 px.
+- Weight: 700.
+- Color: almost white.
+- Letter spacing: approximately -2 px.
+Crop Health
+- Approximately 19–20 px.
+- Weight: 400–500.
+- Color: #F0F8FF.
+Growth indicator
+- Text: ↑ +3%
+- Approximately 19 px.
+- Semibold.
+- Bright green-turquoise.
+- Small gap below the label.
+
+5. Crop-health analytics graph
+
+
+
+
+
+
+
+
+
+
+The graph is positioned to the right of the circular gauge.
+
+It is integrated directly into the Farm Conditions card.
+
+There is no separate chart card or opaque graph background.
+5.1 Chart boundaries and dimensions
+Approximate visual boundaries:
+- Left: 548 px.
+- Right: 1174 px.
+- Top: 153 px.
+- Bottom: 423 px.
+The chart has a wide landscape proportion.
+
+It uses a dark, very faint coordinate grid.
+
+The grid is visible but understated.
+5.2 Grid structure
+The chart contains horizontal and vertical grid lines.
+
+Horizontal lines:
+- Thin.
+- Dark blue-cyan.
+- Approximately 1 px.
+- Low opacity, approximately 0.13–0.20.
+- Evenly spaced vertically.
+Vertical lines:
+- Thin.
+- Dark cyan.
+- Approximately 1 px.
+- Low opacity.
+- Evenly distributed horizontally.
+The grid should never compete with the graph.
+.chart-grid {
+    background-image:
+        linear-gradient(
+            to bottom,
+            rgba(92, 208, 229, 0.13) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            to right,
+            rgba(92, 208, 229, 0.10) 1px,
+            transparent 1px
+        );
+
+    background-size:
+        100% 53px,
+        78px 100%;
+}
+
+
+5.3 Main line
+The chart contains a single continuous upward-trending turquoise line.
+
+It starts relatively low on the left.
+
+It rises through several data points, experiences a small plateau, climbs to a higher level, reaches its highest point toward the right, and then fluctuates slightly.
+
+The line is:
+- Bright turquoise.
+- Approximately 2–3 px thick.
+- Smoothly curved.
+- Slightly glowing.
+- No sharp angular corners.
+Use an SVG path with smooth Bézier curves.
+Data points
+The line has approximately ten visible data points.
+
+Most are small white circular markers.
+
+Each marker is around 9–11 px in diameter.
+
+The points have:
+- White fill.
+- Slight cyan outer glow.
+- No prominent dark outline.
+Area fill
+Under the line is a translucent cyan-turquoise filled area.
+
+It fades gradually toward the bottom.
+.chart-area {
+    fill: url(#chartAreaGradient);
+}
+
+.chart-line {
+    fill: none;
+
+    stroke: #00DCCB;
+
+    stroke-width: 2.5;
+
+    stroke-linecap: round;
+    stroke-linejoin: round;
+
+    filter:
+        drop-shadow(0 0 6px rgba(0,235,225,0.65));
+}
+
+
+The area gradient should fade from approximately 30% opacity at the top to transparent at the bottom.
+5.4 Selected data point
+One point near the right-center of the graph is highlighted.
+
+This is the highest or selected measurement.
+
+It has a large circular white-cyan marker.
+
+Above it is a dark blue tooltip displaying:
+92%
+
+
+The tooltip:
+- Is approximately 78 × 41 px.
+- Has 14–16 px rounded corners.
+- Dark blue translucent background.
+- White percentage.
+- Approximately 19 px semibold text.
+- Small downward-pointing triangle.
+A thin vertical cyan guide line descends from the highlighted marker toward the bottom of the chart.
+
+This selected point is visually more prominent than all the other markers.
+
+6. Bottom condition notification banner
+Positive status
+The notification banner spans almost the entire internal width of the Farm Conditions card.
+
+It is positioned beneath the gauge and graph.
+
+Approximate measurements:
+Property	Measurement
+X	129 px
+Y	482 px
+Width	1067 px
+Height	98 px
+Corner radius	31 px
+
+It has a separate translucent teal-green glass surface.
+
+It is not a solid green notification.
+6.1 Banner background
+The banner is darker and greener than the main panel.
+
+It has a horizontal gradient.
+
+The left portion is slightly more saturated turquoise.
+
+The center is a translucent deep teal.
+
+The right side is a softer blue-green.
+.condition-banner {
+    position: absolute;
+
+    left: 29px;
+    right: 28px;
+    bottom: 22px;
+
+    height: 98px;
+
+    display: flex;
+    align-items: center;
+
+    border-radius: 31px;
+
+    background:
+        linear-gradient(
+            100deg,
+            rgba(0, 133, 126, 0.52) 0%,
+            rgba(8, 93, 105, 0.60) 47%,
+            rgba(14, 105, 124, 0.53) 100%
+        );
+
+    border:
+        1px solid rgba(38, 228, 220, 0.58);
+
+    box-shadow:
+        0 0 12px rgba(0, 215, 205, 0.15),
+        inset 0 1px 2px rgba(255,255,255,0.20),
+        inset 0 -2px 5px rgba(0,220,200,0.12);
+}
+
+
+6.2 Banner contents
+The layout is horizontal.
+
+From left to right:
+1. Green circular success icon.
+2. Two-line notification text.
+3. Right-facing chevron.
+Success icon
+- Approximately 55 × 55 px.
+- Positioned 24 px from the left edge.
+- Bright emerald-turquoise circular fill.
+- White checkmark.
+- Subtle green glow.
+.success-icon {
+    width: 55px;
+    height: 55px;
+
+    border-radius: 50%;
+
+    display: grid;
+    place-items: center;
+
+    background:
+        linear-gradient(
+            135deg,
+            #12E9BB,
+            #00CBA9
+        );
+
+    color: white;
+
+    box-shadow:
+        0 0 16px rgba(0,239,190,0.40),
+        inset 0 1px 2px rgba(255,255,255,0.45);
+}
+
+
+Notification heading
+Exact text:
+
+Your crops are in excellent condition!
+- Approximately 19–20 px.
+- Semibold.
+- White.
+- Positioned approximately 22 px after the icon.
+Notification subtitle
+Exact text:
+
+No immediate action required.
+- Approximately 18 px.
+- Regular.
+- Pale blue-grey.
+- Positioned approximately 4 px below the heading.
+Both text lines share a left alignment.
+Right chevron
+- Approximately 20 px.
+- White-blue.
+- Positioned 24–30 px from the right edge.
+- Vertically centered.
+- No separate circle.
+
+7. Upper-right card — All Fields
+Field listing panel
+
+
+
+
+
+
+
+
+devpost.com
+
+
+The All Fields panel is a separate glass container.
+
+It sits directly beside Farm Conditions.
+
+It has the same height, similar corner radius and similar outer illumination.
+
+Its internal structure is different: it is a vertically stacked list.
+
+It contains:
+1. Header.
+2. View All link.
+3. Field 1 card.
+4. Field 2 card.
+5. Field 3 card.
+There are three individually rounded field cards inside the larger All Fields panel.
+7.1 Outer card positioning
+Property	Measurement
+X	1252 px
+Y	15 px
+Width	519 px
+Height	589 px
+Corner radius	39 px
+Horizontal padding	26 px
+Top padding	36 px
+
+The panel has approximately the same blue-tinted glass background as the Farm Conditions card.
+
+Its border is cyan-blue.
+
+Its bottom edge has a subtle bright reflection.
+
+It should look like the right-hand continuation of the same dashboard, but remain a separate panel.
+.all-fields-panel {
+    position: absolute;
+
+    left: 68.79%;
+    top: 1.83%;
+
+    width: 28.52%;
+    height: 72.13%;
+
+    box-sizing: border-box;
+
+    padding: 35px 25px 23px;
+
+    border-radius: 39px;
+
+    background:
+        linear-gradient(
+            150deg,
+            rgba(45, 137, 188, 0.49),
+            rgba(10, 79, 119, 0.62)
+        );
+
+    backdrop-filter:
+        blur(19px) saturate(145%);
+
+    border: 1px solid
+        rgba(117, 222, 255, 0.70);
+
+    box-shadow:
+        0 0 17px rgba(0,181,244,0.17),
+        0 9px 25px rgba(0,32,66,0.17),
+        inset 0 1px 2px rgba(255,255,255,0.31);
+}
+
+
+7.2 All Fields header
+The header sits approximately 35 px below the top edge.
+
+It has a horizontal alignment.
+All Fields
+
+View All
+
+
+
+Left side:
+- Stacked layers icon.
+- Approximately 35 × 35 px.
+- Turquoise outline.
+- No enclosing circle.
+- Heading All Fields.
+- Approximately 25–27 px.
+- Semibold.
+- White.
+Right side:
+- View All text.
+- Approximately 15 px.
+- Turquoise.
+- Right-facing arrow.
+- Approximately 16 px.
+The header elements are vertically centered.
+
+The entire heading row occupies approximately 45 px in height.
+
+8. Individual field cards
+There are three vertically stacked field cards.
+
+Each card is a separate translucent blue-glass rectangle inside the All Fields panel.
+
+They have consistent widths and heights.
+
+Approximate dimensions:
+Property	Value
+Width	465 px
+Height	148 px
+Corner radius	26 px
+Vertical gap	21–23 px
+
+Approximate positions:
+Card	X	Y
+Field 1	1279 px	121 px
+Field 2	1279 px	291 px
+Field 3	1279 px	456 px
+
+The field cards use a lighter and slightly more cyan glass background than the outer All Fields panel.
+
+They should appear as raised glass surfaces.
+8.1 Field-card surface
+.field-item {
+    position: relative;
+
+    width: 100%;
+    height: 148px;
+
+    box-sizing: border-box;
+
+    display: flex;
+    align-items: center;
+
+    padding: 10px 12px;
+
+    border-radius: 26px;
+
+    background:
+        linear-gradient(
+            115deg,
+            rgba(125, 205, 237, 0.34) 0%,
+            rgba(78, 160, 204, 0.36) 48%,
+            rgba(44, 131, 173, 0.40) 100%
+        );
+
+    border: 1px solid
+        rgba(154, 229, 255, 0.45);
+
+    backdrop-filter:
+        blur(15px) saturate(135%);
+
+    box-shadow:
+        0 4px 13px rgba(0,40,70,0.12),
+        inset 0 1px 3px rgba(255,255,255,0.35),
+        inset 0 -1px 3px rgba(20,190,226,0.12);
+}
+
+
+The surface should be translucent enough that the background is visible through it, but it must provide enough contrast for the field information.
+8.2 Field-card internal layout
+Each field card contains three main horizontal zones:
+
+
+
+
+
+
+
+
+
+
+Field 1 ● Healthy
+
+92% Health | 24°C
+
+
+
+
+
+The three zones are:
+- Crop thumbnail on the left.
+- Field information in the middle.
+- Circular chevron control on the right.
+8.3 Crop thumbnails
+Each field card has a rectangular landscape thumbnail.
+
+Approximate dimensions:
+- Width: 160 px.
+- Height: 132 px.
+- Corner radius: 19 px.
+The image fills its entire thumbnail container.
+
+Use:
+.field-thumbnail {
+    width: 160px;
+    height: 132px;
+
+    flex-shrink: 0;
+
+    object-fit: cover;
+
+    border-radius: 19px;
+
+    border: 1px solid
+        rgba(207,244,255,0.42);
+
+    box-shadow:
+        0 2px 8px rgba(0,25,45,0.20);
+}
+
+
+The images have no caption or separate frame.
+
+Each thumbnail has its own agricultural image.
+Field 1
+- Lush green crop rows.
+- Healthy appearance.
+- Strong green vegetation.
+- Bright daylight.
+Field 2
+- Dense green crop.
+- Slightly different crop composition.
+- Corn-like plants.
+- Bright green leaves.
+Field 3
+- Golden-yellow mature wheat.
+- Warm yellow-orange appearance.
+- Clearly distinguishable from the other green fields.
+The images must remain clipped to their rounded rectangular containers.
+8.4 Field information text
+The information block begins approximately 20 px after the thumbnail.
+
+It occupies the remaining central width.
+
+The title and status are on the same horizontal line.
+Field title
+- Font size: 20–21 px.
+- Weight: 600.
+- Color: white.
+- Examples: Field 1, Field 2, Field 3.
+Health status
+Each title is followed by a small colored circular status dot and a label.
+Field	Status	Status color
+Field 1	Healthy	Mint green
+Field 2	Monitor	Amber yellow
+Field 3	Healthy	Mint green
+
+The status dot is approximately 10 px.
+
+The label is approximately 15 px.
+
+Healthy:
+.status-healthy {
+    color: #13E6B7;
+}
+
+
+Monitor:
+.status-monitor {
+    color: #FFD45C;
+}
+
+
+Health and temperature
+The next line displays:
+- Health percentage.
+- Vertical separator.
+- Temperature.
+Examples:
+
+92% Health | 24°C
+
+78% Health | 26°C
+
+95% Health | 23°C
+
+Typography:
+- Approximately 17 px.
+- Regular weight.
+- Color: #D7EBF9.
+- Vertical alignment centered.
+Progress bar
+The final information row is a horizontal health progress bar.
+
+It is approximately 212 px wide and 7 px high.
+
+It has a dark teal track.
+
+The filled section is bright turquoise.
+
+The fill length corresponds to the health percentage.
+Field	Progress
+Field 1	92%
+Field 2	78%
+Field 3	95%
+
+CSS:
+.field-progress {
+    width: 212px;
+    height: 7px;
+
+    overflow: hidden;
+
+    border-radius: 99px;
+
+    background:
+        rgba(0, 52, 82, 0.62);
+}
+
+.field-progress-fill {
+    height: 100%;
+
+    border-radius: inherit;
+
+    background:
+        linear-gradient(
+            90deg,
+            #13CBBF,
+            #25E7D2
+        );
+}
+
+
+For Field 2, use a yellow-orange fill:
+background:
+    linear-gradient(
+        90deg,
+        #FFAC13,
+        #FFDB48
+    );
+
+
+8.5 Right-side chevron
+Each field card contains a circular arrow control.
+
+It sits close to the right edge of the card.
+
+Approximate size: 39 × 39 px.
+
+It has:
+- Translucent blue background.
+- Fine light-blue border.
+- White chevron.
+- Very subtle inner highlight.
+The arrow is centered in the circle.
+
+The circle is vertically centered within each field card.
+
+9. Bottom card — Weather information
+Full-width information panel
+
+
+
+
+
+
+
+
+dribbble.com
+
+
+The weather panel is a single wide horizontal glass card.
+
+It sits underneath the two upper cards and extends across almost the entire screen.
+
+Unlike the two upper panels, it is much shorter in height and has a horizontally distributed internal layout.
+
+It is divided into four information sections:
+1. Weather.
+2. Humidity.
+3. Wind Speed.
+4. Location.
+The four sections are contained within the same outer card.
+
+They are separated by thin vertical divider lines, except that the first section has a slightly more prominent inner surface.
+9.1 Outer card positioning
+Property	Measurement
+X position	101 px
+Y position	636 px
+Width	1664 px
+Height	151 px
+Corner radius	39 px
+Horizontal padding	28 px
+Vertical alignment	Center
+
+The card has an elongated rounded rectangular silhouette.
+
+It is approximately 11 times wider than its height.
+
+The card has a blue-teal translucent glass background.
+
+Its upper border has a brighter cyan-white highlight.
+
+The lower border has a thin turquoise glow.
+
+The outer corners have a diffuse blue illumination.
+Weather card CSS
+.weather-panel {
+    position: absolute;
+
+    left: 5.55%;
+    top: 77.75%;
+
+    width: 91.43%;
+    height: 18.46%;
+
+    box-sizing: border-box;
+
+    display: grid;
+
+    grid-template-columns:
+        1.34fr
+        1fr
+        1.12fr
+        1.16fr;
+
+    align-items: center;
+
+    padding: 15px 26px;
+
+    border-radius: 39px;
+
+    background:
+        linear-gradient(
+            105deg,
+            rgba(5, 92, 105, 0.70) 0%,
+            rgba(5, 73, 103, 0.69) 36%,
+            rgba(7, 91, 117, 0.67) 70%,
+            rgba(12, 91, 124, 0.66) 100%
+        );
+
+    backdrop-filter:
+        blur(19px) saturate(145%);
+
+    -webkit-backdrop-filter:
+        blur(19px) saturate(145%);
+
+    border: 1px solid
+        rgba(81, 221, 240, 0.69);
+
+    box-shadow:
+        0 6px 22px rgba(0, 39, 65, 0.22),
+        0 0 16px rgba(0, 197, 238, 0.18),
+        0 0 28px rgba(0, 224, 222, 0.09),
+        inset 0 1px 3px rgba(255,255,255,0.35),
+        inset 0 -2px 5px rgba(0,220,221,0.15);
+}
+
+
+9.2 Internal section arrangement
+The sections are arranged horizontally.
+
+The proportions are deliberately not equal.
+
+The Weather section is the widest.
+
+Humidity is narrower.
+
+Wind Speed is slightly wider than Humidity.
+
+Location occupies a large area on the right.
+01 WEATHER
+24°C
+Sunny
+
+
+02 HUMIDITY
+68%
+
+
+03 WIND
+14 km/h
+
+
+04 LOCATION
+
+Davis, Sacramento Valley, CA
+
+
+
+Illustration of the relative section proportions.
+The actual separators are subtle vertical lines rather than visible individual section backgrounds.
+
+Approximate divider positions:
+- First divider: X = 582 px.
+- Second divider: X = 945 px.
+- Third divider: X = 1334 px.
+Each divider:
+- Height: approximately 91 px.
+- Width: 1–2 px.
+- Color: rgba(120, 222, 244, 0.30).
+- Slightly brighter near its center.
+.weather-divider {
+    width: 1px;
+    height: 91px;
+
+    background:
+        linear-gradient(
+            180deg,
+            transparent,
+            rgba(145, 225, 247, 0.40) 18%,
+            rgba(145, 225, 247, 0.36) 82%,
+            transparent
+        );
+}
+
+
+
+10. Weather section
+The Weather section occupies the leftmost portion of the bottom card.
+
+It is approximately 480 px wide.
+
+Its contents are arranged horizontally.
+
+Weather
+24°C
+Sunny
+
+High: 28°C | Low: 17°C
+
+
+
+10.1 Sun icon
+The sun icon is approximately 80 × 80 px.
+
+It is a bright yellow circular sun with eight short radial rays.
+
+It has:
+- Bright yellow-orange central circle.
+- Warm yellow rays.
+- Soft golden glow.
+- Slight dimensional shading.
+The icon is positioned at the far left.
+
+It has no enclosing circle or background square.
+10.2 Weather text
+The weather text block sits to the right of the sun.
+
+Weather heading
+- Approximately 20 px.
+- Semibold.
+- White.
+- Positioned above the temperature.
+Temperature
+- 24°C
+- Approximately 43–45 px.
+- Bold.
+- White.
+- Largest text in this section.
+Condition
+- Sunny
+- Approximately 16 px.
+- White-blue.
+- Positioned horizontally beside the temperature.
+High/low
+- High: 28°C | Low: 17°C
+- Approximately 14 px.
+- Muted light blue.
+- Positioned beneath the temperature row.
+All text uses the same left alignment.
+
+11. Humidity section
+The humidity section is the second segment.
+
+It contains a blue water-droplet icon and two lines of information.
+Humidity
+68%
+↑ +2%
+
+
+
+
+11.1 Icon
+- Water droplet.
+- Approximately 44 × 54 px.
+- Bright cyan-blue.
+- Slight highlight near the upper-left.
+- Subtle glow.
+The droplet is vertically centered.
+11.2 Text
+Humidity
+- Approximately 18 px.
+- Light blue-white.
+- Regular weight.
+68%
+- Approximately 28 px.
+- Semibold.
+- White.
+↑ +2%
+- Approximately 15 px.
+- Mint green.
+- Semibold.
+The percentage and growth indicator share one horizontal row.
+11.3 Miniature humidity graph
+There is a tiny decorative turquoise line graph underneath the humidity figures.
+
+It is approximately 150 px wide and 30 px high.
+
+It is a smooth irregular curve.
+
+It has no axis labels, grid, or background.
+
+The line is approximately 2 px thick.
+
+Its color is bright turquoise.
+
+It starts relatively low, rises slightly, dips, and then rises toward the right.
+
+The miniature graph is positioned near the bottom of the humidity section.
+
+12. Wind Speed section
+The third segment contains a wind icon, speed information, wind direction, and a miniature graph.
+Wind Speed
+14 km/h
+↑ NW
+
+
+
+12.1 Wind icon
+- Approximately 48 × 48 px.
+- White-blue.
+- Three curved horizontal wind strokes.
+- Rounded line endings.
+- No solid circular background.
+The icon sits on the left side of the segment.
+12.2 Text information
+Wind Speed
+- Approximately 17 px.
+- Pale blue-white.
+14 km/h
+- Approximately 24 px.
+- White.
+- Semibold.
+NW
+- Approximately 13 px.
+- Cyan-turquoise.
+- Positioned beneath the speed.
+A small directional indicator accompanies the wind direction.
+12.3 Miniature wind graph
+A small cyan line chart sits toward the right side of the wind section.
+
+Approximate dimensions:
+- Width: 165 px.
+- Height: 39 px.
+It contains a smooth, fluctuating turquoise line.
+
+There are several small cyan circular data markers.
+
+The line has a few noticeable peaks and dips.
+
+The chart has no visible axes or labels.
+
+The line is approximately 2 px thick.
+
+It has a faint cyan glow.
+
+13. Location section
+The fourth and final section occupies the far-right portion of the weather panel.
+
+It contains a location pin, a heading and a location name.
+Location
+
+Davis, Sacramento Valley, CA
+
+
+
+13.1 Location icon
+- Approximately 43 × 49 px.
+- Pale cyan-white.
+- Solid map-pin silhouette.
+- Small dark circular center.
+- Subtle turquoise glow.
+13.2 Location text
+Location
+- Approximately 18 px.
+- Light blue-white.
+- Regular weight.
+Davis, Sacramento Valley, CA
+- Approximately 17 px.
+- White.
+- Medium or semibold.
+- Single line.
+The text is left-aligned.
+
+The location section also has a faint scenic blue tint at the far right of its glass surface, but this is part of the visible underlying image and should not be recreated as a separate decorative UI image unless intentionally desired.
+
+14. Precise internal spacing and alignment rules
+The three cards must look like one cohesive dashboard.
+
+Their internal padding and alignments should be consistent.
+Element	Horizontal spacing	Vertical spacing
+Farm logo → title	24 px	Centered
+Header title → subtitle	0 px	4 px
+Gauge → chart	30–40 px	Aligned to same content region
+Banner icon → text	23 px	Centered
+Banner text lines	0 px	4 px
+All Fields icon → heading	15 px	Centered
+Thumbnail → field information	20–23 px	Centered
+Field title → status	10 px	Same row
+Title → health details	8–10 px	Vertical
+Health details → progress bar	16 px	Vertical
+Weather icon → text	22 px	Centered
+Weather section → divider	20–25 px	Centered
+Divider → next icon	20–24 px	Centered
+
+Important: Use align-items: center for the internal horizontal groups. Do not independently position each icon and text element with arbitrary top coordinates. Use flexbox and grid so that their relationships remain consistent.
+
+15. Full CSS layout blueprint
+The following is a consolidated implementation structure for the foreground cards only.
+
+It deliberately excludes all background image elements.
+
+/* ==========================================
+   DASHBOARD FOREGROUND
+   Reference canvas: 1820 x 818
+   ========================================== */
+
+.dashboard-ui {
+    position: relative;
+
+    width: 100%;
+    min-height: 100vh;
+
+    font-family: "Inter", sans-serif;
+
+    color: #F5FAFF;
+}
+
+/* Shared glass surfaces */
+
+.glass-panel {
+    position: absolute;
+
+    overflow: hidden;
+    isolation: isolate;
+
+    border: 1px solid
+        rgba(105, 223, 250, 0.73);
+
+    border-radius: 39px;
+
+    backdrop-filter:
+        blur(19px) saturate(145%);
+
+    -webkit-backdrop-filter:
+        blur(19px) saturate(145%);
+
+    box-shadow:
+        0 7px 24px rgba(0, 33, 64, 0.19),
+        0 0 16px rgba(0, 186, 245, 0.16),
+        0 0 28px rgba(0, 209, 225, 0.09),
+        inset 0 1px 2px
+            rgba(255,255,255,0.32),
+        inset 0 -2px 5px
+            rgba(0,220,225,0.13);
+}
+
+/* Main farm conditions */
+
+.farm-card {
+    left: 5.44%;
+    top: 1.83%;
+
+    width: 61.81%;
+    height: 72.13%;
+
+    padding: 30px 28px;
+
+    background:
+        linear-gradient(
+            140deg,
+            rgba(30,132,191,.48),
+            rgba(13,88,139,.55) 43%,
+            rgba(4,65,91,.63)
+        );
+}
+
+/* Farm header */
+
+.farm-header {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+}
+
+.farm-brand {
+    display: flex;
+    align-items: center;
+
+    gap: 24px;
+}
+
+.farm-brand img {
+    width: 51px;
+    height: 53px;
+
+    object-fit: contain;
+}
+
+.farm-title {
+    font-size: 30px;
+    font-weight: 650;
+
+    color: #F5FAFF;
+}
+
+.farm-subtitle {
+    margin-top: 4px;
+
+    font-size: 19px;
+
+    color: #C4E0F2;
+}
+
+/* Header status */
+
+.farm-status {
+    display: flex;
+    align-items: center;
+
+    gap: 13px;
+}
+
+.live-pill {
+    height: 41px;
+
+    padding: 0 15px;
+
+    border-radius: 999px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 9px;
+
+    background: rgba(0, 133, 147, .66);
+
+    color: #00F1C6;
+}
+
+/* Main analytics region */
+
+.farm-main-content {
+    position: absolute;
+
+    left: 29px;
+    right: 28px;
+
+    top: 135px;
+    bottom: 133px;
+
+    display: grid;
+
+    grid-template-columns: 39% 61%;
+
+    align-items: center;
+}
+
+/* Circular health indicator */
+
+.health-gauge {
+    display: grid;
+
+    place-items: center;
+
+    width: 340px;
+    height: 340px;
+}
+
+/* Graph */
+
+.health-chart {
+    width: 100%;
+    height: 100%;
+
+    position: relative;
+}
+
+/* Success banner */
+
+.condition-banner {
+    position: absolute;
+
+    left: 29px;
+    right: 28px;
+
+    bottom: 22px;
+
+    height: 98px;
+
+    border-radius: 31px;
+
+    display: flex;
+    align-items: center;
+
+    padding: 0 24px;
+
+    gap: 23px;
+
+    background:
+        linear-gradient(
+            100deg,
+            rgba(0,133,126,.52),
+            rgba(8,93,105,.60),
+            rgba(14,105,124,.53)
+        );
+
+    border: 1px solid
+        rgba(38,228,220,.58);
+}
+
+/* All Fields */
+
+.fields-card {
+    left: 68.79%;
+    top: 1.83%;
+
+    width: 28.52%;
+    height: 72.13%;
+
+    padding: 35px 25px 23px;
+
+    background:
+        linear-gradient(
+            150deg,
+            rgba(45,137,188,.49),
+            rgba(10,79,119,.62)
+        );
+}
+
+/* Fields heading */
+
+.fields-header {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    height: 45px;
+
+    margin-bottom: 25px;
+}
+
+/* Field list */
+
+.field-list {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 21px;
+}
+
+.field-item {
+    height: 148px;
+
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+
+    padding: 10px 12px;
+
+    gap: 20px;
+
+    border-radius: 26px;
+
+    background:
+        linear-gradient(
+            115deg,
+            rgba(125,205,237,.34),
+            rgba(78,160,204,.36),
+            rgba(44,131,173,.40)
+        );
+
+    border: 1px solid
+        rgba(154,229,255,.45);
+}
+
+.field-thumbnail {
+    width: 160px;
+    height: 132px;
+
+    object-fit: cover;
+
+    flex-shrink: 0;
+
+    border-radius: 19px;
+}
+
+.field-details {
+    flex: 1;
+    min-width: 0;
+}
+
+.field-title {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.field-meta {
+    margin-top: 9px;
+
+    font-size: 17px;
+
+    color: #D7EBF9;
+}
+
+.field-progress {
+    width: 100%;
+    max-width: 212px;
+
+    height: 7px;
+
+    margin-top: 16px;
+
+    border-radius: 99px;
+
+    overflow: hidden;
+
+    background: rgba(0,52,82,.62);
+}
+
+/* Weather */
+
+.weather-card {
+    left: 5.55%;
+    top: 77.75%;
+
+    width: 91.43%;
+    height: 18.46%;
+
+    padding: 15px 26px;
+
+    display: grid;
+
+    grid-template-columns:
+        1.34fr 1fr 1.12fr 1.16fr;
+
+    align-items: center;
+
+    background:
+        linear-gradient(
+            105deg,
+            rgba(5,92,105,.70),
+            rgba(5,73,103,.69) 36%,
+            rgba(7,91,117,.67) 70%,
+            rgba(12,91,124,.66)
+        );
+}
+
+.weather-section {
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+
+    min-width: 0;
+
+    gap: 20px;
+
+    padding: 0 18px;
+}
+
+.weather-divider {
+    position: absolute;
+
+    width: 1px;
+    height: 91px;
+
+    background:
+        rgba(145,225,247,.36);
+}
+
+.weather-heading {
+    font-size: 18px;
+
+    color: #D6EAF5;
+}
+
+.weather-value {
+    font-size: 28px;
+
+    font-weight: 650;
+
+    color: #FFFFFF;
+}
+
+.weather-secondary {
+    font-size: 14px;
+
+    color: #B8D9E9;
+}
+
+
+
+16. Final positioning and visual fidelity requirements
+These are the most important implementation details to preserve.
+Priority	Requirement
+1	The two upper panels must have identical top and bottom alignment.
+2	Farm Conditions must be substantially wider than All Fields.
+3	All Fields must contain exactly three vertically stacked field cards.
+4	The circular 92% gauge must sit on the left side of Farm Conditions.
+5	The analytics graph must occupy the right side of the main card.
+6	The success notification must span the lower width of Farm Conditions.
+7	Weather must be one continuous full-width card underneath the upper panels.
+8	Weather must have four horizontal information sections.
+9	The three upper-level cards must use consistent luminous glass styling.
+10	The inner field cards must look slightly more raised and brighter than their parent container.
+
+16.1 Important differences between the three card types
+Do not apply exactly the same background opacity and gradient to every container.
+Characteristic	Farm Conditions	All Fields	Weather
+Main tint	Blue-cyan	Blue-cyan	Deep teal-blue
+Transparency	Medium-high	Medium-high	Medium
+Blur	19 px	19 px	19 px
+Corner radius	39 px	39 px	39 px
+Border	Cyan-blue	Cyan-blue	Cyan-turquoise
+Internal structure	Gauge and graph	Stacked cards	Four columns
+Overall shape	Large rectangle	Tall rectangle	Wide horizontal rectangle
+
+The inner field cards have a lighter blue tint and a smaller 26 px corner radius.
+
+The success banner has a greener tint and a 31 px radius.
+16.2 Final implementation rule
+The most important thing is to construct the interface as three independent parent components, not as one large panel with everything positioned absolutely inside it.
+
+The recommended component hierarchy is:
+Dashboard
+│
+├── FarmConditionsPanel
+│   ├── FarmHeader
+│   │   ├── FarmLogo
+│   │   ├── TitleAndSubtitle
+│   │   └── LiveStatusAndRefresh
+│   │
+│   ├── FarmAnalytics
+│   │   ├── CropHealthGauge
+│   │   └── CropHealthChart
+│   │
+│   └── ConditionNotification
+│
+├── AllFieldsPanel
+│   ├── FieldsHeader
+│   ├── FieldCard
+│   │   ├── CropThumbnail
+│   │   ├── FieldInformation
+│   │   ├── HealthStatus
+│   │   ├── ProgressBar
+│   │   └── Chevron
+│   ├── FieldCard
+│   └── FieldCard
+│
+└── WeatherPanel
+    ├── WeatherSection
+    ├── HumiditySection
+    ├── WindSection
+    └── LocationSection
+
+
+The intended result: three large floating translucent glass panels, two aligned across the upper area and one spanning beneath them. Inside, the information is carefully organized into a circular health visualization, a luminous analytics graph, three compact crop cards, and four horizontally divided weather metrics. All content is consistently aligned, with cyan-lit borders, rounded glass surfaces, and restrained turquoise accents.

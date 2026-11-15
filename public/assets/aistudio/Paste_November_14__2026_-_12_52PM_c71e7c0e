@@ -1,0 +1,1941 @@
+Complete pixel-level UI reconstruction specification — FIELD SHIFT
+The reference image is a 1024 × 1536 px, vertically oriented, cinematic agricultural dashboard website. Its design combines a futuristic nighttime landscape, a gigantic illuminated Earth, realistic agricultural imagery, emerald-green accents, translucent glassmorphism panels, neon lighting, and a sophisticated dark navy interface.
+
+The objective is to recreate the reference as closely as possible, not to reinterpret or redesign it.
+
+This specification describes the composition, positioning, dimensions, proportions, typography, colors, transparency, gradients, image treatments, shadows, lighting, borders, icons, and individual UI elements.
+
+1. Overall design language and visual identity
+
+
+
+
+
+
+
+
+seaart.ai
+
+
+1.1 Design identity
+The website is called FIELD SHIFT.
+
+Its visual identity is built around five principles:
+1. Cinematic environmental imagery: the website feels like an immersive nighttime agricultural environment rather than a conventional dashboard.
+2. Premium glassmorphism: all major interface panels have translucent navy glass surfaces through which the landscape remains visible.
+3. Emerald-green visual identity: green is used to communicate healthy crops, positive status, activity, and primary actions.
+4. Electric-blue illumination: blue atmospheric light separates the interface from the background and adds depth.
+5. Information hierarchy: the most important information is the farm's health percentage, followed by field conditions, alerts, weather, and the overall farm status.
+The result should feel like a combination of a high-end environmental monitoring platform, a futuristic satellite monitoring system, and an immersive agricultural control center.
+1.2 Reference canvas
+REFERENCE WIDTH
+1024 px
+
+REFERENCE HEIGHT
+1536 px
+
+ASPECT RATIO
+
+2:3
+
+PRIMARY THEME
+
+Night / dark
+
+
+
+Overall composition
+- Full-viewport background image.
+- Fixed-feeling horizontal navigation at the top.
+- Large left-aligned hero section.
+- Large Earth visual on the upper right.
+- Main farm conditions glass panel.
+- Horizontal weather panel.
+- Bottom farm health confirmation panel.
+- Continuous background imagery behind every section.
+
+The screenshot should be treated as the master reference resolution. All measurements below refer to that 1024 × 1536 coordinate system.
+1.3 Global color palette
+The palette is predominantly dark navy, blue-black, turquoise, emerald, and cyan.
+Color	Hex	Purpose
+Midnight black	#000817	Deepest background
+Dark navy	#00132E	Main interface
+Ocean navy	#002347	Glass panel tint
+Deep blue	#00345B	Background lighting
+Electric blue	#168BFF	Atmospheric illumination
+Cyan	#16D9E9	Glowing borders
+Turquoise	#20E9C4	Active accents
+Emerald	#00E995	Primary brand color
+Bright mint	#45F4A5	Primary buttons
+Pale mint	#8CFFD2	Highlights
+White-blue	#EAF4FF	Main typography
+Muted blue-grey	#B5C7DC	Secondary typography
+Alert red	#FF535F	Critical warnings
+Alert orange	#FFA32E	Secondary warnings
+
+The green gradient is particularly important.
+
+Use a gradient that transitions through:
+linear-gradient(
+  110deg,
+  #62FFB0 0%,
+  #20F3A2 48%,
+  #00D78E 100%
+);
+
+
+For luminous green edges, use multiple shadow layers rather than one solid shadow.
+box-shadow:
+  0 0 8px rgba(0, 255, 164, 0.35),
+  0 0 20px rgba(0, 255, 164, 0.20),
+  0 0 42px rgba(0, 255, 164, 0.10);
+
+
+1.4 Typography
+The typography is modern, geometric, and softly rounded, with a clean technology-oriented appearance.
+
+Recommended implementation:
+- Primary font: Inter.
+- Alternative: Manrope.
+- Headings: 650–750 font weight.
+- Body text: 400–450 font weight.
+- Navigation: 400–500 font weight.
+- Numbers: 650–750 font weight.
+Use:
+font-family: "Inter", "Manrope", sans-serif;
+
+
+Typography should be slightly spacious without looking excessively futuristic.
+
+Important characteristics:
+- Smooth rounded letterforms.
+- Clean lowercase characters.
+- High readability on dark backgrounds.
+- Bright white primary text.
+- Slightly muted secondary text.
+- Green gradient for the hero's second line.
+- No heavy outlines or decorative text effects.
+
+2. Background environment — the most important visual element
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+8
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+The background is not a flat color or a simple gradient. It is a continuous cinematic photographic environment.
+
+It consists of multiple visual layers.
+2.1 Main background image
+The main image covers the entire page:
+background-image: url("/images/night-farm-background.jpg");
+background-size: cover;
+background-position: center center;
+background-repeat: no-repeat;
+
+
+The image should contain:
+- A deep midnight-blue sky.
+- Numerous tiny stars.
+- Dark mountain silhouettes.
+- Clouds illuminated by blue moonlight.
+- A distant lake.
+- Forest silhouettes.
+- Agricultural fields.
+- Small warm lights from distant buildings.
+- A subtle glowing horizon.
+The image is predominantly blue-black, with small patches of cyan, dark green, and warm golden light.
+
+The background must remain visible behind the entire interface.
+
+It should not end at the hero section or become a solid color behind the dashboard.
+2.2 Background color treatment
+Apply a layered darkening treatment above the image.
+background:
+  linear-gradient(
+    180deg,
+    rgba(0, 7, 22, 0.32) 0%,
+    rgba(0, 15, 37, 0.12) 35%,
+    rgba(0, 11, 29, 0.28) 70%,
+    rgba(0, 5, 17, 0.55) 100%
+  );
+
+
+The purpose is to ensure that the white text and glass panels remain legible while the landscape stays recognizable.
+
+Add subtle atmospheric blue lighting in the upper and middle sections.
+2.3 Background positioning
+The visual distribution is important:
+Vertical position	Background content
+0–100 px	Dark star-filled sky
+100–420 px	Sky, clouds, Earth, atmospheric lighting
+420–550 px	Mountain silhouettes, lake, horizon
+550–1120 px	Agricultural farm, fields, farmhouse
+1120–1536 px	Dark forest, mountains, distant horizon
+
+These are approximate visual zones, not separate background sections.
+
+The background should feel like one uninterrupted environment.
+2.4 Giant Earth visual
+
+
+
+
+
+
+
+
+businesstoday.in
+
+
+The enormous Earth is positioned in the upper-right area.
+
+Approximate bounding box:
+- Left: 510 px.
+- Top: 80 px.
+- Width: 514 px.
+- Height: 440 px.
+It is partially cropped by the right edge.
+
+The planet should have:
+- Realistic geographical surface details.
+- Visible North American continent.
+- Golden city lights.
+- Deep navy oceans.
+- Dark landmass shadows.
+- A very bright electric-blue atmospheric outline.
+- A thin cyan halo around its circumference.
+The edge lighting should be strongest around the upper and left portions.
+
+Example:
+.earth {
+  filter:
+    drop-shadow(0 0 10px rgba(0, 137, 255, .85))
+    drop-shadow(0 0 28px rgba(0, 123, 255, .45))
+    drop-shadow(0 0 60px rgba(0, 115, 255, .20);
+}
+
+
+The Earth must visually blend into the surrounding sky.
+
+Do not put it inside a card, border, or rectangular container.
+2.5 Atmospheric overlays
+There are several subtle visual effects:
+- Blue atmospheric haze around the Earth.
+- Soft cloud illumination.
+- Dim stars in the sky.
+- Green and cyan reflections around glass panel edges.
+- Slightly blurred landscape details behind translucent panels.
+- Very subtle dark vignette around the outer edges.
+These effects should be implemented as independent layers, not as one heavy filter.
+
+3. Top navigation bar
+
+
+
+
+
+
+
+
+dribbble.com
+
+
+The navigation occupies the very top of the page.
+3.1 Overall positioning
+Approximate coordinates:
+Element	X	Y	Width	Height
+Logo	29	29	107	41
+Navigation container	164	26	642	50
+Notification	905	34	30	32
+Profile image	948	27	45	45
+
+The entire navigation is horizontally arranged and vertically centered.
+3.2 FIELD SHIFT logo
+The logo consists of:
+- A bright green agricultural leaf symbol.
+- A stylized angular leaf with several internal cutouts.
+- Two-line white brand typography.
+Text:
+
+FIELD
+SHIFT
+
+The text uses uppercase characters.
+
+Approximate font size: 17 px.
+
+Font weight: 750.
+
+Line height: approximately 16 px.
+
+Letter spacing: approximately 1.2 px.
+
+The icon is approximately 41 × 39 px.
+
+Color: #23EBA0.
+
+The logo must not be placed inside a card or background.
+3.3 Navigation glass container
+The navigation itself sits inside a long pill-shaped translucent panel.
+
+Approximate dimensions:
+width: 642px;
+height: 50px;
+border-radius: 28px;
+
+
+Background:
+background: rgba(0, 42, 82, 0.47);
+
+
+Border:
+border: 1px solid rgba(45, 160, 255, 0.18);
+
+
+Blur:
+backdrop-filter: blur(18px) saturate(145%);
+
+
+Add a very subtle blue glow beneath the navigation.
+3.4 Navigation items
+There are six navigation items, evenly distributed:
+Item	Icon	Label
+Home	House	Home
+My Farms	Sprout	My Farms
+Map	Map pin	Map
+Crop Rotation	Refresh arrows	Crop Rotation
+Insights	Bar chart	Insights
+Settings	Gear	Settings
+
+Each item is an icon followed by its text.
+
+Approximate text size: 12–13 px.
+
+Icon size: 18–20 px.
+
+Spacing between icon and label: 8 px.
+
+Text color: #D4E1F0.
+3.5 Active Home item
+The Home item is highlighted with a green-blue pill.
+
+Approximate dimensions:
+- Width: 96 px.
+- Height: 42 px.
+- Border radius: 25 px.
+Background:
+linear-gradient(
+  110deg,
+  rgba(0, 238, 153, 0.23),
+  rgba(0, 131, 121, 0.20)
+);
+
+
+The Home icon and text are brighter than the remaining navigation items.
+
+Add a luminous green line/glow along the lower part of the pill.
+3.6 Notification icon
+Positioned at the far right.
+- White outline bell.
+- Approximately 27 px.
+- Small green notification indicator at upper-right.
+- Tiny luminous green outer glow.
+The indicator is approximately 9 px with a darker green outline.
+3.7 Profile image
+A circular user portrait.
+- Diameter: approximately 45 px.
+- Circular crop.
+- 2 px subtle blue border.
+- Small shadow.
+- No rectangular background.
+
+4. Hero section
+The hero is positioned below the navigation and above the farm selector.
+
+It is left aligned and occupies the upper-left part of the page.
+4.1 Main headline
+Exact text:
+
+Smarter decisions.
+Healthier fields.
+
+Approximate coordinates:
+- X: 64 px.
+- Y: 174 px.
+- Width: 450 px.
+- Height: 91 px.
+Typography:
+Property	Value
+Font	Inter / Manrope
+Size	44 px
+Weight	700
+Line height	49 px
+Letter spacing	-1.7 px
+Alignment	Left
+
+The first line uses a near-white blue color:
+color: #E9F2FF;
+
+
+The second line uses a green gradient:
+background: linear-gradient(
+  100deg,
+  #51F6AA,
+  #12DBA0,
+  #00D99A
+);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+
+
+The second line should be visually prominent.
+
+Do not apply a strong text shadow. The typography should remain clean.
+4.2 Description
+Exact text:
+
+"Track your farm’s performance, monitor
+conditions, and stay ahead."
+
+Position:
+- X: 65 px.
+- Y: 286 px.
+- Width: 390 px.
+Typography:
+- 17 px.
+- Weight: 400.
+- Line height: 25 px.
+- Color: #E1EBF7.
+There are two lines.
+4.3 Primary action button
+
+Plan crop rotations
+
+This represents the appearance and internal layout of the button.
+
+Actual button positioning:
+- X: 64 px.
+- Y: 348 px.
+- Width: 218 px.
+- Height: 50 px.
+- Border radius: 28 px.
+Background:
+linear-gradient(
+  105deg,
+  #5AFFB4 0%,
+  #20EDA0 60%,
+  #51E6AE 100%
+);
+
+
+Shadow:
+box-shadow:
+  0 0 14px rgba(0, 255, 157, 0.42),
+  0 0 32px rgba(0, 255, 157, 0.25),
+  0 6px 18px rgba(0, 0, 0, 0.25);
+
+
+Inside the button:
+- Leaf icon at approximately 25 px.
+- Text in dark green-black.
+- Font size 13 px.
+- Weight 650.
+- Arrow icon on the right.
+- Horizontal padding approximately 18 px.
+The button should have a slightly luminous appearance without looking overexposed.
+
+5. Farm selection dropdown
+The farm selector is located directly above the main Farm Conditions panel.
+
+
+
+
+
+
+
+
+
+
+5.1 Position and dimensions
+- X: 55 px.
+- Y: 484 px.
+- Width: 257 px.
+- Height: 51 px.
+- Border radius: 27 px.
+It floats independently above the main panel.
+5.2 Appearance
+Background:
+background: rgba(0, 25, 52, 0.76);
+
+
+Border:
+border: 1px solid rgba(85, 184, 236, 0.35);
+
+
+Backdrop blur: 16 px.
+
+Subtle outer shadow:
+box-shadow:
+  0 4px 18px rgba(0, 0, 0, 0.30),
+  0 0 12px rgba(0, 190, 255, 0.10);
+
+
+5.3 Internal arrangement
+From left to right:
+1. Green leaf icon.
+2. Farm name.
+3. Downward chevron.
+Exact text:
+
+Green Valley Farm
+
+Text size: 15 px.
+
+Text weight: 500.
+
+Text color: #F4F8FF.
+
+The leaf icon is approximately 28 px and glows slightly green.
+
+The chevron is approximately 16 px.
+
+6. Main Farm Conditions panel
+Primary dashboard component
+This is the largest and most important interface component.
+
+
+
+
+
+
+
+
+dribbble.com
+
+
+6.1 Overall dimensions and placement
+The panel begins at approximately:
+- X: 26 px.
+- Y: 546 px.
+It ends at approximately:
+- X: 1000 px.
+- Y: 1123 px.
+Dimensions:
+Property	Value
+Width	974 px
+Height	577 px
+Border radius	36 px
+Border thickness	1–2 px
+
+The panel nearly spans the entire available screen width.
+
+Horizontal margins:
+- Left: 26 px.
+- Right: 24 px.
+6.2 Main glassmorphism effect
+This is not an opaque solid-color card.
+
+It is a highly transparent, dark-blue glass surface through which the underlying farm image remains visible.
+
+Recommended background:
+background:
+  linear-gradient(
+    135deg,
+    rgba(0, 39, 79, 0.69) 0%,
+    rgba(0, 23, 54, 0.73) 50%,
+    rgba(0, 39, 72, 0.69) 100%
+  );
+
+
+Recommended blur:
+backdrop-filter:
+  blur(17px)
+  saturate(135%);
+
+
+Border:
+border: 1px solid rgba(68, 202, 255, 0.54);
+
+
+Outer glow:
+box-shadow:
+  0 0 12px rgba(0, 195, 255, 0.23),
+  0 0 30px rgba(0, 147, 255, 0.14),
+  0 15px 45px rgba(0, 0, 0, 0.35),
+  inset 0 1px 2px rgba(170, 241, 255, 0.12);
+
+
+The upper and side edges should appear illuminated.
+
+The bottom edge should have a more noticeable cyan glow, especially around the corners.
+6.3 Farm landscape inside the panel
+The panel contains a large agricultural nighttime image.
+
+This is an important detail: the panel background is visually composed from the underlying landscape plus an agricultural field image.
+
+
+
+
+
+
+
+
+renaissance-media.jp
+
+
+The image should show:
+- Dense green crop rows.
+- A farm building with warm illuminated windows.
+- Dark mountains in the distance.
+- A bright moon.
+- A cloudy dark-blue sky.
+- A small water tower or agricultural structure.
+- Subtle light sources illuminating the field.
+The image is most visible in the central-left portion.
+
+Apply a dark gradient overlay:
+background:
+  linear-gradient(
+    90deg,
+    rgba(0, 17, 37, 0.12) 0%,
+    rgba(0, 22, 48, 0.16) 58%,
+    rgba(0, 19, 43, 0.68) 70%,
+    rgba(0, 24, 48, 0.88) 100%
+  );
+
+
+The right-hand field list must have a darker backing to maintain readability.
+6.4 Panel header
+The header occupies approximately the top 82 px of the panel.
+
+Coordinates:
+- X: 55 px.
+- Y: 570 px.
+- Height: 60 px.
+Internal arrangement:
+Farm Conditions
+
+ Live
+Updated 24 min ago
+
+Header components:
+
+Farm icon
+- Approximately 44 px.
+- Bright mint green.
+- Stylized leaf/sprout design.
+Title
+- Text: Farm Conditions.
+- Font size: 23 px.
+- Weight: 650.
+- Color: #F1F6FF.
+Live indicator
+- Pill-shaped.
+- Approximately 72 × 28 px.
+- Background: rgba(0, 175, 120, 0.20).
+- Green circular dot.
+- Green text.
+- Font size: 13 px.
+Updated timestamp
+- Text: Updated 24 min ago.
+- Font size: 14 px.
+- Color: #D6E3F1.
+Refresh icon
+- 30 px.
+- White-blue.
+- Positioned at the far right.
+A thin horizontal separator sits beneath the header.
+border-bottom: 1px solid rgba(119, 195, 235, 0.14);
+
+
+
+7. Left section — farm health visualization
+This section occupies the majority of the left side of the main panel.
+
+Its visual center is a large circular health indicator.
+7.1 Health ring positioning
+Approximate coordinates:
+- X: 107 px.
+- Y: 652 px.
+- Width: 249 px.
+- Height: 249 px.
+Center point:
+- X: 231 px.
+- Y: 776 px.
+The ring is circular and thick.
+
+It consists of:
+1. Dark transparent circular interior.
+2. Bright turquoise-green progress arc.
+3. Small darker green progress transition.
+4. Soft luminous green glow.
+
+
+
+
+
+
+
+
+
+
+7.2 Ring construction
+The ring should be created using SVG, not a CSS border.
+
+Recommended SVG structure:
+<svg viewBox="0 0 260 260">
+  <circle
+    cx="130"
+    cy="130"
+    r="108"
+    fill="none"
+    stroke="rgba(0, 130, 117, 0.18)"
+    strokeWidth="19"
+  />
+
+  <circle
+    cx="130"
+    cy="130"
+    r="108"
+    fill="none"
+    stroke="#19EBC2"
+    strokeWidth="19"
+    strokeLinecap="round"
+    strokeDasharray="678"
+    strokeDashoffset="54"
+    transform="rotate(130 130 130)"
+  />
+</svg>
+
+
+The progress ring has:
+- Approximately 92% completion.
+- Thick 18–20 px stroke.
+- Rounded ends.
+- A small dark-green transition near the top.
+- A glowing appearance.
+The center remains transparent enough to show the background.
+7.3 Central leaf symbol
+The leaf symbol is centered around the middle of the circle.
+
+Approximate size: 43 × 40 px.
+
+Color: #16EFA2.
+
+It is positioned above the health number.
+7.4 Percentage number
+Exact text:
+
+92%
+
+Position: centered horizontally inside the ring.
+
+Approximate font size: 58 px.
+
+Font weight: 750.
+
+Color: #F5FAFF.
+
+Letter spacing: -2 px.
+
+This should be the most visually prominent numerical element on the dashboard.
+7.5 Health status
+Exact text:
+
+Very Healthy
+
+Position:
+- X: approximately 139 px.
+- Y: approximately 913 px.
+Icon: heartbeat/pulse line.
+
+Text size: 23 px.
+
+Weight: 650.
+
+Color: #10EBA2.
+
+The icon and text are horizontally aligned.
+
+8. Alert notification bars
+Two horizontal alert rows appear underneath the health status.
+
+They sit on top of the field background and have their own translucent dark surfaces.
+
+
+
+
+
+
+
+
+
+
+8.1 First alert — red
+Approximate coordinates:
+- X: 56 px.
+- Y: 974 px.
+- Width: 604 px.
+- Height: 57 px.
+Border radius: 21 px.
+
+Background:
+linear-gradient(
+  100deg,
+  rgba(96, 35, 58, 0.85),
+  rgba(33, 32, 55, 0.86)
+);
+
+
+Border:
+1px solid rgba(255, 92, 105, 0.27);
+
+
+Left icon:
+- Warning triangle.
+- Approximately 32 px.
+- Red background glow.
+- Color: #FF555F.
+Text arrangement:
+Element	Text
+Status	Alert
+Message	Soil moisture is low in Field 1.
+Action	View details
+Arrow	Right arrow
+
+Typography:
+- Alert: 16 px, bold, red.
+- Message: 14 px, white-blue.
+- Action: 12 px, red.
+The action and arrow are positioned at the far right.
+8.2 Second alert — orange
+Approximate coordinates:
+- X: 56 px.
+- Y: 1031 px.
+- Width: 604 px.
+- Height: 55 px.
+Background:
+linear-gradient(
+  100deg,
+  rgba(96, 60, 31, 0.82),
+  rgba(44, 43, 49, 0.86)
+);
+
+
+Border:
+1px solid rgba(255, 165, 58, 0.23);
+
+
+Icon: orange warning triangle.
+
+Color: #FFA52E.
+
+Exact text:
+- Alert
+- High wind expected later today.
+- View details
+The structure and dimensions should match the red alert row.
+
+9. Right section — All Fields
+This section occupies the right side of the Farm Conditions panel.
+
+Approximate coordinates:
+- X: 677 px.
+- Y: 650 px.
+- Width: 305 px.
+- Height: 438 px.
+It is separated from the left section by a thin vertical divider.
+9.1 Vertical divider
+Position:
+- X: approximately 676 px.
+- Y: 650 px.
+- Height: 436 px.
+Style:
+border-left: 1px solid rgba(148, 203, 237, 0.20);
+
+
+9.2 Section title
+Exact text:
+
+All Fields
+- Font size: 23 px.
+- Weight: 650.
+- Color: #F1F7FF.
+- Position: X 699 px, Y 652 px.
+9.3 Field cards
+There are three vertically stacked cards.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+9
+
+
+
+
+
+
+
+
+
+
+
+Each card has approximately:
+- Width: 289 px.
+- Height: 120 px.
+- Border radius: 21 px.
+- Vertical spacing: 8–10 px.
+Positions:
+Card	X	Y	Width	Height
+Field 1	693	689	289	120
+Field 2	693	817	289	121
+Field 3	693	946	289	120
+
+Card appearance
+Background:
+linear-gradient(
+  115deg,
+  rgba(0, 79, 104, 0.80),
+  rgba(0, 39, 75, 0.84)
+);
+
+
+Border:
+1px solid rgba(53, 205, 226, 0.23);
+
+
+Shadow:
+box-shadow:
+  0 5px 17px rgba(0, 0, 0, 0.22),
+  inset 0 1px 1px rgba(180, 238, 255, 0.06);
+
+
+The cards should have a subtle blue-green glow, not a bright neon outline.
+9.4 Field image thumbnails
+Each card contains a square-ish landscape thumbnail on the left.
+
+Approximate dimensions:
+- 108 × 98 px.
+- Border radius: 15 px.
+- Object fit: cover.
+Position inside the card:
+- 10 px from left.
+- 10 px from top.
+Each field should have its own distinct image.
+
+Field 1: Aerial wheat field with long green agricultural rows and distant mountains.
+
+Field 2: Corn crops with visible rows of green plants and warm sunlight.
+
+Field 3: Lush green pea crops with dense foliage and organized planting rows.
+
+The images should appear realistic and slightly cinematic.
+9.5 Field information
+The text is aligned to the right of the thumbnail.
+
+Approximate internal positioning:
+- Left: 832 px.
+- Top: 708 px.
+Field title:
+- Font size: 16 px.
+- Weight: 550.
+- Color: #F4F8FF.
+Crop type:
+- Font size: 15 px.
+- Weight: 400.
+- Color: #E4EDF8.
+Exact content:
+Field	Crop	Status
+Field 1	Wheat	Current
+Field 2	Corn	90 days
+Field 3	Peas	90 days
+
+Field 1 status
+The Current indicator is a small green pill.
+
+Approximate size: 73 × 27 px.
+
+Background: #19EAB2.
+
+Text: dark green-black.
+
+Font size: 12 px.
+Field 2 and Field 3 status
+These show a green circular rotation arrow and the text 90 days.
+
+The arrow is approximately 23 px.
+
+The text is 14 px and white-blue.
+Right-side chevrons
+Each card has a white-blue right-facing chevron near its right edge.
+
+Size: approximately 18 px.
+
+All three should be vertically centered.
+
+10. Weather information panel
+
+
+
+
+
+
+
+
+medium.com
+
+
+The weather panel is positioned directly underneath the Farm Conditions panel.
+
+It stretches almost the full width of the screen.
+10.1 Position and dimensions
+Property	Value
+X	27 px
+Y	1155 px
+Width	971 px
+Height	123 px
+Border radius	37 px
+
+It has a similar visual language to the main dashboard panel, but is shorter and more horizontally organized.
+10.2 Glass surface
+Background:
+background:
+  linear-gradient(
+    110deg,
+    rgba(0, 44, 82, 0.78),
+    rgba(0, 29, 65, 0.83),
+    rgba(0, 52, 85, 0.73)
+  );
+
+
+Border:
+1px solid rgba(69, 188, 247, 0.47);
+
+
+Backdrop blur:
+backdrop-filter: blur(18px) saturate(140%);
+
+
+Outer lighting:
+box-shadow:
+  0 0 15px rgba(0, 160, 255, 0.20),
+  0 0 30px rgba(0, 144, 255, 0.13),
+  0 8px 25px rgba(0, 0, 0, 0.25),
+  inset 0 1px 1px rgba(255, 255, 255, 0.10);
+
+
+The surface should be transparent enough for the mountain and forest background to be visible through it.
+10.3 Internal layout
+The panel contains four information groups.
+
+Weather
+18°C
+Partly cloudy
+
+
+
+
+72%
+
+Humidity
+
+12 km/h
+
+Wind
+
+North Valley
+
+
+
+
+This is a structural illustration of the information arrangement.
+
+The actual reference uses a single horizontal row, not a vertically stacked layout.
+10.4 First group — weather
+Positioned on the left.
+
+Approximate width: 466 px.
+
+It contains:
+
+Weather icon
+- Large partly cloudy weather illustration.
+- Approximately 79 × 75 px.
+- Positioned at X 58 px.
+- Bright yellow sun.
+- White-blue cloud.
+- Soft shadow beneath the cloud.
+The sun is a warm golden-yellow circle with eight short rays.
+
+The cloud consists of several overlapping white-blue rounded shapes.
+
+Use a realistic illustrative weather icon, not a thin line icon.
+
+Weather label
+- Text: Weather.
+- Font size: 18 px.
+- Weight: 600.
+- Color: white.
+Temperature
+- Text: 18°C.
+- Font size: 29 px.
+- Weight: 700.
+- Color: #F5F9FF.
+Condition
+- Text: Partly cloudy.
+- Font size: 14 px.
+- Color: #DCE8F5.
+The temperature and condition are displayed on the same line.
+10.5 Vertical separator
+A thin divider separates the main weather group from humidity.
+
+Position approximately:
+- X: 495 px.
+- Y: 1190 px.
+- Height: 57 px.
+Color:
+rgba(162, 203, 231, 0.28)
+
+
+Thickness: 1 px.
+10.6 Second group — humidity
+Positioned around X 522 px.
+
+Contains:
+- Blue water droplet icon.
+- Text 72%.
+- Text Humidity.
+Icon size: 29 px.
+
+Percentage size: 16 px.
+
+Label size: 14 px.
+
+Icon color: #3CCBFF.
+10.7 Third group — wind
+Positioned around X 650 px.
+
+Contains:
+- White wind icon.
+- Text 12 km/h.
+- Text Wind.
+Icon size: 31 px.
+
+Text size: 15 px.
+
+Color: #F1F6FF.
+
+Another thin vertical divider separates this group from the location.
+10.8 Fourth group — location
+Positioned around X 840 px.
+
+Contains:
+- Grey-blue map pin icon.
+- Text North Valley.
+Icon size: 28 px.
+
+Text size: 14 px.
+
+Text color: #E3EDF9.
+
+All four groups must be vertically centered within the weather panel.
+
+11. Bottom farm health status panel
+
+
+
+
+
+
+
+
+
+
+This is the final component visible near the bottom of the reference.
+
+It communicates that the farm is currently healthy.
+11.1 Position and dimensions
+- X: 28 px.
+- Y: 1361 px.
+- Width: 969 px.
+- Height: 92 px.
+- Border radius: 37 px.
+The panel sits above the dark forest background.
+11.2 Glass background
+Background:
+linear-gradient(
+  105deg,
+  rgba(0, 52, 70, 0.78),
+  rgba(0, 34, 65, 0.79),
+  rgba(0, 55, 70, 0.78)
+);
+
+
+Border:
+1px solid rgba(33, 223, 177, 0.43);
+
+
+Blur:
+backdrop-filter: blur(20px) saturate(145%);
+
+
+Shadow:
+box-shadow:
+  0 0 14px rgba(0, 237, 167, 0.18),
+  0 0 30px rgba(0, 205, 150, 0.10),
+  inset 0 1px 2px rgba(144, 255, 220, 0.09);
+
+
+11.3 Left circular icon
+The left icon is positioned around:
+- X: 53 px.
+- Y: 1380 px.
+Diameter: approximately 52 px.
+
+It is a bright green circular background containing a dark agricultural leaf symbol.
+
+The circle has a subtle green glow.
+11.4 Main text
+Exact heading:
+
+Your farm is on track!
+- Font size: 17 px.
+- Weight: 650.
+- Color: #F2F8FF.
+Supporting text:
+
+Everything looks healthy.
+- Font size: 14 px.
+- Weight: 400.
+- Color: #DCE9F4.
+The two text lines are left aligned.
+11.5 Green progress connection
+A thin luminous green horizontal line starts after the text and travels toward the right side.
+
+Approximate position:
+- X: 460 px.
+- Y: 1417 px.
+- Width: 410 px.
+- Height: 2 px.
+The line should have:
+background: linear-gradient(
+  90deg,
+  rgba(0, 240, 155, 0.0),
+  rgba(0, 240, 155, 0.45),
+  #12F4A5
+);
+
+box-shadow:
+  0 0 7px rgba(0, 255, 162, 0.75),
+  0 0 15px rgba(0, 255, 162, 0.35);
+
+
+A small right-facing arrow sits at the end of the line.
+11.6 Right decorative leaf
+At the far right:
+- Large outlined leaf illustration.
+- Approximate size: 65 × 60 px.
+- Color: #5AFFAE.
+- Transparent interior.
+- Thin luminous green stroke.
+- Multiple internal veins.
+Add a green outer glow.
+
+This is a decorative visual rather than a functional control.
+
+12. Exact visual layering and glassmorphism implementation
+One of the most important aspects of recreating this design is understanding how the layers interact.
+
+The glass effect is not simply background: rgba(255,255,255,.1).
+
+The reference has multiple layers of depth.
+12.1 Layer stack
+The correct rendering order should be:
+Layer 1 — Base environment
+
+Full-screen photographic nighttime background
+
+Layer 2 — Environmental overlays
+
+Dark gradients, vignette, blue atmospheric haze
+
+Layer 3 — Decorative visuals
+
+Earth, stars, lighting and background effects
+
+Layer 4 — Glass surfaces
+
+Translucent navy surfaces with backdrop blur
+
+Layer 5 — Component borders and illumination
+
+Cyan edges, green reflections and soft shadows
+
+Layer 6 — UI content
+
+Typography, icons, charts, buttons and indicators
+
+
+12.2 Glass surface transparency
+Different components should have different transparency levels.
+Component	Suggested background opacity
+Navigation	40–50%
+Farm selector	70–78%
+Main conditions panel	68–75%
+Field cards	78–86%
+Alert cards	82–90%
+Weather panel	72–82%
+Bottom status panel	72–82%
+
+These are starting implementation values, not measured alpha-channel values from the original image.
+12.3 Border treatment
+Avoid generic bright white borders.
+
+The design uses colored borders with low opacity.
+
+Recommended:
+/* Blue glass */
+border: 1px solid rgba(64, 182, 241, 0.34);
+
+/* Cyan illuminated glass */
+border: 1px solid rgba(46, 206, 246, 0.48);
+
+/* Green success glass */
+border: 1px solid rgba(38, 239, 166, 0.40);
+
+
+12.4 Backdrop blur
+Suggested values:
+Element	Blur
+Navigation	18 px
+Farm selector	16 px
+Main panel	17–20 px
+Field cards	12–15 px
+Weather panel	18 px
+Bottom panel	20 px
+
+Do not over-blur the background. It must remain identifiable through the panels.
+12.5 Glow intensity
+There are three different glow types:
+
+Ambient glow: large, soft, low-opacity lighting surrounding the panel.
+
+Edge glow: thin luminous light around the panel's outline.
+
+Accent glow: concentrated green or cyan illumination around individual icons and controls.
+
+Keep the ambient glow relatively subtle. The strongest glow belongs to the main Farm Conditions border, health ring, primary button, and bottom green status illustration.
+
+13. Complete page positioning blueprint
+The following table is useful when implementing the screenshot as a fixed-reference layout.
+
+All coordinates are approximate and measured against the supplied 1024 × 1536 image.
+Component	X	Y	W	H
+Logo	29	29	107	41
+Navbar	164	26	642	50
+Notification	905	34	30	32
+Profile	948	27	45	45
+Hero heading	64	174	450	91
+Hero description	65	286	390	45
+Hero CTA	64	348	218	50
+Farm selector	55	484	257	51
+Main panel	26	546	974	577
+Main panel header	55	570	920	60
+Health ring	107	652	249	249
+Health status	139	912	200	32
+Alert 1	56	974	604	57
+Alert 2	56	1031	604	55
+Fields divider	676	650	1	436
+All Fields heading	699	652	200	32
+Field 1	693	689	289	120
+Field 2	693	817	289	121
+Field 3	693	946	289	120
+Weather panel	27	1155	971	123
+Bottom status panel	28	1361	969	92
+
+The composition has intentional spacing:
+- Hero section to farm selector: generous breathing room.
+- Farm selector to dashboard: almost no gap.
+- Dashboard to weather: approximately 32 px.
+- Weather to bottom status: approximately 83 px.
+Do not distribute the sections evenly. The different spacing is part of the design.
+14. Responsive implementation and layout behaviour
+Although the reference is 1024 × 1536 px, the website should be implemented responsively.
+
+The desktop screenshot should remain the visual authority.
+
+Do not allow responsive behaviour to change the desktop composition.
+14.1 Desktop — 1024 px and above
+- Preserve the full-width landscape.
+- Keep the navigation horizontal.
+- Keep the Earth in the upper-right.
+- Keep the hero on the left.
+- Keep the health gauge and alerts on the left side of the main panel.
+- Keep All Fields on the right.
+- Keep the weather information in one horizontal row.
+- Keep the bottom status banner horizontal.
+14.2 Tablet — 768–1023 px
+- Reduce horizontal margins.
+- Scale the navigation.
+- Reduce the hero heading to approximately 38 px.
+- Preserve the two-column Farm Conditions layout when space permits.
+- Reduce field thumbnail sizes.
+- Reduce spacing between weather groups.
+14.3 Mobile — below 768 px
+The layout should become vertically stacked.
+
+Suggested order:
+1. Compact navigation.
+2. Hero heading and description.
+3. Farm selector.
+4. Farm health visualization.
+5. Alerts.
+6. All Fields.
+7. Weather.
+8. Farm status.
+The Earth should become a smaller background decorative element.
+
+The background must continue covering the entire page.
+
+15. Recommended HTML component architecture
+The website should be built with reusable components rather than one enormous HTML element.
+
+Recommended hierarchy:
+App
+│
+├── BackgroundEnvironment
+│   ├── NightSky
+│   ├── MountainLandscape
+│   ├── FarmLandscape
+│   ├── EarthVisual
+│   ├── AtmosphericGlow
+│   └── BackgroundVignette
+│
+├── Navigation
+│   ├── BrandLogo
+│   ├── NavigationLinks
+│   ├── NotificationButton
+│   └── ProfileAvatar
+│
+├── HeroSection
+│   ├── HeroHeading
+│   ├── HeroDescription
+│   └── PrimaryAction
+│
+├── FarmSelector
+│
+├── FarmConditions
+│   ├── FarmConditionsHeader
+│   ├── FarmHealth
+│   │   ├── HealthRing
+│   │   └── HealthStatus
+│   │
+│   ├── FarmAlerts
+│   │   ├── CriticalAlert
+│   │   └── WarningAlert
+│   │
+│   └── AllFields
+│       ├── FieldCard
+│       ├── FieldCard
+│       └── FieldCard
+│
+├── WeatherPanel
+│   ├── WeatherOverview
+│   ├── Humidity
+│   ├── Wind
+│   └── Location
+│
+└── FarmStatusBanner
+    ├── StatusIcon
+    ├── StatusText
+    ├── ProgressLine
+    └── DecorativeLeaf
+
+
+This architecture keeps the design maintainable while making it possible to reproduce the individual sections accurately.
+16. CSS design system
+Use centralized CSS variables to ensure the colors, transparency, radii, and effects remain consistent throughout the website.
+
+Here is a starting design-token system:
+
+:root {
+  /* Background palette */
+  --midnight: #000817;
+  --navy: #00132E;
+  --deep-blue: #002347;
+  --ocean-blue: #00345B;
+
+  /* Brand palette */
+  --emerald: #00E995;
+  --mint: #45F4A5;
+  --turquoise: #20E9C4;
+  --cyan: #16D9E9;
+  --electric-blue: #168BFF;
+
+  /* Typography */
+  --text-primary: #F1F7FF;
+  --text-secondary: #D4E2F1;
+  --text-muted: #A9BED4;
+
+  /* Glass surfaces */
+  --glass-navigation: rgba(0, 42, 82, .47);
+  --glass-main: rgba(0, 29, 62, .72);
+  --glass-field: rgba(0, 54, 84, .82);
+  --glass-weather: rgba(0, 39, 76, .78);
+  --glass-status: rgba(0, 48, 66, .78);
+
+  /* Borders */
+  --border-blue: rgba(64, 182, 241, .34);
+  --border-cyan: rgba(46, 206, 246, .48);
+  --border-green: rgba(38, 239, 166, .40);
+
+  /* Shadows */
+  --glow-green:
+    0 0 8px rgba(0, 255, 164, .35),
+    0 0 20px rgba(0, 255, 164, .20);
+
+  --glow-blue:
+    0 0 12px rgba(0, 195, 255, .23),
+    0 0 30px rgba(0, 147, 255, .14);
+
+  /* Radii */
+  --radius-small: 14px;
+  --radius-medium: 21px;
+  --radius-large: 36px;
+  --radius-pill: 999px;
+
+  /* Typography */
+  --font-main: "Inter", sans-serif;
+}
+
+
+
+16.1 Reusable glass panel class
+
+.glass-panel {
+  position: relative;
+  overflow: hidden;
+
+  background: linear-gradient(
+    135deg,
+    rgba(0, 39, 79, .69),
+    rgba(0, 23, 54, .73),
+    rgba(0, 39, 72, .69)
+  );
+
+  border: 1px solid rgba(68, 202, 255, .48);
+  border-radius: 36px;
+
+  backdrop-filter:
+    blur(18px)
+    saturate(140%);
+
+  -webkit-backdrop-filter:
+    blur(18px)
+    saturate(140%);
+
+  box-shadow:
+    0 0 12px rgba(0, 195, 255, .23),
+    0 0 30px rgba(0, 147, 255, .14),
+    0 15px 45px rgba(0, 0, 0, .35),
+    inset 0 1px 2px rgba(170, 241, 255, .12);
+}
+
+.glass-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+
+  background: linear-gradient(
+    135deg,
+    rgba(255,255,255,.09),
+    transparent 22%,
+    transparent 75%,
+    rgba(0,220,255,.04)
+  );
+}
+
+.glass-panel > * {
+  position: relative;
+  z-index: 1;
+}
+
+
+
+16.2 Background implementation
+
+.page-background {
+  position: fixed;
+  inset: 0;
+  z-index: -10;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(0,7,22,.32),
+      rgba(0,15,37,.12) 35%,
+      rgba(0,11,29,.28) 70%,
+      rgba(0,5,17,.55)
+    ),
+    url("/images/night-farm-background.jpg");
+
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.ambient-blue-glow {
+  position: absolute;
+  pointer-events: none;
+  border-radius: 50%;
+
+  background: rgba(0, 117, 255, .16);
+  filter: blur(100px);
+}
+
+.ambient-green-glow {
+  position: absolute;
+  pointer-events: none;
+  border-radius: 50%;
+
+  background: rgba(0, 255, 153, .10);
+  filter: blur(85px);
+}
+
+
+
+
+17. Animation and interaction details
+The original appearance is relatively calm. It should not be turned into an excessively animated gaming interface.
+
+Animations should be smooth, subtle, and purposeful.
+Element	Animation	Suggested duration
+Health ring	Animated progress draw	1.5 s
+Active navigation	Green glow transition	250 ms
+Primary button	Slight brightness increase on hover	200 ms
+Field cards	Slight upward movement on hover	200 ms
+Main panel	Subtle border illumination	3 s
+Live indicator	Soft green pulse	2 s
+Earth	Extremely slow atmospheric movement	15–25 s
+Background	Optional subtle parallax	Continuous
+Refresh icon	Rotation on refresh	600 ms
+
+Example:
+
+@keyframes livePulse {
+  0%, 100% {
+    box-shadow: 0 0 4px rgba(0,255,153,.25);
+    opacity: 1;
+  }
+
+  50% {
+    box-shadow: 0 0 12px rgba(0,255,153,.65);
+    opacity: .8;
+  }
+}
+
+.live-dot {
+  animation: livePulse 2s ease-in-out infinite;
+}
+
+.field-card {
+  transition:
+    transform .2s ease,
+    border-color .2s ease,
+    box-shadow .2s ease;
+}
+
+.field-card:hover {
+  transform: translateY(-2px);
+
+  border-color:
+    rgba(43, 231, 220, .55);
+
+  box-shadow:
+    0 0 17px rgba(0, 193, 225, .18);
+}
+
+.primary-button {
+  transition:
+    filter .2s ease,
+    transform .2s ease;
+}
+
+.primary-button:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+
+
+
+Respect prefers-reduced-motion so that users who disable animations are not forced to see them.
+
+18. Image asset requirements
+This is particularly important for a genuinely accurate reconstruction.
+
+The website's appearance depends heavily on the photographs and illustrations. Recreating the CSS without recreating the imagery will not produce the same visual result.
+
+The following assets should be prepared separately.
+
+
+
+
+
+
+
+
+
+
+01 — Main background
+
+Full-page nighttime mountain, lake, forest and farm environment.
+
+Recommended: 2048 × 3072 px or higher.
+
+
+
+
+
+
+
+
+
+
+
+
+
+02 — Earth visual
+
+Realistic globe with nighttime city illumination and electric-blue atmospheric edge.
+
+Recommended: 1200 × 1200 px, transparent background if possible.
+
+
+
+
+
+
+
+
+
+
+
+
+
+03 — Farm conditions image
+
+Nighttime aerial farm, illuminated farmhouse and crop rows.
+
+Recommended: 1400 × 900 px.
+
+
+
+
+
+
+
+
+
+
+
+
+
+04 — Field 1
+
+Wheat crop thumbnail.
+
+Recommended: 400 × 400 px.
+
+
+
+
+
+
+
+
+
+
+
+
+
+05 — Field 2
+
+Corn crop thumbnail.
+
+Recommended: 400 × 400 px.
+
+
+
+
+
+
+
+
+
+
+
+
+
+06 — Field 3
+
+Pea crop thumbnail.
+
+Recommended: 400 × 400 px.
+
+
+
+
+
+
+
+
+
+
+
+
+
+07 — Weather illustration
+
+Three-dimensional sunny/cloudy illustration.
+
+Recommended: 256 × 256 px, transparent background.
+
+
+
+
+
+
+
+
+
+
+
+
+
+08 — Decorative leaf
+
+Large outlined mint-green leaf illustration.
+
+Recommended: SVG or transparent PNG.
+
+
+
+For the actual implementation, use original matching image assets wherever possible. The examples above are visual references, not the original embedded photographs.
+
+19. Critical implementation details — what must not be changed
+These are the details most likely to cause the recreation to look noticeably different if implemented incorrectly.
+Priority	Requirement
+Critical	Full-screen cinematic nighttime background
+Critical	Giant Earth in the upper-right
+Critical	Main Farm Conditions panel dimensions and placement
+Critical	Transparent panel with visible agricultural imagery
+Critical	Large green 92% health ring
+Critical	Two-column dashboard composition
+Critical	Three field cards on the right
+Critical	Cyan illuminated panel borders
+Critical	Weather panel beneath the dashboard
+Critical	Green status banner at the bottom
+High	Rounded geometric typography
+High	Green gradient heading
+High	Correct card transparency
+High	Subtle atmospheric glows
+High	Original icon proportions
+High	Precise spacing and alignment
+
+Things to avoid:
+- Do not replace the background with a flat navy gradient.
+- Do not make the cards opaque.
+- Do not turn the main dashboard into a conventional white analytics dashboard.
+- Do not use excessive neon outlines.
+- Do not use generic stock dashboard templates.
+- Do not change the hero alignment.
+- Do not place the Earth inside a card.
+- Do not move All Fields underneath the health gauge on desktop.
+- Do not remove the agricultural photograph visible behind the main panel.
+- Do not introduce extra charts, statistics, or sections.
+- Do not make every interface element glow equally.
+- Do not add unnecessary borders between every individual element.
+
+20. Final reconstruction target
+FIELD SHIFT — visual acceptance criteria
+The finished implementation should satisfy all of these requirements.
+Implementation progress
+1/17
+
+
+
+[ ] The page matches the 1024 × 1536 reference composition.
+[ ] The nighttime landscape fills the entire background.
+[ ] The Earth is large, realistic and positioned in the upper-right.
+[ ] The navigation has the correct horizontal glass pill layout.
+[ ] The hero heading uses white and emerald gradient typography.
+[ ] The farm dropdown sits immediately above Farm Conditions.
+[ ] The main panel has a translucent blue glass surface.
+[ ] The farm photograph remains visible behind the panel.
+[ ] The health ring displays 92% and Very Healthy.
+[ ] The two alerts have distinct red and orange styling.
+[ ] All Fields appears in a separate right-hand column.
+[ ] All three field cards contain separate agricultural photographs.
+[ ] The weather panel contains all four horizontally arranged information groups.
+[x] The bottom status banner has its luminous green line and decorative leaf.
+[ ] All borders, gradients, shadows, and transparency levels are consistent.
+[ ] The desktop layout preserves the reference proportions.
+[ ] Animations are subtle and do not interfere with readability.
+
+The most important final instruction for the developer:
+
+Reproduce the reference as an existing visual design, not as inspiration for a new design. Prioritize matching the original geometry, image composition, typography, spacing, transparency, gradients, lighting, and visual hierarchy. Every element should occupy approximately the same position and proportion as in the supplied reference at 1024 × 1536 resolution.
+
+The numerical measurements in this specification are visual estimates from the screenshot. Exact pixel-for-pixel reproduction additionally requires matching the original photographic assets, logo, avatar, icons, and font. CSS alone cannot recreate those image details.

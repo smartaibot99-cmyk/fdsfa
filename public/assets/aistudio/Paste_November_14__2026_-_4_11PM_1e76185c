@@ -1,0 +1,1762 @@
+FIELD SHIFT — Extreme-detail visual and coding specification
+DAYTIME EDITION · COMPLETE LANDING PAGE RECONSTRUCTION · 1670 × 941 PX
+
+This image is the bright daytime version of the FIELD SHIFT geospatial intelligence landing page. It preserves the same overall composition, navigation, typography, four feature cards, and interface structure as the nighttime version, but completely changes the visual atmosphere, background lighting, glass transparency, color treatment, and contrast.
+
+The design is a premium, cinematic agricultural technology website.
+
+Its defining visual characteristics are:
+- A breathtaking, photorealistic daytime agricultural valley.
+- Bright blue sky with soft white clouds.
+- Strong sunlight and atmospheric sun rays in the upper-right.
+- Layered blue mountain ranges in the distance.
+- Bright green agricultural fields with visible crop rows.
+- A lake reflecting the sunlight.
+- Blurred green leaves framing the bottom corners.
+- Transparent, pale blue-green glass cards.
+- Bright cyan and emerald accents.
+- Dark navy typography against the bright landscape.
+- A sophisticated floating navigation bar.
+- Four horizontally aligned glassmorphism feature cards.
+The most important difference from the nighttime version is that the interface now uses light glass rather than dark glass. The landscape should remain clearly visible through the cards, while the cards still have enough tinted opacity to preserve text readability.
+
+1. Overall canvas and composition
+
+
+
+
+
+
+
+
+
+
+The reference image has a resolution of 1670 × 941 pixels.
+
+Its aspect ratio is approximately 16:9.
+
+The page fills the entire viewport, with no outer margins, no white page background, and no conventional solid-color header.
+
+The entire website is layered over one continuous photographic background.
+1.1 Global layout coordinates
+These are approximate coordinates taken from the supplied image.
+Component	X	Y	Width	Height
+FIELD SHIFT logo	69	29	139	53
+Navigation pill	466	26	716	57
+Utility controls	1364	31	238	49
+Eyebrow badge	74	164	371	41
+Hero heading	77	218	720	152
+Description	77	395	510	55
+Primary CTA	74	490	282	61
+Secondary CTA	389	490	178	61
+Feature card 1	72	639	369	160
+Feature card 2	467	639	350	160
+Feature card 3	841	639	355	160
+Feature card 4	1222	639	359	160
+Scroll indicator	440	850	770	37
+
+The page has four major horizontal zones:
+1. Header: approximately 0–90 px.
+2. Hero: approximately 160–550 px.
+3. Feature cards: approximately 638–800 px.
+4. Scroll indicator: approximately 850–890 px.
+The main content begins approximately 74 px from the left edge.
+
+The rightmost card ends approximately 90 px from the right edge.
+
+The layout should feel spacious, with substantial breathing room between the hero and feature cards.
+2. Main background — daytime agricultural landscape
+
+
+
+
+
+
+
+
+heimat-original.com
+
+
+The background is the most important asset in the entire design.
+
+It is not a simple image of a farm.
+
+It is a cinematic, wide-angle landscape featuring a large agricultural valley, distant mountain ranges, a lake, and an intensely blue daytime sky.
+
+The image should be highly detailed, realistic, and naturally illuminated.
+2.1 Background composition
+The photograph has several distinct depth layers.
+
+Layer 1 — Sky
+
+Occupies approximately the top 40–45% of the image.
+- Bright azure-blue sky.
+- Slightly lighter blue toward the upper-left.
+- Strong blue saturation toward the upper-center.
+- Pale atmospheric blue toward the horizon.
+- Large soft white clouds on the left.
+- More scattered white clouds on the right.
+- Bright sunlight near the upper-right.
+- Soft atmospheric haze around the mountain peaks.
+Layer 2 — Distant mountains
+
+Occupies approximately 35–60% of the image height.
+
+There are multiple mountain layers.
+- The farthest mountains are pale blue.
+- Middle mountain ranges are medium blue.
+- Foreground mountain slopes are deeper blue-green.
+- The mountain silhouettes are irregular, with pointed peaks.
+- Atmospheric haze reduces contrast as the mountains recede.
+The tallest mountain range appears toward the right side, approximately X = 1550 px.
+
+Layer 3 — Agricultural valley
+
+Occupies approximately 48–75% of the image.
+- Bright green fields.
+- Rolling hills.
+- Rows of cultivated crops.
+- Small trees and hedgerows.
+- Visible agricultural divisions.
+- Narrow tracks and field boundaries.
+- Small reflective water features.
+Layer 4 — Lake
+
+Located around the center-right of the landscape.
+
+The lake is a relatively narrow horizontal reflective feature.
+
+It has bright sky reflections and darker blue-green water around the surrounding vegetation.
+
+Layer 5 — Foreground vegetation
+
+Occupies approximately the bottom 15–25%.
+- Dark green crop rows.
+- Dense leaves.
+- Bright green foliage.
+- Out-of-focus leaves in the bottom corners.
+- Stronger depth-of-field blur near the bottom-left and bottom-right.
+The foreground plants frame the page and create a natural sense of depth.
+2.2 Background color palette
+
+Sky blue
+
+#48B4F5
+
+
+Azure
+
+#278FE0
+
+
+Cloud white
+
+#EAF7FF
+
+
+Horizon blue
+
+#A9D9F3
+
+
+Mountain blue
+
+#4B92C2
+
+
+Field green
+
+#65AE37
+
+
+Crop green
+
+#367B27
+
+
+Deep foliage
+
+#073D29
+
+
+These are representative colors for the overall scene, rather than exact sampled pixel values.
+2.3 Background image positioning
+The image must cover the entire viewport without stretching.
+.page-background {
+  position: fixed;
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  background-image:
+    url("/images/daytime-farm-valley.jpg");
+
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+
+  z-index: -10;
+}
+
+
+The image itself should already contain the sun, mountains, lake, fields, clouds, and vegetation.
+
+Do not separately construct these elements using CSS gradients.
+2.4 Environmental overlays
+The image is bright, so the overlay strategy is different from the nighttime design.
+
+The left side has a very subtle pale atmospheric wash behind the headline, making the text easy to read without creating an obvious rectangular panel.
+
+The upper-right remains bright, especially around the sun.
+
+The lower landscape should retain its rich green colors.
+
+Use:
+.page-background::after {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  background:
+
+    /* Soft readability wash behind the hero */
+    linear-gradient(
+      90deg,
+      rgba(225, 244, 255, 0.18) 0%,
+      rgba(220, 242, 255, 0.09) 34%,
+      transparent 66%
+    ),
+
+    /* Slight foreground depth */
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.025) 0%,
+      transparent 50%,
+      rgba(0, 35, 25, 0.10) 100%
+    );
+
+  pointer-events: none;
+}
+
+
+Do not put a strong dark overlay over this version.
+
+The defining visual quality is the brightness of the natural landscape.
+
+3. Sunlight, clouds and atmospheric illumination
+
+
+
+
+
+
+
+
+
+
+The sunlight is located in the upper-right quadrant.
+
+Its approximate center is:
+- X: 1380 px.
+- Y: 243 px.
+The sun itself is extremely bright, almost white, with a warm pale-yellow center.
+
+There is a broad, diffused halo around it.
+
+The surrounding sky becomes slightly lighter and more washed out.
+Sun appearance
+- Bright white center.
+- Very subtle warm-white edge.
+- Large atmospheric bloom.
+- Diffuse radial illumination.
+- Slightly visible sun rays.
+- Soft cloud illumination around the right side.
+If the background image already contains the sun, preserve it as part of the image.
+
+Do not add a second sun.
+
+For a separately composited sun:
+.sun-halo {
+  position: absolute;
+
+  width: 390px;
+  height: 390px;
+
+  left: 82.6%;
+  top: 25.8%;
+
+  transform: translate(-50%, -50%);
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(255,255,255,0.58) 0%,
+      rgba(255,255,255,0.27) 13%,
+      rgba(255,249,225,0.16) 30%,
+      rgba(255,255,255,0.08) 48%,
+      transparent 73%
+    );
+
+  filter: blur(17px);
+
+  pointer-events: none;
+}
+
+
+The halo must be soft and photographic, never a sharply defined circle.
+
+4. FIELD SHIFT logo and header
+The header retains the exact same general structure as the nighttime version, but its color treatment changes significantly.
+
+It now uses dark navy icons and text against the bright sky.
+4.1 Logo
+The logo is located in the upper-left corner.
+
+It consists of a bright mint-green leaf emblem and a two-line wordmark.
+
+FIELD
+SHIFT
+
+
+Leaf emblem:
+- Approximately 49 × 53 px.
+- Turquoise-green.
+- Stylized geometric leaf.
+- Angular stem.
+- Fine internal vein detail.
+Wordmark:
+- Two lines.
+- Uppercase.
+- Bold.
+- Approximately 24 px.
+- Color: deep navy #071C39.
+- Tight vertical spacing.
+The logo should remain crisp and solid, not transparent.
+4.2 Navigation pill
+The navigation is positioned in the upper-center of the page.
+
+It has a light glass appearance.
+
+Unlike the dark nighttime version, the background is a pale translucent blue-white.
+Home
+
+
+Analyze
+
+Compare
+
+Data Sources
+
+About
+
+
+
+Container styling
+Approximate dimensions:
+- Width: 716 px.
+- Height: 57 px.
+- Border radius: 999 px.
+- Position: top 26 px.
+- Horizontal center alignment.
+The background has:
+- Translucent pale blue.
+- White highlights.
+- Light cyan border.
+- Stronger cyan illumination around the active Home button.
+CSS:
+.nav-container {
+  position: absolute;
+
+  top: 26px;
+  left: 50%;
+
+  transform: translateX(-50%);
+
+  width: 716px;
+  height: 57px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 4px;
+
+  border-radius: 999px;
+
+  background:
+    linear-gradient(
+      110deg,
+      rgba(225, 246, 255, 0.65),
+      rgba(199, 232, 252, 0.74),
+      rgba(227, 246, 255, 0.67)
+    );
+
+  border: 1px solid rgba(130, 218, 255, 0.65);
+
+  backdrop-filter:
+    blur(20px) saturate(140%);
+
+  -webkit-backdrop-filter:
+    blur(20px) saturate(140%);
+
+  box-shadow:
+    0 4px 20px rgba(42, 143, 214, 0.12),
+    inset 0 1px 2px rgba(255,255,255,0.75);
+}
+
+
+4.3 Active navigation item
+The Home button is brighter than the rest of the navigation.
+
+It has a pale cyan background with a vivid turquoise underline.
+
+The active item is approximately 125 × 49 px.
+
+Its appearance includes:
+- Light aqua fill.
+- Thin cyan outline.
+- Bright mint bottom line.
+- Subtle cyan glow.
+- Rounded pill shape.
+.nav-item.active {
+  height: 49px;
+
+  border-radius: 999px;
+
+  background:
+    linear-gradient(
+      120deg,
+      rgba(175, 243, 255, 0.90),
+      rgba(179, 255, 239, 0.80)
+    );
+
+  border: 1px solid rgba(0, 212, 205, 0.34);
+
+  box-shadow:
+    0 0 13px rgba(0, 220, 220, 0.23),
+    inset 0 1px 2px rgba(255,255,255,0.75);
+}
+
+.nav-item.active::after {
+  content: "";
+
+  position: absolute;
+
+  bottom: 0;
+  left: 22%;
+
+  width: 56%;
+  height: 2px;
+
+  background: #00E5C1;
+
+  box-shadow:
+    0 0 8px rgba(0, 226, 190, 0.85);
+}
+
+
+4.4 Utility controls
+The four controls are aligned to the far-right:
+1. Sun/theme icon.
+2. Settings gear.
+3. Notification bell.
+4. Profile avatar.
+Each circular control is approximately 47 px in diameter.
+
+They use:
+- Pale transparent blue fill.
+- Soft cyan-blue border.
+- Dark navy icon.
+- Very subtle drop shadow.
+The notification has a tiny green indicator at the top-right.
+
+The profile is a blue translucent circle with a dark navy B and a small green online indicator.
+
+The utility icons must be dark in this version. White icons from the nighttime theme would have insufficient contrast.
+
+5. Hero section
+The hero is left-aligned and positioned in the upper-middle portion of the page.
+
+It has four components:
+1. Eyebrow badge.
+2. Main headline.
+3. Supporting description.
+4. Two call-to-action buttons.
+The hero has no enclosing card or background panel.
+
+The text floats directly over the bright landscape.
+5.1 Eyebrow badge
+Geospatial Intelligence for a Sustainable Tomorrow.
+
+
+Position:
+- X: approximately 74 px.
+- Y: approximately 164 px.
+- Width: 371 px.
+- Height: 41 px.
+The badge has a pale translucent cyan-green surface.
+
+It has a thin turquoise outline and a subtle mint glow.
+
+The icon is a small dark-green leaf, approximately 15 px.
+
+The text is approximately 13 px, dark navy, normal weight.
+
+It must not look like a solid green button.
+
+CSS:
+.hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+
+  height: 41px;
+  padding: 0 14px;
+
+  border-radius: 999px;
+
+  background:
+    linear-gradient(
+      100deg,
+      rgba(223, 255, 249, 0.70),
+      rgba(218, 245, 255, 0.64)
+    );
+
+  border: 1px solid rgba(49, 219, 201, 0.72);
+
+  color: #092B42;
+
+  backdrop-filter: blur(12px);
+
+  box-shadow:
+    0 0 12px rgba(0, 215, 185, 0.12),
+    inset 0 1px 2px rgba(255,255,255,0.70);
+}
+
+
+5.2 Main heading
+Smarter decisions.
+Healthier fields.
+
+This is the dominant typographic feature.
+
+It uses two lines, with very large bold lettering.
+
+The first line is solid dark navy.
+
+The second line uses a horizontal blue-to-cyan-to-emerald gradient.
+First line: Smarter decisions.
+- Color: #061D43.
+- Font size: approximately 80 px.
+- Font weight: 800.
+- Letter spacing: approximately -3.5 px.
+- Line height: 0.99.
+- No outline.
+- No visible text shadow.
+The letters should be crisp and dark enough to stand out against the light sky.
+Second line: Healthier fields.
+The gradient begins in bright blue on the left and transitions through cyan and turquoise into green.
+
+#168AFF
+
+#00AEEB
+
+#00CFC1
+
+#00D89C
+
+
+CSS:
+.hero-title {
+  margin: 0;
+
+  font-family: "Inter", sans-serif;
+
+  font-size: 80px;
+  font-weight: 800;
+
+  line-height: 0.99;
+  letter-spacing: -3.5px;
+
+  color: #071D42;
+}
+
+.hero-title .gradient-text {
+  display: inline-block;
+
+  background:
+    linear-gradient(
+      95deg,
+      #168AFF 0%,
+      #00AEEB 34%,
+      #00CFC1 65%,
+      #00D89C 100%
+    );
+
+  -webkit-background-clip: text;
+  background-clip: text;
+
+  -webkit-text-fill-color: transparent;
+}
+
+
+Important: The gradient must be applied only to the second line. The first line must remain solid navy.
+5.3 Supporting description
+Exact wording:
+Harness the power of geospatial intelligence to
+monitor, analyze and improve agricultural productivity.
+
+Position:
+- X: approximately 77 px.
+- Y: approximately 400 px.
+Typography:
+Property	Value
+Font	Inter
+Size	19–20 px
+Weight	400
+Line height	1.55
+Color	#344C6C
+Maximum width	540 px
+
+The color is a muted dark blue-grey.
+
+It should not be black, and it should not be white.
+
+There are two lines with a clear but relatively tight vertical gap.
+.hero-description {
+  max-width: 540px;
+
+  margin-top: 14px;
+
+  font-size: 19px;
+  font-weight: 400;
+
+  line-height: 1.55;
+
+  color: #344C6C;
+}
+
+
+6. Call-to-action buttons
+The buttons sit horizontally underneath the description.
+
+They are approximately 60 px tall.
+
+The primary button is significantly brighter than the secondary button.
+Explore the Platform
+
+
+
+Watch Demo
+
+
+6.1 Primary CTA — Explore the Platform
+Approximate dimensions:
+- Width: 282 px.
+- Height: 61 px.
+- Border radius: 999 px.
+The background gradient is:
+background: linear-gradient(
+  105deg,
+  #08B9FF 0%,
+  #00D5D2 57%,
+  #39EFA9 100%
+);
+
+
+The left side is bright electric blue.
+
+The center becomes turquoise.
+
+The right side becomes mint green.
+
+Contents:
+- Small dark leaf icon.
+- Dark navy button label.
+- Right-facing dark arrow.
+The icon is approximately 22 px.
+
+The text is approximately 16 px and semibold.
+Button glow
+The button has a diffuse blue-green outer glow.
+
+It should look illuminated against the daylight landscape without appearing like a glowing neon tube.
+.primary-button {
+  border: 1px solid rgba(255,255,255,0.34);
+
+  border-radius: 999px;
+
+  box-shadow:
+    0 4px 12px rgba(0, 159, 235, 0.25),
+    0 0 19px rgba(0, 198, 220, 0.20),
+    0 0 30px rgba(0, 225, 170, 0.13),
+    inset 0 1px 2px rgba(255,255,255,0.40);
+}
+
+
+6.2 Secondary CTA — Watch Demo
+The secondary button consists of a circular play button and a text label.
+
+The circle is approximately 61 × 61 px.
+
+Its background is transparent pale blue glass.
+
+Its border is a thin medium-blue outline.
+
+The play triangle is dark navy.
+
+The text is dark navy and approximately 15 px.
+.demo-play {
+  width: 61px;
+  height: 61px;
+
+  border-radius: 50%;
+
+  display: grid;
+  place-items: center;
+
+  background: rgba(220, 243, 255, 0.57);
+
+  border: 1px solid rgba(63, 169, 244, 0.74);
+
+  backdrop-filter: blur(10px);
+
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,0.65),
+    0 2px 9px rgba(31, 132, 215, 0.10);
+}
+
+
+
+7. Feature cards — complete light-glass reconstruction
+
+
+
+
+
+
+
+
+dribbble.com
+
+
+This is one of the most visually important sections of the design.
+
+The four feature cards sit over the agricultural landscape.
+
+Unlike the dark cards from the nighttime version, these are now bright, translucent, frosted glass panels.
+
+They have a pale blue-green tint.
+
+The background landscape is visibly seen through the cards.
+
+The cards should appear as if they are made from thick frosted glass, with sunlight reflecting off their upper edges and cyan-blue illumination around their borders.
+
+The cards have a premium, slightly luminous appearance.
+7.1 Card arrangement
+There are four horizontally aligned cards.
+
+They occupy nearly the entire width of the page.
+
+The first card starts around X = 72 px.
+
+The final card ends around X = 1581 px.
+
+Each card has:
+- Rounded corners.
+- A translucent blue-green background.
+- A subtle gradient.
+- A fine cyan border.
+- A diffuse blue-green outer glow.
+- A glass-like highlight.
+- A faint topographic contour pattern.
+Recommended grid:
+.feature-grid {
+  position: absolute;
+
+  left: 50%;
+  bottom: 141px;
+
+  transform: translateX(-50%);
+
+  width: calc(100% - 144px);
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+
+  gap: 26px;
+}
+
+
+The reference has slightly varying card widths. A four-column equal-width grid is a clean implementation that retains the overall composition.
+7.2 Card dimensions
+At the reference resolution:
+- Width: approximately 350–370 px.
+- Height: approximately 160 px.
+- Border radius: approximately 23–25 px.
+- Horizontal gap: approximately 25–27 px.
+The cards should have identical heights.
+
+Their content is vertically centered.
+7.3 Main card background — extremely detailed
+The background is a light, semi-transparent teal-blue glass surface.
+
+It is neither fully transparent nor opaque.
+
+The landscape should remain visible through it, but its colors should become softened and slightly desaturated.
+
+The first three cards have a slightly cooler blue-green appearance.
+
+The fourth card has a warmer, greener tint.
+
+The glass should be brighter toward the top and slightly more saturated toward the lower edge.
+Main color progression
+
+Upper-left
+
+#D8F3F2
+
+
+Left-center
+
+#B9E1E5
+
+
+Center
+
+#A7D5D8
+
+
+Right-center
+
+#B5DFDF
+
+
+Right
+
+#D0EAD2
+
+
+These are visual target colors for the tinting, not flat colors to use independently.
+Main CSS gradient
+.feature-card {
+  position: relative;
+
+  isolation: isolate;
+  overflow: hidden;
+
+  min-height: 160px;
+
+  border-radius: 24px;
+
+  background:
+    linear-gradient(
+      115deg,
+
+      rgba(214, 242, 245, 0.77) 0%,
+
+      rgba(187, 226, 231, 0.76) 27%,
+
+      rgba(165, 216, 220, 0.79) 56%,
+
+      rgba(185, 227, 223, 0.75) 100%
+    );
+
+  backdrop-filter:
+    blur(17px)
+    saturate(135%)
+    brightness(1.06);
+
+  -webkit-backdrop-filter:
+    blur(17px)
+    saturate(135%)
+    brightness(1.06);
+
+  border: 1px solid
+    rgba(111, 220, 232, 0.80);
+
+  box-shadow:
+    0 5px 18px rgba(10, 105, 137, 0.12),
+
+    0 0 12px rgba(0, 174, 229, 0.16),
+
+    0 0 24px rgba(0, 193, 207, 0.09),
+
+    inset 0 1px 2px
+      rgba(255, 255, 255, 0.88),
+
+    inset 0 -2px 5px
+      rgba(52, 182, 207, 0.15);
+}
+
+
+Transparency characteristics
+The background must have enough transparency to reveal the scenery.
+
+The upper portions show soft blue and green colors from the underlying landscape.
+
+The lower portions reveal more recognizable crop rows and foliage.
+
+The glass should diffuse the background rather than completely obscure it.
+
+Recommended:
+- Backdrop blur: 15–19 px.
+- Saturation: 125–140%.
+- Main background opacity: approximately 0.72–0.80.
+- Border opacity: approximately 0.70–0.85.
+The exact transparency must be tuned against the actual background image.
+
+A major mistake would be setting the card background to rgba(255,255,255,0.95). That would make it look like a white opaque panel instead of the reference.
+7.4 Upper glass reflection
+The upper portion has a soft white-cyan reflection.
+
+This makes the card look like a physical piece of frosted glass catching sunlight.
+.feature-card::before {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  border-radius: inherit;
+
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      180deg,
+
+      rgba(255, 255, 255, 0.48) 0%,
+
+      rgba(240, 255, 255, 0.23) 12%,
+
+      rgba(211, 247, 249, 0.09) 30%,
+
+      transparent 58%
+    );
+
+  z-index: 0;
+}
+
+
+This highlight must not create a distinct horizontal stripe.
+
+It should fade gradually.
+7.5 Lower cyan reflection
+The lower edges of the cards have a brighter cyan-blue reflection.
+
+This is particularly noticeable along the bottom corners.
+.feature-card::after {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  border-radius: inherit;
+
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      180deg,
+
+      transparent 65%,
+
+      rgba(68, 198, 215, 0.06) 79%,
+
+      rgba(49, 206, 219, 0.15) 100%
+    );
+
+  z-index: 0;
+}
+
+
+The reflection should be stronger near the bottom border, especially around the corners.
+7.6 Card-specific tint variations
+The four cards have a slightly different visual character.
+Card	Dominant tint	Border
+Explore Sources	Cool sky blue	Cyan-blue
+Check Claims	Turquoise teal	Mint-green
+See Evidence	Cool aqua	Blue-cyan
+Stay Informed	Pale green	Lime-green
+
+The difference is subtle.
+
+Do not make every card a completely different color.
+
+For the fourth card, add a faint green radial gradient.
+.feature-card.green {
+  background:
+    radial-gradient(
+      circle at 80% 15%,
+      rgba(186, 245, 174, 0.26),
+      transparent 56%
+    ),
+
+    linear-gradient(
+      110deg,
+      rgba(219, 242, 218, 0.80),
+      rgba(181, 223, 194, 0.77)
+    );
+
+  border-color: rgba(151, 226, 130, 0.78);
+}
+
+
+
+8. Feature card icons and internal layout
+Every card follows the same three-part horizontal structure:
+
+Explore Sources
+
+Access trusted geospatial data across the web.
+
+
+
+
+The three elements are:
+1. Circular icon container on the left.
+2. Text block in the middle.
+3. Circular arrow control on the right.
+The content should be vertically centered within the card.
+
+Recommended internal padding:
+.feature-card-content {
+  position: relative;
+  z-index: 1;
+
+  height: 100%;
+
+  display: flex;
+  align-items: center;
+
+  padding: 20px 19px 20px 23px;
+
+  gap: 19px;
+}
+
+
+8.1 Circular icon containers
+The icon circles are approximately 68 × 68 px.
+
+They have a soft colored background, a thin colored outline, and a gentle matching glow.
+
+Unlike the nighttime design, the icons are not sitting inside extremely dark circles.
+
+Their background is a lighter, translucent version of their accent color.
+Card 1 — Explore Sources
+
+Explore Sources
+
+Electric blue globe, pale blue glass background, cyan border and blue halo.
+
+
+Approximate colors:
+- Icon: #078DEB
+- Circle background: #B9E9FA
+- Border: #45B8F9
+- Glow: rgba(0,153,255,0.24)
+Card 2 — Check Claims
+
+Check Claims
+
+Dark teal shield-check icon with a bright turquoise ring and mint glow.
+
+
+Approximate colors:
+- Icon: #00464C
+- Circle background: #A7E8D9
+- Border: #2DE1BC
+- Glow: rgba(0,226,184,0.30)
+Card 3 — See Evidence
+
+See Evidence
+
+Dark electric-blue ascending bar chart with a blue-cyan ring.
+
+
+Approximate colors:
+- Icon: #075DAE
+- Circle background: #B6DDF5
+- Border: #48B6FA
+- Glow: rgba(0,149,245,0.23)
+Card 4 — Stay Informed
+
+Stay Informed
+
+Bright orange-yellow lightning bolt with a golden outline and warm glow.
+
+
+Approximate colors:
+- Icon: #F39A00
+- Circle background: #E5EAB5
+- Border: #F1CF46
+- Glow: rgba(255,190,36,0.30)
+8.2 Icon circle CSS
+.feature-icon {
+  width: 68px;
+  height: 68px;
+
+  flex-shrink: 0;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 50%;
+
+  box-shadow:
+    0 0 12px var(--icon-glow),
+    inset 0 1px 3px rgba(255,255,255,0.65);
+
+  border: 1px solid var(--icon-border);
+
+  background: var(--icon-background);
+}
+
+
+8.3 Card titles
+The titles are dark navy.
+
+They are approximately 16–17 px.
+
+Font weight is 600.
+
+They should be clean and highly legible.
+Card	Title
+1	Explore Sources
+2	Check Claims
+3	See Evidence
+4	Stay Informed
+
+Recommended:
+.feature-title {
+  font-family: "Inter", sans-serif;
+
+  font-size: 16px;
+  font-weight: 600;
+
+  line-height: 1.3;
+
+  color: #071E3A;
+
+  margin-bottom: 8px;
+}
+
+
+8.4 Card descriptions
+The descriptions are:
+- Dark navy-grey.
+- Approximately 13 px.
+- Weight 400.
+- Line height 1.5.
+- Maximum width around 165 px.
+Exact text:
+
+Explore Sources
+
+Access trusted geospatial data across the web.
+
+Check Claims
+
+Verify information with AI precision.
+
+See Evidence
+
+Get clear, visual proof and insights.
+
+Stay Informed
+
+Make confident decisions.
+
+Use:
+.feature-description {
+  font-size: 13px;
+  font-weight: 400;
+
+  line-height: 1.5;
+
+  color: #29435B;
+
+  max-width: 170px;
+}
+
+
+8.5 Arrow buttons
+The small arrows on the right side of each card are approximately 40 × 40 px.
+
+They use:
+- Circular shape.
+- Pale transparent aqua background.
+- Fine muted blue border.
+- Dark navy arrow.
+- Very subtle inner highlight.
+.card-arrow {
+  width: 40px;
+  height: 40px;
+
+  flex-shrink: 0;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 50%;
+
+  background: rgba(195, 229, 238, 0.53);
+
+  border: 1px solid rgba(108, 169, 190, 0.48);
+
+  color: #29475D;
+
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,0.55);
+}
+
+
+The arrow must be centered and approximately 17 px.
+9. Topographic map pattern inside cards
+The feature cards contain a subtle decorative contour-line pattern.
+
+This is a particularly important detail because it reinforces the geospatial intelligence identity.
+
+The pattern appears around the lower areas and right-hand portions of the cards.
+
+It resembles elevation contour lines from a geographical map.
+
+In the daytime version, the lines are cyan, turquoise and pale blue.
+
+They are extremely thin and partially transparent.
+
+
+
+
+
+
+
+
+rivierawsfl.com
+
+
+Use an SVG overlay with:
+- Stroke width: 0.7–1 px.
+- Opacity: 0.10–0.20.
+- No solid fill.
+- Smooth irregular curved paths.
+- Partial clipping at the card boundaries.
+Example:
+.topographic-pattern {
+  position: absolute;
+
+  inset: 0;
+
+  opacity: 0.15;
+
+  background-image:
+    url("/images/topographic-lines.svg");
+
+  background-repeat: no-repeat;
+
+  background-position:
+    right bottom;
+
+  background-size: 58% 100%;
+
+  pointer-events: none;
+
+  z-index: 0;
+}
+
+
+The pattern must not interfere with text readability.
+
+It should be more visible near the lower border, where the screenshot shows delicate cyan linework.
+10. Card border and lighting
+The card perimeter is not a normal flat border.
+
+It has a luminous, slightly reflective appearance.
+
+The border is approximately 1 px.
+
+The upper edge is brighter white-cyan.
+
+The bottom edge is more turquoise.
+
+The corners have soft blue-green illumination.
+
+Recommended:
+.feature-card {
+  border: 1px solid rgba(103, 220, 231, 0.80);
+
+  box-shadow:
+
+    /* Soft external depth */
+    0 5px 17px rgba(13, 104, 134, 0.13),
+
+    /* Cyan outer glow */
+    0 0 11px rgba(0, 185, 226, 0.15),
+
+    /* Subtle green reflection */
+    0 0 21px rgba(0, 211, 177, 0.08),
+
+    /* Bright upper glass edge */
+    inset 0 1px 2px rgba(255,255,255,0.85),
+
+    /* Lower reflected light */
+    inset 0 -2px 4px rgba(37, 194, 213, 0.17);
+}
+
+
+The glow should remain subtle.
+
+The card must look like transparent glass illuminated by daylight, not a neon panel.
+
+11. Bottom scroll indicator
+The scroll indicator sits at the lower center of the composition.
+
+It is positioned approximately 850–885 px from the top.
+
+It consists of:
+- Thin horizontal line extending left.
+- Vertical rounded scroll icon.
+- Small downward arrow.
+- Text Scroll to explore.
+- Thin horizontal line extending right.
+The left line is approximately 300 px long.
+
+The right line is approximately 290 px long.
+
+The central group is approximately 140 px wide.
+
+The icon is approximately 22 × 34 px.
+
+The text is approximately 12 px.
+Important color detail
+The scroll indicator is white in the reference, despite the daytime background.
+
+This helps it remain visible against the darker green foreground.
+
+Use:
+.scroll-indicator {
+  position: absolute;
+
+  left: 50%;
+  bottom: 55px;
+
+  transform: translateX(-50%);
+
+  width: 770px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 25px;
+
+  color: rgba(255,255,255,0.95);
+
+  font-size: 12px;
+}
+
+.scroll-line {
+  height: 1px;
+
+  flex: 1;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(224, 247, 255, 0.8)
+    );
+}
+
+.scroll-icon {
+  width: 22px;
+  height: 34px;
+
+  display: grid;
+  place-items: center;
+
+  border: 1.5px solid rgba(255,255,255,0.92);
+
+  border-radius: 12px;
+
+  color: white;
+}
+
+
+The icon and text should sit directly over the foreground landscape.
+
+Do not put them inside a card.
+12. Complete daytime design color system
+The entire color system changes from nighttime navy to daytime blue, aqua, mint and green.
+Environment
+
+Sky
+
+#48B4F5
+
+
+Clouds
+
+#EAF7FF
+
+
+Horizon
+
+#A9D9F3
+
+
+Mountains
+
+#4B92C2
+
+
+
+Brand and interface
+
+Navy
+
+#071D42
+
+
+Blue
+
+#168AFF
+
+
+Cyan
+
+#00AEEB
+
+
+Turquoise
+
+#00CFC1
+
+
+Emerald
+
+#00D89C
+
+
+Mint
+
+#2DE1BC
+
+
+Lime
+
+#A4D83B
+
+
+Gold
+
+#F1CF46
+
+
+
+Glass
+
+Ice
+
+#D8F3F2
+
+
+Aqua
+
+#B9E1E5
+
+
+Teal glass
+
+#A7D5D8
+
+
+Green glass
+
+#D0EAD2
+
+
+
+12.1 Complete CSS variables
+
+:root {
+
+  /* Daytime environment */
+  --sky-blue: #48B4F5;
+  --azure-blue: #278FE0;
+  --cloud-white: #EAF7FF;
+  --horizon-blue: #A9D9F3;
+
+  --mountain-blue: #4B92C2;
+  --field-green: #65AE37;
+  --crop-green: #367B27;
+  --foliage-green: #073D29;
+
+  /* Brand */
+  --brand-navy: #071D42;
+  --brand-blue: #168AFF;
+  --brand-cyan: #00AEEB;
+  --brand-turquoise: #00CFC1;
+  --brand-emerald: #00D89C;
+  --brand-mint: #2DE1BC;
+  --brand-lime: #A4D83B;
+  --brand-gold: #F1CF46;
+
+  /* Typography */
+  --text-primary: #071D42;
+  --text-secondary: #344C6C;
+  --text-muted: #526D88;
+
+  /* Glass surfaces */
+  --glass-light:
+    rgba(214, 242, 245, 0.77);
+
+  --glass-medium:
+    rgba(187, 226, 231, 0.76);
+
+  --glass-green:
+    rgba(219, 242, 218, 0.80);
+
+  --glass-navigation:
+    rgba(218, 242, 255, 0.70);
+
+  /* Borders */
+  --border-blue:
+    rgba(69, 184, 249, 0.80);
+
+  --border-cyan:
+    rgba(103, 220, 231, 0.80);
+
+  --border-green:
+    rgba(45, 225, 188, 0.80);
+
+  /* Radius */
+  --radius-card: 24px;
+  --radius-pill: 999px;
+
+  /* Glass blur */
+  --blur-card: 17px;
+  --blur-navigation: 20px;
+
+  /* Typography */
+  --font-main: "Inter", sans-serif;
+}
+
+
+
+13. Typography system
+The typography is clean, modern and geometric.
+
+The font is best approximated using Inter.
+
+The most important typographic distinction is the contrast between the enormous hero heading and the small supporting interface text.
+Element	Size	Weight	Color
+Logo	24 px	800	Navy
+Navigation	14 px	500	Navy
+Eyebrow	13 px	400	Dark navy
+Hero heading	80 px	800	Navy/gradient
+Description	19 px	400	Blue-grey
+CTA	16 px	600	Dark navy
+Card titles	16 px	600	Navy
+Card descriptions	13 px	400	Blue-grey
+Scroll label	12 px	400	White
+
+Recommended font import:
+@import url(
+  'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap'
+);
+
+
+14. Complete component structure
+The website should be constructed from reusable components.
+
+FieldShiftDaytimeLandingPage
+│
+├── Background
+│   ├── DaytimeFarmLandscape
+│   ├── SkyClouds
+│   ├── Sunlight
+│   ├── AtmosphericHaze
+│   ├── MountainRanges
+│   ├── LakeReflection
+│   └── ForegroundFoliage
+│
+├── Header
+│   ├── FieldShiftLogo
+│   ├── NavigationPill
+│   │   ├── Home
+│   │   ├── Analyze
+│   │   ├── Compare
+│   │   ├── DataSources
+│   │   └── About
+│   └── UtilityControls
+│       ├── Theme
+│       ├── Settings
+│       ├── Notifications
+│       └── Profile
+│
+├── Hero
+│   ├── Eyebrow
+│   ├── MainHeading
+│   ├── Description
+│   └── CTAButtons
+│       ├── ExplorePlatform
+│       └── WatchDemo
+│
+├── FeatureCards
+│   ├── ExploreSources
+│   │   ├── GlobeIcon
+│   │   ├── Title
+│   │   ├── Description
+│   │   └── Arrow
+│   │
+│   ├── CheckClaims
+│   │   ├── ShieldIcon
+│   │   ├── Title
+│   │   ├── Description
+│   │   └── Arrow
+│   │
+│   ├── SeeEvidence
+│   │   ├── ChartIcon
+│   │   ├── Title
+│   │   ├── Description
+│   │   └── Arrow
+│   │
+│   └── StayInformed
+│       ├── LightningIcon
+│       ├── Title
+│       ├── Description
+│       └── Arrow
+│
+└── ScrollIndicator
+    ├── LeftLine
+    ├── ScrollIcon
+    ├── ScrollText
+    └── RightLine
+
+
+
+15. Animation and interaction specifications
+The design should feel alive without being distracting.
+
+The animations should be smooth, subtle and relatively slow.
+Element	Animation	Duration
+Background	Very slow parallax	20–30 seconds
+Sunlight	Gentle opacity variation	8 seconds
+Navigation active line	Smooth transition	250 ms
+Primary CTA	Slight brightness increase	200 ms
+Feature cards	Lift upward on hover	250 ms
+Card borders	Gentle glow variation	3 seconds
+Icon circles	Slight scale and brightness	250 ms
+Scroll indicator	Gentle downward movement	1.5 seconds
+
+Card hover effect
+The cards should rise by approximately 4–5 px when hovered.
+
+Their border becomes slightly brighter.
+
+The background becomes marginally more opaque.
+.feature-card {
+  transition:
+    transform 250ms ease,
+    box-shadow 250ms ease,
+    border-color 250ms ease,
+    background 250ms ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+
+  border-color:
+    rgba(0, 193, 220, 0.95);
+
+  box-shadow:
+    0 10px 24px rgba(18, 111, 144, 0.18),
+    0 0 20px rgba(0, 189, 222, 0.20),
+    inset 0 1px 3px rgba(255,255,255,0.95);
+}
+
+
+16. Responsive behaviour
+The desktop composition must remain faithful to the reference.
+
+At smaller resolutions, adjust the composition without allowing elements to overlap.
+Viewport	Layout
+1440 px+	Original four-card horizontal layout
+1200–1439 px	Slightly smaller heading and cards
+1024–1199 px	Compact navigation and four narrower cards
+768–1023 px	Two-column feature grid
+Below 768 px	Stacked mobile layout
+
+At mobile sizes:
+- Move the moon/sun away from the headline.
+- Keep the hero left-aligned.
+- Reduce the heading to approximately 43–48 px.
+- Stack the four cards vertically.
+- Make CTA buttons responsive.
+- Keep the navigation compact.
+- Preserve the bright daytime landscape.
+17. Asset requirements
+The background photograph is more important than almost any individual CSS effect.
+
+The correct image should show the same composition as the reference.
+
+
+
+
+
+
+
+
+
+
+01 — Main daytime farm landscape
+
+Large wide-angle agricultural valley, mountains, reflective lake, bright blue sky and foreground foliage.
+
+Recommended: 2560 × 1440 px or higher.
+
+
+
+
+
+
+
+
+
+
+
+
+
+02 — FIELD SHIFT logo
+
+Original geometric leaf emblem with internal vein detailing.
+
+Recommended: SVG.
+
+
+
+
+
+
+
+
+
+
+
+
+
+03 — Geospatial topographic pattern
+
+Thin irregular elevation contours for the feature card overlays.
+
+Recommended: SVG.
+
+
+
+Use Lucide SVG icons or an equivalent consistent icon library for all interface icons.

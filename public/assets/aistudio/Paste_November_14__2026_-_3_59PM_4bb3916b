@@ -1,0 +1,1451 @@
+FIELD SHIFT — Complete pixel-level website reconstruction specification
+REFERENCE ANALYSIS · 1671 × 941 PX · DESKTOP LANDING PAGE · CINEMATIC GLASSMORPHISM
+
+This design is a cinematic, full-screen agricultural intelligence landing page. Its visual identity combines a futuristic geospatial platform, a photorealistic nighttime agricultural landscape, luminous cyan and emerald accents, transparent glass navigation, and floating glass feature cards.
+
+The most important thing about recreating this design is that the background, lighting, interface and typography must feel like one continuous visual environment. The interface should appear to float above the landscape rather than sit on top of a conventional website background.
+
+The design has five major visual layers:
+1. A full-screen cinematic nighttime landscape.
+2. A dark atmospheric sky with a luminous moon and orbital geospatial graphics.
+3. A floating navigation bar and large left-aligned hero section.
+4. Four translucent glass feature cards arranged horizontally.
+5. A subtle bottom scroll indicator integrated into the landscape.
+The reference dimensions are 1671 × 941 pixels, approximately 16:9.
+
+1. Overall page geometry and composition
+
+
+
+
+
+
+
+
+rerissonmoura.com.br
+
+
+The page is a single full-viewport composition.
+
+It does not have a conventional header background, separate white content section, or solid-color footer.
+
+Everything exists within the same nighttime environment.
+1.1 Main layout measurements
+The following measurements are estimated from the supplied 1671 × 941 reference.
+Element	X position	Y position	Width	Height
+Logo	70 px	29 px	140 px	52 px
+Navigation pill	467 px	26 px	725 px	57 px
+Right controls	1365 px	30 px	230 px	50 px
+Hero eyebrow	74 px	164 px	371 px	41 px
+Hero heading	76 px	214 px	730 px	153 px
+Description	77 px	395 px	520 px	49 px
+Primary CTA	74 px	482 px	286 px	60 px
+Demo CTA	395 px	482 px	180 px	60 px
+Feature cards	82 px	638 px	1500 px	152 px
+Scroll indicator	768 px	850 px	140 px	35 px
+
+The overall content is centered horizontally, with approximately 74–82 px of left and right margin.
+
+The layout uses three visual zones:
+- Top: Brand identity and navigation.
+- Middle: Hero messaging and call-to-action buttons.
+- Bottom: Four feature cards and the scroll indicator.
+The hero section occupies the left half of the screen, while the moon and atmospheric landscape occupy the right half.
+
+2. Full-screen background — most important visual element
+
+
+
+
+
+
+
+
+note.com
+
+
+The background is a single immersive landscape extending from the very top to the very bottom of the page.
+
+It consists of:
+- Deep midnight-blue sky.
+- Subtle stars.
+- Wispy atmospheric clouds.
+- A large luminous moon.
+- Multiple layers of distant mountain ranges.
+- A reflective lake.
+- Agricultural fields and crop rows.
+- Dark foreground vegetation.
+- Leaves framing the lower-left and lower-right corners.
+The background should be photographic, cinematic and realistic.
+
+It must not look like a flat illustration, vector landscape, or generic blue gradient.
+2.1 Background positioning
+The composition is vertically distributed into approximately four visual zones.
+Vertical region	Appearance
+0–17%	Very dark blue-black sky
+17–45%	Blue atmospheric clouds and moonlight
+42–68%	Mountain silhouettes, lake and illuminated fields
+65–100%	Dark agricultural foreground with glossy green leaves
+
+The landscape horizon sits around 55–65% of the image height.
+
+The mountain ranges are layered:
+- Rear mountains: dark blue, low contrast.
+- Middle mountains: medium blue with atmospheric haze.
+- Front mountains: darker navy silhouettes.
+- Valley: faintly illuminated by cool moonlight.
+- Fields: dark green with visible agricultural rows.
+2.2 Background color palette
+Purpose	Approximate color
+Upper sky	#020B18
+Deep atmospheric navy	#03162D
+Sky blue	#07315A
+Cloud illumination	#1769A5
+Distant mountains	#102C4B
+Middle landscape	#12364B
+Agricultural green	#092F29
+Foreground shadows	#00150F
+
+2.3 Background overlays
+The background is darkened selectively to maintain readability.
+
+It is especially dark behind the headline and navigation.
+
+The right side has more atmospheric blue illumination because of the moon.
+
+Use several overlays rather than one uniform black layer.
+
+.page-background {
+  position: fixed;
+  inset: 0;
+  z-index: -10;
+
+  background-image:
+    linear-gradient(
+      90deg,
+      rgba(0, 8, 20, 0.72) 0%,
+      rgba(0, 12, 29, 0.54) 35%,
+      rgba(0, 14, 32, 0.18) 65%,
+      rgba(0, 12, 27, 0.25) 100%
+    ),
+
+    linear-gradient(
+      180deg,
+      rgba(0, 7, 18, 0.60) 0%,
+      rgba(0, 12, 27, 0.18) 30%,
+      rgba(0, 12, 22, 0.05) 52%,
+      rgba(0, 12, 19, 0.20) 70%,
+      rgba(0, 9, 15, 0.58) 100%
+    ),
+
+    url("/images/night-agricultural-valley.jpg");
+
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+
+
+The left-to-right overlay is particularly important.
+
+It creates a dark region behind the text while allowing the moonlit mountain scenery to remain brighter on the right.
+
+3. Moon and geospatial orbital graphics
+
+
+
+
+
+
+
+
+
+
+The moon is positioned in the upper-right quadrant.
+
+Approximate reference coordinates:
+- Center X: 1322 px.
+- Center Y: 236 px.
+- Diameter: 110–115 px.
+It is a realistic, detailed, pale-blue full moon.
+
+It has:
+- White-blue illuminated surface.
+- Visible lunar craters.
+- Pale cyan outer rim.
+- Strong diffused blue halo.
+- Slight atmospheric bloom.
+- Bright central surface.
+The moon should be an actual image asset, preferably transparent or carefully isolated from its original background.
+Moon glow
+Place several radial gradients behind it.
+.moon-glow {
+  position: absolute;
+
+  width: 390px;
+  height: 390px;
+
+  left: 1322px;
+  top: 236px;
+
+  transform: translate(-50%, -50%);
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(106, 198, 255, 0.24) 0%,
+      rgba(62, 157, 255, 0.17) 22%,
+      rgba(34, 126, 241, 0.09) 45%,
+      transparent 72%
+    );
+
+  filter: blur(18px);
+  pointer-events: none;
+}
+
+
+The glow should blend naturally into the blue atmospheric clouds.
+3.1 Orbital lines
+There are thin cyan-blue geospatial orbit lines sweeping across the right side.
+
+They are not ordinary decorative dividers.
+
+They resemble satellite trajectories or geospatial data visualization paths.
+
+Visible details:
+- One large curved arc starts near the lower-middle/right region and curves upward toward the upper-right.
+- Another thin diagonal line extends from near the moon toward the upper-right edge.
+- Additional curved segments appear near the far-right edge.
+- Small luminous points are positioned along some trajectories.
+Use SVG paths for accuracy.
+
+Example:
+<svg
+  class="orbital-overlay"
+  viewBox="0 0 1671 941"
+  preserveAspectRatio="none"
+>
+  <path
+    d="M 945 495 C 1030 330, 1250 260, 1670 109"
+    fill="none"
+    stroke="rgba(0,180,255,0.55)"
+    stroke-width="1.2"
+  />
+
+  <path
+    d="M 1300 170 C 1420 155, 1530 125, 1670 109"
+    fill="none"
+    stroke="rgba(0,180,255,0.45)"
+    stroke-width="1"
+  />
+</svg>
+
+
+Add a subtle cyan glow to the SVG paths using:
+.orbital-overlay path {
+  filter: drop-shadow(
+    0 0 4px rgba(0, 174, 255, 0.45)
+  );
+}
+
+
+These graphics should remain very thin and unobtrusive.
+
+4. Navigation and brand identity
+The header occupies the uppermost 85 pixels.
+
+It has three separate groups:
+1. Brand logo on the left.
+2. Central floating navigation.
+3. Utility buttons on the right.
+The header itself has no solid full-width background.
+4.1 FIELD SHIFT logo
+
+FIELD
+SHIFT
+
+
+The logo sits around X = 70 px and Y = 29 px.
+
+It consists of:
+- A turquoise-green leaf emblem.
+- Two lines of white uppercase text.
+- Bold geometric sans-serif lettering.
+- Tight line spacing.
+The leaf is approximately 48 × 51 px.
+
+The wordmark uses approximately 24 px bold text in the reference dimensions.
+
+The wordmark should use a weight around 750–800.
+
+The icon is mint-green, approximately #00E8B1.
+4.2 Navigation pill
+The navigation container is positioned approximately:
+.nav-container {
+  position: absolute;
+
+  top: 26px;
+  left: 50%;
+
+  transform: translateX(-50%);
+
+  width: 725px;
+  height: 57px;
+
+  border-radius: 999px;
+}
+
+
+It is a dark translucent blue glass pill.
+
+Its appearance:
+- Deep navy-blue transparent fill.
+- Thin dark-cyan border.
+- Slight upper reflection.
+- Soft cyan glow around the perimeter.
+- Large pill-shaped radius.
+- Blurred background visible behind it.
+.nav-container {
+  background:
+    linear-gradient(
+      110deg,
+      rgba(2, 45, 64, 0.79),
+      rgba(0, 28, 53, 0.86),
+      rgba(2, 39, 69, 0.77)
+    );
+
+  border: 1px solid rgba(0, 164, 190, 0.20);
+
+  backdrop-filter: blur(18px) saturate(145%);
+
+  box-shadow:
+    0 0 16px rgba(0, 162, 210, 0.09),
+    inset 0 1px 1px rgba(117, 231, 255, 0.06);
+}
+
+
+4.3 Navigation items
+There are five navigation options.
+Item	Icon	Label
+1	House	Home
+2	Bar chart	Analyze
+3	Scales	Compare
+4	Database	Data Sources
+5	Information circle	About
+
+Icons are white/light blue.
+
+Use Lucide-style icons:
+- house
+- chart-no-axes-column-increasing
+- scale
+- database
+- info
+The icons are approximately 20–22 px.
+
+Labels are approximately 14–15 px.
+
+Each navigation item uses horizontal alignment, with icon on the left and text on the right.
+Active Home item
+The Home button is highlighted with a separate inner glass pill.
+
+Its approximate dimensions are 126 × 49 px.
+
+It has:
+- Teal-blue translucent fill.
+- Cyan-green border.
+- Bright turquoise bottom indicator.
+- Soft green illumination.
+- Rounded pill corners.
+.nav-item.active {
+  position: relative;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(0, 177, 171, 0.26),
+      rgba(0, 94, 110, 0.29)
+    );
+
+  border: 1px solid rgba(0, 225, 200, 0.27);
+
+  border-radius: 999px;
+
+  box-shadow:
+    0 0 15px rgba(0, 226, 196, 0.14),
+    inset 0 1px 2px rgba(133, 255, 238, 0.12);
+}
+
+.nav-item.active::after {
+  content: "";
+
+  position: absolute;
+
+  width: 62%;
+  height: 2px;
+
+  bottom: 0;
+  left: 19%;
+
+  background: #00E9C4;
+
+  box-shadow:
+    0 0 7px #00E9C4,
+    0 0 14px rgba(0, 233, 196, 0.75);
+}
+
+
+4.4 Right utility controls
+On the far right are four circular elements:
+- Theme toggle with sun icon.
+- Settings with gear icon.
+- Notification bell.
+- Circular profile avatar.
+The first three are approximately 45 × 45 px.
+
+Each has a dark transparent blue fill, a fine blue border, and a subtle glass effect.
+
+The icons are approximately 22–24 px and white.
+
+The notification has a tiny mint-green status indicator at its top-right.
+
+The profile is a circular blue avatar containing a white letter B, with a small green online indicator at its bottom-right.
+
+5. Hero eyebrow badge
+Geospatial Intelligence for a Sustainable Tomorrow.
+
+
+The eyebrow is a compact horizontal pill positioned at X = 74 px and Y = 164 px.
+
+Approximate dimensions:
+- Width: 371 px.
+- Height: 41 px.
+- Border radius: 999 px.
+- Background: translucent dark teal.
+- Border: thin emerald-cyan.
+- Text: white/light grey.
+- Icon: bright green leaf.
+The pill has a very subtle teal outer glow.
+
+Its text is approximately 13 px.
+
+Use:
+.hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+
+  height: 41px;
+  padding: 0 15px;
+
+  border-radius: 999px;
+
+  background:
+    linear-gradient(
+      110deg,
+      rgba(0, 65, 69, 0.55),
+      rgba(0, 31, 48, 0.66)
+    );
+
+  border: 1px solid rgba(0, 218, 184, 0.62);
+
+  box-shadow:
+    0 0 10px rgba(0, 223, 188, 0.10),
+    inset 0 1px 1px rgba(128, 255, 237, 0.08);
+}
+
+
+
+6. Main hero heading
+Smarter decisions.
+Healthier fields.
+
+This is the strongest typographic element in the entire design.
+
+It occupies the left side of the screen and uses two lines.
+First line
+Smarter decisions.
+- White.
+- Very bold.
+- Large geometric sans-serif.
+- Approximately 78–82 px.
+- Tight letter spacing.
+- Line height approximately 0.98.
+- No outline.
+- No shadow-heavy styling.
+Second line
+Healthier fields.
+- Same font.
+- Same size.
+- Same weight.
+- Horizontal cyan-to-blue-to-green gradient.
+- Slightly luminous appearance.
+The gradient begins with electric blue on the left and finishes with emerald green on the right.
+Gradient colors
+
+
+
+
+
+.hero-title {
+  margin: 0;
+
+  font-family: "Inter", sans-serif;
+
+  font-size: 80px;
+  font-weight: 800;
+
+  line-height: 0.99;
+  letter-spacing: -3.6px;
+
+  color: #F3F6FF;
+}
+
+.hero-title .gradient-text {
+  background:
+    linear-gradient(
+      95deg,
+      #168BFF 0%,
+      #00B6F0 35%,
+      #00D6B7 67%,
+      #00E9A7 100%
+    );
+
+  -webkit-background-clip: text;
+  background-clip: text;
+
+  color: transparent;
+}
+
+
+The gradient must be applied to the text itself, not the entire heading container.
+
+Do not add a thick glow around the letters.
+
+The text should remain crisp, bright and highly legible.
+
+7. Hero description
+The description is directly underneath the headline.
+
+Exact wording:
+Harness the power of geospatial intelligence to
+monitor, analyze and improve agricultural productivity.
+
+It occupies approximately 520 px in width.
+
+Typography:
+- Font: Inter.
+- Size: 19–20 px.
+- Weight: 400.
+- Line height: 1.55.
+- Color: muted pale blue-grey.
+- Approximate color: #D0DDF1.
+The line breaks should be preserved on desktop.
+.hero-description {
+  max-width: 540px;
+
+  margin-top: 14px;
+
+  font-size: 19px;
+  font-weight: 400;
+
+  line-height: 1.55;
+
+  color: rgba(218, 231, 249, 0.91);
+}
+
+
+
+8. Call-to-action buttons
+There are two horizontally arranged actions.
+Explore the Platform
+
+
+
+
+Watch Demo
+
+
+8.1 Primary button
+Approximate dimensions:
+- Width: 286 px.
+- Height: 60 px.
+- Border radius: 999 px.
+It has a vivid cyan-to-turquoise-to-emerald horizontal gradient.
+
+Gradient:
+background: linear-gradient(
+  100deg,
+  #12BEFF 0%,
+  #00D9DC 45%,
+  #00E8A4 100%
+);
+
+
+Its contents:
+- Dark leaf icon on the left.
+- Dark text in the center.
+- Right arrow on the right.
+Typography:
+- 16 px.
+- Semibold.
+- Dark navy text.
+The button has a noticeable but soft blue-green outer glow.
+box-shadow:
+  0 0 10px rgba(0, 222, 255, 0.52),
+  0 0 25px rgba(0, 211, 220, 0.29),
+  0 0 42px rgba(0, 222, 177, 0.16),
+  inset 0 1px 2px rgba(255,255,255,0.34);
+
+
+It should be the brightest interface element apart from the moon.
+8.2 Secondary demo button
+The second action consists of:
+- Circular outlined play button.
+- White triangular play icon.
+- Text label Watch Demo.
+Circle dimensions: approximately 60 × 60 px.
+
+Background:
+
+rgba(3, 37, 65, 0.68)
+
+Border:
+
+1px solid rgba(0, 138, 225, 0.68)
+
+The text is approximately 15 px.
+
+The circle should have a subtle blue glow, not a bright neon effect.
+
+9. Four floating feature cards
+
+
+
+
+
+
+
+
+behance.net
+
+
+These cards are the main interactive content section below the hero.
+
+They form a single horizontal row across the lower-middle part of the screen.
+
+They are not ordinary rectangular dashboard cards. They have a translucent blue-green glass surface, individually illuminated borders, softly rounded corners, faint topographic line patterns, and circular icon containers.
+9.1 Card positioning and dimensions
+The entire row begins approximately 82 px from the left.
+
+The cards are approximately 361 px wide and 152 px tall, with approximately 25–27 px spacing.
+Card	Left position	Width	Height
+Explore Sources	82 px	361 px	152 px
+Check Claims	469 px	350 px	152 px
+See Evidence	846 px	352 px	152 px
+Stay Informed	1225 px	356 px	152 px
+
+The slight width differences are visual estimates. A clean implementation can use equal-width cards.
+
+Recommended grid:
+.feature-grid {
+  position: absolute;
+
+  left: 50%;
+  bottom: 151px;
+
+  transform: translateX(-50%);
+
+  width: calc(100% - 164px);
+
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+
+  gap: 26px;
+}
+
+
+9.2 Card background — detailed glass construction
+This is an especially important component.
+
+The cards are dark, translucent, blue-green glass.
+
+They are darker than the surrounding landscape but transparent enough to reveal the agricultural scenery and faint background details.
+
+The left card has a slightly stronger blue appearance.
+
+The second and third cards have a more pronounced dark teal appearance.
+
+The fourth card has a stronger green-teal tint.
+Main background gradient
+.feature-card {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+
+  min-height: 152px;
+
+  border-radius: 24px;
+
+  background:
+    linear-gradient(
+      110deg,
+      rgba(3, 39, 66, 0.91) 0%,
+      rgba(2, 34, 59, 0.88) 50%,
+      rgba(3, 45, 66, 0.87) 100%
+    );
+
+  backdrop-filter:
+    blur(16px)
+    saturate(145%)
+    brightness(0.83);
+
+  -webkit-backdrop-filter:
+    blur(16px)
+    saturate(145%)
+    brightness(0.83);
+
+  border: 1px solid rgba(0, 133, 196, 0.45);
+
+  box-shadow:
+    0 8px 25px rgba(0, 0, 0, 0.25),
+    0 0 15px rgba(0, 122, 220, 0.10),
+    inset 0 1px 1px rgba(123, 214, 255, 0.09);
+}
+
+
+Card upper reflection
+A faint blue reflection appears along the upper area.
+.feature-card::before {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  border-radius: inherit;
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(78, 176, 229, 0.13) 0%,
+      rgba(31, 123, 171, 0.05) 22%,
+      transparent 55%
+    );
+
+  z-index: 0;
+}
+
+
+Card lower illumination
+The lower part has a faint cyan/teal reflection.
+.feature-card::after {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  border-radius: inherit;
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      180deg,
+      transparent 75%,
+      rgba(0, 181, 204, 0.07) 100%
+    );
+
+  z-index: 0;
+}
+
+
+9.3 Topographic contour pattern
+One of the finer visual details is the subtle line-art pattern inside the cards.
+
+It resembles geospatial elevation contour lines or a topographic map.
+
+It is most noticeable in the upper-right portions of the cards.
+
+It consists of thin, irregular curved concentric paths.
+
+These lines should be extremely subtle, not bright decorative stripes.
+
+Recommended opacity: 0.08–0.16.
+
+Use an SVG background pattern or a transparent custom SVG asset.
+
+Example:
+
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 300 180"
+  fill="none"
+>
+  <g
+    stroke="#19C6DD"
+    stroke-width="0.8"
+    opacity="0.16"
+  >
+    <path d="M130 5 C180 25 165 65 220 73 C270 80 285 120 260 170"/>
+    <path d="M150 -5 C200 15 190 52 239 60 C295 69 310 112 285 180"/>
+    <path d="M170 -10 C220 8 210 42 260 49 C320 60 330 110 310 180"/>
+    <path d="M110 0 C150 35 145 80 190 92 C225 102 240 140 220 180"/>
+    <path d="M90 0 C130 42 125 94 170 110 C205 123 215 155 200 185"/>
+  </g>
+</svg>
+
+
+
+Position the pattern toward the upper-right and make it partially disappear into the card background.
+
+Do not place it over the text or icons.
+9.4 Card internal layout
+Each card uses a three-part horizontal structure:
+1. Circular icon container.
+2. Text block.
+3. Small circular arrow button.
+The icon is positioned toward the left with approximately 24 px of padding.
+
+The text block is in the middle.
+
+The arrow is aligned to the right.
+
+Recommended:
+.feature-card-content {
+  display: flex;
+  align-items: center;
+
+  height: 100%;
+  padding: 22px 19px 22px 23px;
+
+  gap: 19px;
+}
+
+
+9.5 Circular icon containers
+
+Blue
+
+
+Teal
+
+
+Cyan
+
+
+Lime
+
+
+Each icon container is approximately 67 × 67 px.
+
+It uses:
+- Circular border.
+- Dark tinted transparent fill.
+- Fine colored outline.
+- Slight inner lighting.
+- Soft colored outer glow.
+Icon 1 — Explore Sources
+- Globe icon.
+- Electric cyan.
+- Blue border.
+- Blue halo.
+Icon 2 — Check Claims
+- Shield with checkmark.
+- Turquoise.
+- Green-teal border.
+- Teal halo.
+Icon 3 — See Evidence
+- Three vertical ascending bars.
+- Bright cyan.
+- Blue border.
+- Cyan halo.
+Icon 4 — Stay Informed
+- Lightning bolt.
+- Bright lime green.
+- Olive-green border.
+- Green halo.
+9.6 Card typography and content
+All four cards use the same typographic hierarchy.
+
+Title:
+- 17 px.
+- Weight 600.
+- White.
+- Line height 1.3.
+Description:
+- 13–14 px.
+- Weight 400.
+- Muted light blue-grey.
+- Line height 1.5.
+- Maximum width approximately 165 px.
+Exact card content:
+Title	Description
+Explore Sources	Access trusted geospatial data across the web.
+Check Claims	Verify information with AI precision.
+See Evidence	Get clear, visual proof and insights.
+Stay Informed	Make confident decisions.
+
+The title should be separated from the description by approximately 7–9 px.
+9.7 Small arrow button
+At the far-right of each card is a circular outlined arrow button.
+
+Approximate dimensions: 40 × 40 px.
+- Dark transparent fill.
+- Thin blue border.
+- White right-facing arrow.
+- Slightly luminous blue outline.
+.card-arrow {
+  width: 40px;
+  height: 40px;
+
+  flex-shrink: 0;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 50%;
+
+  color: #EDF8FF;
+
+  background: rgba(3, 44, 73, 0.58);
+
+  border: 1px solid rgba(65, 163, 214, 0.38);
+
+  box-shadow:
+    inset 0 1px 1px rgba(255,255,255,0.06);
+}
+
+
+The arrow should be centered perfectly.
+
+10. Bottom scroll indicator
+
+
+
+
+
+
+
+
+codingflicks.com
+
+
+At the bottom center is a subtle scroll prompt.
+
+It consists of:
+- Long thin horizontal line on the left.
+- Small vertical mouse/scroll icon in the middle.
+- Text Scroll to explore.
+- Long thin horizontal line extending to the right.
+It is positioned at approximately Y = 850 px.
+
+The center icon is a narrow rounded vertical capsule, approximately 21 × 33 px.
+
+Inside it is a downward arrow.
+
+The text is approximately 12 px and white-grey.
+
+The horizontal lines are approximately 1 px high, with muted blue-cyan transparency.
+
+Recommended markup:
+<div class="scroll-indicator">
+  <span class="scroll-line"></span>
+
+  <div class="scroll-icon">
+    <svg><!-- Down arrow --></svg>
+  </div>
+
+  <span class="scroll-label">
+    Scroll to explore
+  </span>
+
+  <span class="scroll-line"></span>
+</div>
+
+
+CSS:
+.scroll-indicator {
+  position: absolute;
+
+  left: 50%;
+  bottom: 56px;
+
+  transform: translateX(-50%);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 500px;
+
+  gap: 24px;
+
+  color: rgba(226, 239, 250, 0.85);
+  font-size: 12px;
+}
+
+.scroll-line {
+  flex: 1;
+
+  height: 1px;
+
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(81, 159, 194, 0.55)
+  );
+}
+
+.scroll-icon {
+  width: 22px;
+  height: 34px;
+
+  border: 1.5px solid rgba(213, 238, 255, 0.9);
+  border-radius: 12px;
+
+  display: grid;
+  place-items: center;
+}
+
+
+
+11. Complete color and design token system
+Use a centralized color system so all elements share the same visual language.
+Primary color palette
+
+Midnight
+
+#020B18
+
+
+Deep navy
+
+#03162D
+
+
+Ocean
+
+#07315A
+
+
+Teal
+
+#087C85
+
+
+Electric blue
+
+#168BFF
+
+
+Cyan
+
+#00C9ED
+
+
+Turquoise
+
+#00D9C2
+
+
+Emerald
+
+#00E9A7
+
+
+
+Typography palette
+Primary white
+
+#F3F6FF
+
+Secondary blue-white
+
+#D0DDF1
+
+Muted blue-grey
+
+#9BB6CF
+
+
+11.1 CSS variables
+
+:root {
+  /* Main environment */
+  --bg-midnight: #020B18;
+  --bg-navy: #03162D;
+  --bg-ocean: #07315A;
+  --bg-teal: #092F3D;
+
+  /* Brand colors */
+  --brand-blue: #168BFF;
+  --brand-cyan: #00C9ED;
+  --brand-turquoise: #00D9C2;
+  --brand-emerald: #00E9A7;
+  --brand-lime: #A4F12B;
+
+  /* Text */
+  --text-primary: #F3F6FF;
+  --text-secondary: #D0DDF1;
+  --text-muted: #9BB6CF;
+
+  /* Glass backgrounds */
+  --glass-nav: rgba(2, 35, 59, .82);
+  --glass-card: rgba(3, 39, 66, .89);
+  --glass-active: rgba(0, 177, 171, .26);
+
+  /* Borders */
+  --border-blue: rgba(0, 133, 196, .45);
+  --border-cyan: rgba(0, 201, 237, .48);
+  --border-green: rgba(0, 225, 180, .48);
+
+  /* Radius */
+  --radius-small: 12px;
+  --radius-medium: 20px;
+  --radius-card: 24px;
+  --radius-pill: 999px;
+
+  /* Glow */
+  --glow-blue:
+    0 0 12px rgba(0, 140, 255, .28);
+
+  --glow-cyan:
+    0 0 16px rgba(0, 210, 235, .26);
+
+  --glow-green:
+    0 0 16px rgba(0, 235, 174, .24);
+
+  /* Font */
+  --font-primary: "Inter", sans-serif;
+}
+
+
+
+12. Typography and font implementation
+The reference uses a modern geometric sans-serif font.
+
+The closest implementation choice is Inter.
+
+Use the following weights:
+Element	Font size	Weight
+Logo	24 px	800
+Navigation	14 px	500
+Eyebrow	13 px	400
+Hero heading	80 px	800
+Description	19 px	400
+Primary button	16 px	600
+Card titles	17 px	600
+Card descriptions	13 px	400
+Scroll prompt	12 px	400
+
+Load the font rather than relying on a system fallback.
+@import url(
+  'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap'
+);
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Inter", sans-serif;
+  color: #F3F6FF;
+  background: #020B18;
+}
+
+
+13. Component architecture
+Build the website with separate reusable components.
+
+FieldShiftLandingPage
+│
+├── CinematicBackground
+│   ├── BackgroundLandscape
+│   ├── SkyOverlay
+│   ├── AtmosphericClouds
+│   ├── Moon
+│   ├── MoonGlow
+│   ├── OrbitalPaths
+│   └── ForegroundVegetation
+│
+├── Header
+│   ├── BrandLogo
+│   ├── NavigationBar
+│   │   ├── Home
+│   │   ├── Analyze
+│   │   ├── Compare
+│   │   ├── DataSources
+│   │   └── About
+│   │
+│   └── UtilityControls
+│       ├── ThemeToggle
+│       ├── Settings
+│       ├── Notifications
+│       └── Profile
+│
+├── HeroSection
+│   ├── EyebrowBadge
+│   ├── HeroHeading
+│   ├── HeroDescription
+│   └── HeroActions
+│       ├── ExploreButton
+│       └── DemoButton
+│
+├── FeatureSection
+│   └── FeatureGrid
+│       ├── ExploreSourcesCard
+│       ├── CheckClaimsCard
+│       ├── SeeEvidenceCard
+│       └── StayInformedCard
+│
+└── ScrollIndicator
+
+
+
+This is important because the background, hero, cards, and navigation should be independently adjustable without breaking the rest of the page.
+14. Animation and visual interaction
+The reference is visually dynamic but not excessively animated.
+
+Use slow, restrained animations.
+Element	Animation	Duration
+Moon glow	Very subtle breathing	6 seconds
+Orbital paths	Slow luminous movement	12 seconds
+Navigation active indicator	Smooth transition	250 ms
+Primary CTA	Glow increase on hover	200 ms
+Feature cards	Slight upward movement	250 ms
+Card borders	Subtle illumination	3 seconds
+Card icons	Slight brightness increase	200 ms
+Scroll arrow	Gentle vertical movement	1.5 seconds
+
+Example:
+
+@keyframes moonBreathing {
+  0%, 100% {
+    opacity: .8;
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  50% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.06);
+  }
+}
+
+@keyframes scrollDown {
+  0%, 100% {
+    transform: translateY(-2px);
+  }
+
+  50% {
+    transform: translateY(3px);
+  }
+}
+
+.feature-card {
+  transition:
+    transform .25s ease,
+    border-color .25s ease,
+    box-shadow .25s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+
+  border-color: rgba(0, 205, 235, .65);
+
+  box-shadow:
+    0 12px 30px rgba(0, 0, 0, .30),
+    0 0 22px rgba(0, 173, 225, .20);
+}
+
+.primary-button {
+  transition:
+    filter .2s ease,
+    transform .2s ease,
+    box-shadow .2s ease;
+}
+
+.primary-button:hover {
+  filter: brightness(1.12);
+  transform: translateY(-2px);
+}
+
+
+
+Avoid continuous rapid flashing, aggressive pulsing, and excessive movement.
+15. Responsive implementation
+The supplied reference is a desktop design. Preserve its composition at desktop resolutions.
+Screen size	Behaviour
+1440 px and above	Full original composition
+1024–1439 px	Scale spacing, typography and card widths
+768–1023 px	Two-column feature grid
+Below 768 px	Vertically stacked landing page
+
+For desktop, the cards must remain in a single horizontal row.
+
+For mobile:
+1. Compact navigation.
+2. Logo and utility controls.
+3. Hero eyebrow.
+4. Hero heading.
+5. Description.
+6. Primary and secondary actions.
+7. Four stacked feature cards.
+8. Scroll indicator.
+The moon should scale down and move toward the upper-right background.
+
+The background image should remain full bleed.
+
+16. Image asset requirements
+The original design is highly dependent on its imagery. Reproducing the CSS without matching the landscape will not achieve the same appearance.
+
+These are the main assets to prepare:
+
+
+
+
+
+
+
+
+
+
+01. Main background landscape
+
+Photorealistic night agricultural valley with mountains, lake, crop fields and foreground leaves.
+
+Target: 2560 × 1440 px or higher.
+
+
+
+
+
+
+
+
+
+
+
+
+
+02. Moon
+
+Detailed pale-blue moon with transparent background.
+
+Target: 512 × 512 px.
+
+
+
+
+
+
+
+
+
+
+
+
+
+03. Brand logo
+
+Turquoise geometric leaf emblem.
+
+Target: SVG.
+
+
+
+
+
+
+
+
+
+
+
+
+
+04. Topographic pattern
+
+Delicate geospatial contour lines for feature cards.
+
+Target: SVG, transparent.
+
+
+
+Use actual icon SVGs for the interface rather than rasterized emoji or random icon images.
+
+17. Final implementation checklist
+Visual implementation checklist
+0/20
+
+
+
+[ ] Full-viewport cinematic nighttime agricultural landscape.
+[ ] Dark left-side overlay for hero readability.
+[ ] Realistic luminous full moon in the upper-right.
+[ ] Thin cyan geospatial orbital paths.
+[ ] FIELD SHIFT leaf logo and two-line wordmark.
+[ ] Centered translucent five-item navigation pill.
+[ ] Three circular utility buttons and profile avatar.
+[ ] Small geospatial eyebrow badge.
+[ ] Large two-line white and blue-to-emerald gradient heading.
+[ ] Correct two-line supporting description.
+[ ] Bright cyan-to-green primary CTA with dark icon.
+[ ] Circular outlined demo button.
+[ ] Four equal-width floating glass feature cards.
+[ ] Correct blue, teal, cyan and lime icon treatments.
+[ ] Dark translucent glass card backgrounds.
+[ ] Subtle SVG topographic contour patterns.
+[ ] Correct title and description hierarchy in all cards.
+[ ] Circular outlined arrow controls.
+[ ] Centered bottom scroll indicator.
+[ ] Correct spacing, proportions, and responsive behaviour.
+
+18. Critical instructions for the actual developer
+There are several things that will make or break the recreation.
+
+1. The background must be a real image. Do not attempt to construct the entire agricultural landscape with CSS gradients.
+
+2. Do not create a separate solid-colored header. The navigation floats directly over the cinematic background.
+
+3. The moon must be an independent visual asset. Its glow should blend into the sky, not appear as a circular blue CSS blob.
+
+4. The hero must remain left-aligned. Do not center the heading or description.
+
+5. The gradient heading must be a text gradient. Do not use separate colored text boxes.
+
+6. The feature cards must be transparent. Their background should allow subtle environmental details to show through.
+
+7. The four cards must remain horizontally aligned on desktop. They should have consistent heights, corner radii and internal layouts.
+
+8. Keep the lighting controlled. The moon, CTA, active navigation and card borders can glow, but ordinary text should not have neon effects.
+
+9. Do not introduce additional dashboard elements. There should be no extra charts, statistics, graphs or unnecessary sections.
+
+10. Preserve the original composition. The goal is visual reconstruction, not redesign.
+
+19. Final visual acceptance target
+FIELD SHIFT
+GEOSPATIAL INTELLIGENCE LANDING PAGE
+
+16:9
+Desktop composition
+
+4
+Horizontal feature cards
+
+80 px
+Hero heading estimate
+
+Glass
+Primary interface material
+
+
+
+The final result should look like a premium geospatial technology platform presented over a cinematic, moonlit agricultural landscape. The typography should be crisp and confident, the glass surfaces should have depth, the blue and green illumination should be restrained, and the four feature cards should appear to float naturally above the farm environment.
+
+One important qualification: the measurements and colors above are visual estimates from the supplied screenshot, not original design-source values. Exact pixel-for-pixel reproduction requires the matching background photograph, moon, logo and font assets as well as matching browser rendering.

@@ -1,0 +1,2347 @@
+# FIELD SHIFT — MAPS WORKSPACE
+## Full technical, frontend, geospatial and backend implementation specification
+
+**Document type:** Product engineering specification  
+**Module:** Maps & Farms Workspace  
+**Primary purpose:** Geographic farm visualization, farm selection, spatial navigation, boundary visualization and farm creation  
+**Interface reference:** Supplied Maps workspace screenshot  
+**Design direction:** Premium dark GIS interface, satellite-first, minimal controls, high information density without dashboard duplication
+
+---
+
+# 1. PRODUCT OVERVIEW
+
+The Maps page is a geographic workspace for viewing, locating and managing farms.
+
+Its purpose is not to reproduce the analytics available elsewhere in Field Shift. It is specifically responsible for:
+
+1. Displaying a navigable interactive world map.
+2. Showing the user's registered farms in a compact left sidebar.
+3. Showing each farm's location and boundary on the map.
+4. Allowing users to select a farm from the sidebar or map.
+5. Allowing users to search for geographic locations.
+6. Allowing users to add a new farm.
+7. Displaying the geographic size of each farm.
+8. Showing a visual farm-condition indicator using boundary colors.
+9. Providing essential map navigation and visualization controls.
+
+The map is the main workspace. The sidebar is a farm selector.
+
+## 1.1 Core layout
+
+The interface consists of two primary regions:
+
+- Left sidebar: fixed-width farm navigation panel.
+- Main map: flexible, full-height geographic workspace.
+
+There is no permanent right-side panel.
+
+```text
+┌──────────────────────────────────────────────────────────────┐
+│                    GLOBAL APP NAVIGATION                      │
+├──────────────────────┬───────────────────────────────────────┤
+│                      │                                       │
+│      MY FARMS        │                                       │
+│                      │                                       │
+│   Search farms...    │             MAIN MAP                   │
+│                      │                                       │
+│   ┌───────────────┐  │     Geographic search                 │
+│   │ Farm 1        │  │                                       │
+│   │ Area / Crop   │  │        Satellite imagery              │
+│   │ Health        │  │                                       │
+│   └───────────────┘  │        Farm boundaries                 │
+│                      │                                       │
+│   ┌───────────────┐  │                                       │
+│   │ Farm 2        │  │        Map navigation controls         │
+│   │ Area / Crop   │  │                                       │
+│   │ Health        │  │                                       │
+│   └───────────────┘  │                                       │
+│                      │                                       │
+│   ┌───────────────┐  │                                       │
+│   │ Farm 3        │  │                                       │
+│   └───────────────┘  │                                       │
+│                      │                                       │
+│   ┌───────────────┐  │                                       │
+│   │ Farm 4        │  │                                       │
+│   └───────────────┘  │                                       │
+│                      │                                       │
+│                      │                                       │
+│   ┌───────────────┐  │                                       │
+│   │   + Add Farm  │  │                                       │
+│   └───────────────┘  │                                       │
+└──────────────────────┴───────────────────────────────────────┘
+```
+
+The sidebar remains fixed while the farm list scrolls independently.
+
+The Add Farm button stays anchored to the bottom of the sidebar and must never scroll away with the farm list.
+
+---
+
+# 2. FRONTEND LAYOUT SPECIFICATION
+
+## 2.1 Main application container
+
+The Maps page should occupy the available viewport without unnecessary page scrolling.
+
+Recommended implementation:
+
+```tsx
+<div className="maps-page">
+  <AppNavigation />
+
+  <main className="maps-workspace">
+    <FarmSidebar />
+    <MapCanvas />
+  </main>
+</div>
+```
+
+CSS:
+
+```css
+.maps-page {
+  width: 100%;
+  height: 100dvh;
+
+  display: flex;
+  flex-direction: column;
+
+  overflow: hidden;
+
+  background: #071219;
+}
+
+.maps-workspace {
+  flex: 1;
+  min-height: 0;
+
+  display: grid;
+
+  grid-template-columns:
+    410px
+    minmax(0, 1fr);
+
+  overflow: hidden;
+}
+```
+
+The 410px sidebar is a reference value based on the supplied image, not a mandatory fixed size for every screen.
+
+Responsive behaviour:
+
+```css
+@media (max-width: 1200px) {
+  .maps-workspace {
+    grid-template-columns: 340px minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 760px) {
+  .maps-workspace {
+    grid-template-columns: 1fr;
+  }
+
+  .farm-sidebar {
+    position: absolute;
+    z-index: 20;
+  }
+
+  .map-canvas {
+    width: 100%;
+  }
+}
+```
+
+On smaller screens, the sidebar should become a drawer or bottom sheet rather than permanently occupying valuable map space.
+
+---
+
+# 3. LEFT SIDEBAR — MY FARMS
+
+The sidebar has only three functional elements:
+
+1. My Farms heading.
+2. Searchable, vertically scrollable farm list.
+3. Add Farm button.
+
+Do not introduce analytics cards, weather panels, regional dashboards, map legends or additional information sections into this sidebar.
+
+## 3.1 Sidebar visual structure
+
+```tsx
+function FarmSidebar() {
+  return (
+    <aside className="farm-sidebar">
+
+      <FarmSidebarHeader />
+
+      <FarmSearch />
+
+      <div className="farm-list-scroll">
+        <FarmList />
+      </div>
+
+      <div className="farm-sidebar-footer">
+        <AddFarmButton />
+      </div>
+
+    </aside>
+  );
+}
+```
+
+CSS:
+
+```css
+.farm-sidebar {
+  display: flex;
+  flex-direction: column;
+
+  height: 100%;
+  min-height: 0;
+
+  background:
+    linear-gradient(
+      160deg,
+      rgba(9, 26, 34, 0.98),
+      rgba(5, 19, 27, 0.98)
+    );
+
+  border-right: 1px solid rgba(130, 180, 190, 0.13);
+
+  overflow: hidden;
+}
+```
+
+## 3.2 My Farms header
+
+The heading contains:
+
+- Farm/plant icon.
+- Text: `My Farms`.
+- Optional collapse button.
+
+```tsx
+<header className="farm-sidebar-header">
+
+  <div className="header-title">
+    <FarmIcon />
+    <h2>My Farms</h2>
+  </div>
+
+  <button
+    aria-label="Collapse farm sidebar"
+    onClick={toggleSidebar}
+  >
+    <CollapseIcon />
+  </button>
+
+</header>
+```
+
+The collapse control should reduce the sidebar to a narrow icon rail.
+
+When collapsed:
+
+- Hide the search input.
+- Hide farm names and metadata.
+- Display compact farm indicators or thumbnails.
+- Preserve the currently selected farm.
+- Keep access to Add Farm through an accessible icon and tooltip.
+
+## 3.3 Farm search
+
+The search field filters the user's own farm collection.
+
+Visible placeholder:
+
+`Search farms...`
+
+Search behaviour:
+
+```tsx
+const filteredFarms = farms.filter(farm => {
+  const query = searchTerm
+    .trim()
+    .toLowerCase();
+
+  return (
+    farm.name.toLowerCase().includes(query) ||
+    farm.crop?.toLowerCase().includes(query) ||
+    farm.locationLabel?.toLowerCase().includes(query)
+  );
+});
+```
+
+The search must:
+
+- Ignore capitalization.
+- Trim leading and trailing whitespace.
+- Update as the user types.
+- Preserve the selected map location.
+- Never issue a geographic search when the user is typing in this field.
+- Show a clear empty state when nothing matches.
+
+Empty state:
+
+```text
+No farms found
+Try another farm name.
+```
+
+Search is local to the user's farm list. It is not the same as the global geographic search on the map.
+
+## 3.4 Scrollable farm list
+
+The farm list is the main content of the sidebar.
+
+Each farm is represented by a compact card.
+
+```tsx
+<div className="farm-list-scroll">
+  {filteredFarms.map(farm => (
+    <FarmCard
+      key={farm.id}
+      farm={farm}
+      selected={farm.id === selectedFarmId}
+      onClick={() => selectFarm(farm.id)}
+    />
+  ))}
+</div>
+```
+
+CSS:
+
+```css
+.farm-list-scroll {
+  flex: 1;
+  min-height: 0;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  padding: 12px 18px 16px;
+
+  scrollbar-width: thin;
+  scrollbar-color:
+    rgba(90, 140, 150, 0.35)
+    transparent;
+}
+```
+
+The list must support any number of farms.
+
+For large collections, use virtualized rendering, such as `react-virtual`, to avoid rendering hundreds or thousands of cards simultaneously.
+
+## 3.5 Farm card structure
+
+Each card contains:
+
+| Element | Purpose |
+|---|---|
+| Status dot | Quick visual condition indicator |
+| Thumbnail | Satellite preview of the farm |
+| Farm name | Farm identification |
+| Area | Total registered geographic area |
+| Crop | Current recorded crop, if known |
+| Status badge | Current condition classification |
+| Chevron | Indicates selection/navigation |
+
+Example:
+
+```tsx
+interface FarmCardProps {
+  farm: Farm;
+  selected: boolean;
+  onClick: () => void;
+}
+```
+
+Example rendering:
+
+```tsx
+function FarmCard({
+  farm,
+  selected,
+  onClick
+}: FarmCardProps) {
+
+  return (
+    <button
+      className={`farm-card ${selected ? "selected" : ""}`}
+      onClick={onClick}
+    >
+
+      <div className="farm-thumbnail">
+
+        <img
+          src={farm.thumbnailUrl}
+          alt=""
+        />
+
+        <FarmStatusDot
+          status={farm.healthStatus}
+        />
+
+      </div>
+
+      <div className="farm-card-content">
+
+        <h3>{farm.name}</h3>
+
+        <p>
+          {formatArea(farm.areaHa)}
+          {" • "}
+          {farm.currentCrop ?? "Crop not recorded"}
+        </p>
+
+        <FarmStatusBadge
+          status={farm.healthStatus}
+        />
+
+      </div>
+
+      <ChevronRight />
+
+    </button>
+  );
+}
+```
+
+The card must be clickable across its entire surface.
+
+The thumbnail is not an independently stored illustration if it can be generated from the actual farm geometry and satellite basemap.
+
+A practical thumbnail generation strategy is:
+
+1. Load the farm polygon.
+2. Calculate its geographic bounding box.
+3. Expand the bounds slightly.
+4. Request a static satellite map image.
+5. Draw the polygon outline over the image.
+6. Crop to the farm aspect ratio.
+7. Cache the result.
+
+If a thumbnail cannot be generated, display a neutral fallback image rather than a broken image icon.
+
+## 3.6 Farm card selection state
+
+The selected card should match the visual appearance in the reference:
+
+- Teal/cyan outline.
+- Slightly brighter dark background.
+- Subtle inner highlight.
+- Clearly visible selected state.
+- No excessive glow.
+
+```css
+.farm-card {
+  display: grid;
+
+  grid-template-columns: 100px minmax(0, 1fr) 24px;
+
+  gap: 14px;
+  align-items: center;
+
+  min-height: 112px;
+
+  padding: 10px;
+
+  border-radius: 13px;
+
+  border: 1px solid rgba(120, 165, 180, 0.12);
+
+  background: rgba(15, 32, 41, 0.78);
+
+  transition:
+    background 160ms ease,
+    border-color 160ms ease,
+    transform 160ms ease;
+}
+
+.farm-card.selected {
+  border: 2px solid #10d9b4;
+
+  background:
+    linear-gradient(
+      110deg,
+      rgba(8, 61, 57, 0.52),
+      rgba(12, 32, 42, 0.94)
+    );
+
+  box-shadow:
+    inset 0 0 18px rgba(16, 217, 180, 0.06);
+}
+```
+
+Only one farm should be selected at a time in the normal farm-selection mode.
+
+---
+
+# 4. FARM STATUS AND COLOR LOGIC
+
+The screenshot uses four visual states:
+
+| Status | Color | Display label |
+|---|---|---|
+| Healthy | Green | Healthy |
+| Moderate | Amber | Moderate |
+| At risk | Red | At Risk |
+| No data | Grey | No Data |
+
+These are presentation states, not necessarily raw data values.
+
+The system must obtain the status from the farm's latest valid assessment.
+
+It must not infer a farm's health merely from the color of its satellite imagery.
+
+## 4.1 Status enum
+
+```ts
+type FarmHealthStatus =
+  | "healthy"
+  | "moderate"
+  | "at_risk"
+  | "no_data";
+```
+
+Color configuration:
+
+```ts
+const FARM_STATUS_COLORS = {
+  healthy: {
+    main: "#35E66B",
+    background: "rgba(23, 163, 91, 0.20)",
+    text: "#80F3B0"
+  },
+
+  moderate: {
+    main: "#FFB21A",
+    background: "rgba(211, 139, 17, 0.20)",
+    text: "#FFD16B"
+  },
+
+  at_risk: {
+    main: "#FF394C",
+    background: "rgba(195, 43, 55, 0.20)",
+    text: "#FF8992"
+  },
+
+  no_data: {
+    main: "#89949D",
+    background: "rgba(115, 128, 138, 0.20)",
+    text: "#BBC3CA"
+  }
+};
+```
+
+## 4.2 Status calculation
+
+A recommended backend assessment model:
+
+```ts
+interface FarmAssessment {
+  farmId: string;
+  status: FarmHealthStatus;
+
+  score?: number;
+
+  assessedAt: string;
+  assessmentVersion: string;
+
+  confidence?: number;
+
+  explanation?: string;
+}
+```
+
+The status calculation should be performed by the analysis system, not invented by the Maps frontend.
+
+A possible assessment rule:
+
+```ts
+function classifyFarmHealth(
+  score: number | null
+): FarmHealthStatus {
+
+  if (score === null) {
+    return "no_data";
+  }
+
+  if (score >= 75) {
+    return "healthy";
+  }
+
+  if (score >= 45) {
+    return "moderate";
+  }
+
+  return "at_risk";
+}
+```
+
+The thresholds above are example product rules only. They must be agreed with the agricultural assessment methodology and must not be treated as validated agronomic thresholds.
+
+The Maps API should return the final status and assessment date.
+
+---
+
+# 5. FARM AREA CALCULATIONS
+
+Farm area is one of the most important values in the sidebar.
+
+The screenshot shows examples:
+
+- Green Valley Farm: 78.3 ha.
+- Riverside Farm: 89.7 ha.
+- Highland Farm: 120.1 ha.
+- Sunrise Farm: 64.5 ha.
+- Oakridge Farm: 72.8 ha.
+
+These values should come from the actual stored farm geometry.
+
+Never calculate area from the number of polygon points or from a simple latitude/longitude bounding rectangle.
+
+## 5.1 Geometry format
+
+Use GeoJSON for stored farm boundaries.
+
+```ts
+interface FarmGeometry {
+  type: "Polygon" | "MultiPolygon";
+
+  coordinates: number[][][] | number[][][][];
+}
+```
+
+GeoJSON coordinate order:
+
+```ts
+[longitude, latitude]
+```
+
+Example:
+
+```json
+{
+  "type": "Polygon",
+  "coordinates": [
+    [
+      [55.1000, 25.1000],
+      [55.1050, 25.1000],
+      [55.1060, 25.1050],
+      [55.1010, 25.1070],
+      [55.1000, 25.1000]
+    ]
+  ]
+}
+```
+
+The final coordinate must close the ring by matching the first coordinate.
+
+## 5.2 Area calculation
+
+Use a geospatial library that supports ellipsoidal area calculation.
+
+Recommended options:
+
+- PostGIS `ST_Area(geography)`.
+- Turf.js `area()`.
+- A geodesic geometry library.
+
+For PostGIS:
+
+```sql
+SELECT
+  ST_Area(
+    ST_SetSRID(
+      ST_GeomFromGeoJSON(:geometry),
+      4326
+    )::geography
+  ) AS area_m2;
+```
+
+Convert square metres to hectares:
+
+```ts
+const areaHa = areaM2 / 10_000;
+```
+
+Convert square metres to acres:
+
+```ts
+const areaAcres = areaM2 / 4046.8564224;
+```
+
+Format for the card:
+
+```ts
+function formatArea(areaHa: number) {
+  return `${areaHa.toFixed(1)} ha`;
+}
+```
+
+Example:
+
+```ts
+const areaM2 = 783000;
+
+const areaHa = areaM2 / 10000;
+
+// Result: 78.3 hectares
+```
+
+This is an illustrative arithmetic example, not a calculation of the sample farm's actual geometry.
+
+## 5.3 MultiPolygon calculations
+
+If a farm contains multiple separate plots:
+
+```ts
+const totalArea = sum(
+  polygons.map(polygon => geodesicArea(polygon))
+);
+```
+
+If the farm contains holes or excluded regions, the area of those holes must be subtracted according to the polygon geometry.
+
+The same farm should not count overlapping geometries twice.
+
+Recommended validation:
+
+```ts
+if (hasOverlappingFarmParcels(geometry)) {
+  throw new Error("Farm parcels overlap.");
+}
+```
+
+Whether overlaps are forbidden or permitted should be configurable according to the product's farm/field ownership model.
+
+---
+
+# 6. MAIN MAP CANVAS
+
+The map occupies all remaining horizontal and vertical space.
+
+It is the central visual element of the entire Maps page.
+
+The map should be built using a genuine geospatial mapping SDK, not a static image.
+
+Suitable technologies include:
+
+- Mapbox GL JS.
+- MapLibre GL JS.
+- Another compatible vector/raster GIS map engine.
+
+The final choice should depend on licensing, data providers, pricing, regional coverage and the required GIS functionality.
+
+## 6.1 Map structure
+
+```tsx
+function MapCanvas() {
+
+  return (
+    <section className="map-canvas">
+
+      <MapEngine />
+
+      <MapSearch />
+
+      <LocateControl />
+
+      <MapNavigationControls />
+
+      <MapScale />
+
+      <MapAttribution />
+
+    </section>
+  );
+}
+```
+
+The map engine should render:
+
+1. Basemap imagery.
+2. Farm polygons.
+3. Selected farm outline.
+4. Map labels and geographic features.
+5. Map controls and overlays.
+
+## 6.2 Satellite basemap
+
+The screenshot uses a natural-color satellite/aerial image.
+
+The imagery should show:
+
+- Agricultural fields.
+- Rivers and waterways.
+- Roads.
+- Settlements.
+- Vegetation.
+- Terrain and surrounding land.
+
+Use an actual imagery provider with appropriate licensing and tile attribution.
+
+Example Mapbox-style initialization:
+
+```ts
+const map = new mapboxgl.Map({
+  container: mapContainer,
+
+  style: SATELLITE_STYLE_URL,
+
+  center: [
+    initialLongitude,
+    initialLatitude
+  ],
+
+  zoom: initialZoom,
+
+  attributionControl: false
+});
+```
+
+The actual style URL and access token must come from secure application configuration.
+
+Do not put private server credentials inside frontend source code.
+
+The basemap must preserve natural scientific imagery colors.
+
+Do not apply a global dark filter or color inversion to satellite tiles.
+
+The dark interface should frame the imagery rather than distort it.
+
+---
+
+# 7. GLOBAL GEOGRAPHIC SEARCH
+
+The map contains a search bar near its upper-left corner.
+
+Visible placeholder:
+
+`Search anywhere in the world...`
+
+This search is independent of the farm search.
+
+It should allow users to search for:
+
+- Countries.
+- Cities.
+- Towns.
+- Villages.
+- Addresses.
+- Regions.
+- Geographic coordinates.
+- Known landmarks.
+
+## 7.1 Search component
+
+```tsx
+function MapSearch() {
+
+  const [query, setQuery] = useState("");
+
+  const [results, setResults] = useState([]);
+
+  async function searchLocation(value: string) {
+
+    setQuery(value);
+
+    if (value.trim().length < 2) {
+      setResults([]);
+      return;
+    }
+
+    const data = await geocodingApi.search(value);
+
+    setResults(data);
+  }
+
+  return (
+    <div className="map-search">
+
+      <SearchIcon />
+
+      <input
+        value={query}
+        onChange={e => searchLocation(e.target.value)}
+        placeholder="Search anywhere in the world..."
+      />
+
+      <SearchResults results={results} />
+
+    </div>
+  );
+}
+```
+
+Use debouncing so that every keystroke does not trigger a network request.
+
+```ts
+const DEBOUNCE_MS = 350;
+```
+
+Additional search requirements:
+
+- Cancel obsolete requests when a new query is submitted.
+- Display loading feedback.
+- Display a useful no-results state.
+- Distinguish ambiguous places.
+- Support keyboard navigation.
+- Respect geocoding provider rate limits.
+
+## 7.2 Search result selection
+
+When the user selects a location:
+
+```ts
+function navigateToLocation(result: GeocodingResult) {
+
+  map.flyTo({
+    center: [
+      result.longitude,
+      result.latitude
+    ],
+
+    zoom: result.suggestedZoom ?? 13,
+
+    duration: 1400
+  });
+}
+```
+
+The zoom should depend on the result type.
+
+Example policy:
+
+| Result type | Suggested zoom |
+|---|---:|
+| Country | 4 |
+| Large region | 7 |
+| City | 11 |
+| Town | 13 |
+| Street/address | 16 |
+| Exact coordinate | 16 |
+
+These are initial configuration values, not fixed geographic laws.
+
+If a location is outside the currently visible area, the map must navigate smoothly to it.
+
+---
+
+# 8. LOCATE-ME CONTROL
+
+The circular crosshair control beside the search field requests the user's current geographic location.
+
+```tsx
+<button
+  aria-label="Locate my position"
+  onClick={locateUser}
+>
+  <CrosshairIcon />
+</button>
+```
+
+Implementation:
+
+```ts
+async function locateUser() {
+
+  if (!navigator.geolocation) {
+    showError("Location is not supported.");
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(
+    position => {
+
+      const longitude =
+        position.coords.longitude;
+
+      const latitude =
+        position.coords.latitude;
+
+      map.flyTo({
+        center: [longitude, latitude],
+        zoom: 15,
+        duration: 1200
+      });
+
+    },
+
+    error => {
+      showLocationError(error);
+    },
+
+    {
+      enableHighAccuracy: true,
+      timeout: 10000,
+      maximumAge: 30000
+    }
+  );
+}
+```
+
+Requirements:
+
+- Ask for browser permission.
+- Never assume permission has been granted.
+- Handle permission denial.
+- Handle unavailable location.
+- Handle timeout.
+- Do not continuously track users unless they explicitly activate a tracking feature.
+- Do not persist precise location unnecessarily.
+
+---
+
+# 9. FARM BOUNDARY VISUALIZATION
+
+The map shows farm boundaries as polygon overlays.
+
+Each polygon represents the actual geographic geometry stored for a farm.
+
+The screenshot demonstrates three different boundary states:
+
+- Green polygon: Healthy.
+- Amber polygon: Moderate.
+- Red polygon: At Risk.
+
+The selected farm is visually distinguished from unselected farms.
+
+## 9.1 GeoJSON feature structure
+
+Each farm should be converted into a map feature.
+
+```ts
+interface FarmMapFeature {
+  type: "Feature";
+
+  id: string;
+
+  geometry: GeoJSON.Polygon |
+            GeoJSON.MultiPolygon;
+
+  properties: {
+    farmId: string;
+    farmName: string;
+
+    healthStatus: FarmHealthStatus;
+
+    areaHa: number;
+
+    selected: boolean;
+  };
+}
+```
+
+Example:
+
+```json
+{
+  "type": "Feature",
+  "id": "farm-001",
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [55.1000, 25.1000],
+        [55.1050, 25.1000],
+        [55.1070, 25.1050],
+        [55.1010, 25.1070],
+        [55.1000, 25.1000]
+      ]
+    ]
+  },
+  "properties": {
+    "farmId": "farm-001",
+    "farmName": "Green Valley Farm",
+    "healthStatus": "healthy",
+    "areaHa": 78.3,
+    "selected": true
+  }
+}
+```
+
+## 9.2 Polygon fill
+
+Use a translucent fill so the underlying satellite imagery remains visible.
+
+Example:
+
+```ts
+const fillColors = {
+  healthy: "#31D96B",
+  moderate: "#FFB21A",
+  at_risk: "#F04452",
+  no_data: "#929CA6"
+};
+```
+
+Example Mapbox layer:
+
+```ts
+map.addLayer({
+  id: "farm-fill",
+
+  type: "fill",
+
+  source: "farms",
+
+  paint: {
+
+    "fill-color": [
+      "match",
+
+      ["get", "healthStatus"],
+
+      "healthy", "#31D96B",
+
+      "moderate", "#FFB21A",
+
+      "at_risk", "#F04452",
+
+      "#929CA6"
+    ],
+
+    "fill-opacity": 0.30
+  }
+});
+```
+
+## 9.3 Polygon outline
+
+```ts
+map.addLayer({
+  id: "farm-outline",
+
+  type: "line",
+
+  source: "farms",
+
+  paint: {
+
+    "line-color": [
+      "match",
+
+      ["get", "healthStatus"],
+
+      "healthy", "#50F58A",
+
+      "moderate", "#FFC34B",
+
+      "at_risk", "#FF4655",
+
+      "#A0AAB4"
+    ],
+
+    "line-width": 2.5
+  }
+});
+```
+
+## 9.4 Selected farm styling
+
+The selected farm needs stronger visual emphasis.
+
+Recommended styling:
+
+- Teal/white outline.
+- Slightly increased line thickness.
+- Subtle translucent fill.
+- Visible boundary vertices only during edit mode.
+- Area label near polygon centre.
+
+Selection must not destroy the underlying health status.
+
+One option is to render the selected farm on a separate overlay layer.
+
+```ts
+map.addLayer({
+  id: "selected-farm-outline",
+
+  type: "line",
+
+  source: "selected-farm",
+
+  paint: {
+    "line-color": "#43F5D0",
+    "line-width": 3.5
+  }
+});
+```
+
+The selected outline can be drawn above the ordinary health-colored outline.
+
+---
+
+# 10. FARM AREA LABELS
+
+The screenshot displays area labels inside each polygon.
+
+Examples:
+
+```text
+78.3 ha
+120.1 ha
+64.2 ha
+```
+
+These labels should be generated from actual farm area data.
+
+Do not manually position labels using fixed screen coordinates.
+
+## 10.1 Label position
+
+A simple polygon centroid may fall outside a concave polygon.
+
+Use a point-on-surface or pole-of-inaccessibility algorithm to find a label position that lies inside the polygon.
+
+Possible tools:
+
+- Turf.js `pointOnFeature`.
+- Turf.js `centerOfMass` with containment verification.
+- A polylabel implementation.
+
+Example:
+
+```ts
+const labelPoint = polylabel(
+  polygonCoordinates,
+  precision
+);
+```
+
+The label should update when:
+
+- The polygon changes.
+- The map feature is reloaded.
+- The geometry is edited.
+- The selected map data changes.
+
+## 10.2 Label display
+
+```tsx
+<div className="farm-area-label">
+  {farm.areaHa.toFixed(1)} ha
+</div>
+```
+
+The map renderer should preferably use symbol layers or geographic markers rather than ordinary HTML elements fixed to the screen.
+
+The label must remain geographically attached to its farm while panning and zooming.
+
+At low zoom levels, hide or cluster labels if they become too dense.
+
+---
+
+# 11. FARM SELECTION AND MAP SYNCHRONIZATION
+
+This is one of the most important interaction systems.
+
+The farm sidebar and map must always share the same selection state.
+
+Selecting a farm from the sidebar:
+
+1. Update selected farm ID.
+2. Highlight the sidebar card.
+3. Highlight the polygon.
+4. Calculate the farm's geographic bounds.
+5. Fit the map to the selected farm.
+6. Display the area label.
+7. Keep all other farm boundaries visible where appropriate.
+
+Example:
+
+```ts
+const [selectedFarmId, setSelectedFarmId] =
+  useState<string | null>(null);
+
+function selectFarm(farmId: string) {
+
+  setSelectedFarmId(farmId);
+
+  const farm = farms.find(
+    item => item.id === farmId
+  );
+
+  if (!farm) return;
+
+  setSelectedFarmSource(farm);
+
+  const bounds = turf.bbox(farm.geometry);
+
+  map.fitBounds(
+    [
+      [bounds[0], bounds[1]],
+      [bounds[2], bounds[3]]
+    ],
+    {
+      padding: {
+        top: 100,
+        bottom: 100,
+        left: 100,
+        right: 100
+      },
+
+      maxZoom: 17,
+
+      duration: 1200
+    }
+  );
+}
+```
+
+Use a projection-aware bounds implementation where appropriate.
+
+A simple minimum/maximum longitude calculation needs special treatment for geometries crossing the international date line.
+
+## 11.1 Selecting from the map
+
+The reverse interaction must also work.
+
+When the user clicks a farm polygon:
+
+```ts
+map.on("click", "farm-fill", event => {
+
+  const feature = event.features?.[0];
+
+  if (!feature) return;
+
+  const farmId = feature.properties.farmId;
+
+  setSelectedFarmId(farmId);
+
+});
+```
+
+This should also highlight the corresponding sidebar card.
+
+If the farm is not currently visible because the sidebar is filtered, the application should clear or adjust the filter so the selection remains discoverable.
+
+Do not trigger farm selection when the user is actively drawing or editing geometry.
+
+---
+
+# 12. MAP NAVIGATION CONTROLS
+
+The right edge of the screenshot contains a vertical control stack.
+
+It has four controls:
+
+1. Locate or orientation/navigation control.
+2. Zoom in.
+3. Zoom out.
+4. Map layers.
+5. Fullscreen.
+
+The screenshot visually groups some controls together, but each must have its own clearly defined function.
+
+## 12.1 Zoom in
+
+```ts
+function zoomIn() {
+  map.zoomTo(
+    map.getZoom() + 1,
+    { duration: 250 }
+  );
+}
+```
+
+## 12.2 Zoom out
+
+```ts
+function zoomOut() {
+  map.zoomTo(
+    map.getZoom() - 1,
+    { duration: 250 }
+  );
+}
+```
+
+Respect the map's minimum and maximum zoom levels.
+
+## 12.3 Orientation/reset bearing
+
+The navigation control should return the map to a north-up orientation.
+
+```ts
+function resetBearing() {
+
+  map.easeTo({
+    bearing: 0,
+    pitch: 0,
+    duration: 500
+  });
+
+}
+```
+
+If the first icon is intended to locate the user, use the browser geolocation flow described earlier instead. Do not combine two unrelated actions in one ambiguous control.
+
+## 12.4 Map layer selector
+
+The layers button opens a compact map-style menu.
+
+Potential options:
+
+- Satellite.
+- Satellite with labels.
+- Streets.
+- Terrain.
+- Hybrid.
+
+These are basemap styles, not agricultural analysis layers.
+
+```ts
+type BasemapStyle =
+  | "satellite"
+  | "satellite-streets"
+  | "streets"
+  | "terrain";
+```
+
+Changing the basemap must not delete farm polygons or modify stored farm geometry.
+
+## 12.5 Fullscreen
+
+Use the browser Fullscreen API.
+
+```ts
+async function toggleFullscreen() {
+
+  if (!document.fullscreenElement) {
+
+    await mapContainer.requestFullscreen();
+
+  } else {
+
+    await document.exitFullscreen();
+
+  }
+
+}
+```
+
+After fullscreen changes, trigger a map resize.
+
+```ts
+map.resize();
+```
+
+The map must also resize after sidebar expansion or collapse.
+
+---
+
+# 13. SCALE BAR
+
+The lower-left map overlay shows a scale bar.
+
+The screenshot example reads approximately:
+
+`2 km`
+
+The scale must represent real geographic distance at the current zoom and latitude.
+
+It must not be a decorative line with a hardcoded label.
+
+Use the map SDK's native scale control where possible.
+
+```ts
+const scale = new mapboxgl.ScaleControl({
+  maxWidth: 180,
+  unit: "metric"
+});
+
+map.addControl(
+  scale,
+  "bottom-left"
+);
+```
+
+The scale should update automatically as the user zooms and pans.
+
+Metric units should be the default.
+
+Possible units:
+
+- Metres.
+- Kilometres.
+
+---
+
+# 14. MAP ATTRIBUTION
+
+The screenshot shows:
+
+```text
+© Mapbox  © OpenStreetMap
+```
+
+The actual attribution must reflect the providers and datasets used.
+
+Never hardcode attribution for a provider that is not supplying the imagery or map data.
+
+Requirements:
+
+- Keep required attribution visible.
+- Do not obscure it with controls.
+- Maintain sufficient contrast.
+- Respect the licensing requirements of each data source.
+
+---
+
+# 15. ADD FARM FUNCTIONALITY
+
+The Add Farm button is fixed at the bottom of the sidebar.
+
+Its purpose is to begin the process of creating a new farm record.
+
+Clicking it should open a dedicated farm creation flow.
+
+It should not immediately create an empty farm record without the user understanding what is being created.
+
+## 15.1 Add Farm interaction
+
+```tsx
+<button
+  className="add-farm-button"
+  onClick={() => setAddFarmOpen(true)}
+>
+  <PlusIcon />
+  <span>Add Farm</span>
+</button>
+```
+
+The creation flow should support two primary methods:
+
+**Method A — Draw a new boundary**
+
+- Navigate to the farm location.
+- Activate boundary drawing.
+- Click map points to construct a polygon.
+- Close the polygon.
+- Validate the geometry.
+- Calculate its area.
+- Enter farm information.
+- Save.
+
+**Method B — Import an existing boundary**
+
+- Upload GeoJSON or another supported spatial format.
+- Parse and validate geometry.
+- Confirm the location and boundary.
+- Enter farm information.
+- Save.
+
+The application may also support assigning an existing analysed farm, provided that farm has a valid identity and geometry.
+
+## 15.2 Farm creation form
+
+Recommended fields:
+
+```ts
+interface CreateFarmInput {
+
+  name: string;
+
+  geometry: GeoJSON.Polygon |
+            GeoJSON.MultiPolygon;
+
+  crop?: string;
+
+  locationLabel?: string;
+
+  notes?: string;
+
+}
+```
+
+The user should not be forced to supply values that can be derived from geometry.
+
+For example:
+
+- Area: calculated automatically.
+- Perimeter: calculated automatically.
+- Centroid: calculated automatically.
+- Bounding box: calculated automatically.
+
+The user supplies the farm name and any optional agricultural metadata.
+
+## 15.3 Save process
+
+```ts
+async function createFarm(input: CreateFarmInput) {
+
+  const validatedGeometry =
+    validateFarmGeometry(input.geometry);
+
+  const areaHa =
+    calculateAreaHa(validatedGeometry);
+
+  const perimeterM =
+    calculatePerimeter(validatedGeometry);
+
+  const centroid =
+    calculateCentroid(validatedGeometry);
+
+  const response = await api.post(
+    "/api/farms",
+    {
+      ...input,
+
+      geometry: validatedGeometry,
+
+      areaHa,
+
+      perimeterM,
+
+      centroid
+    }
+  );
+
+  return response.data;
+}
+```
+
+The server must repeat validation and calculations.
+
+Never trust client-supplied area or perimeter values as authoritative.
+
+After successful creation:
+
+1. Add the farm to the sidebar list.
+2. Add its polygon to the map.
+3. Select the new farm.
+4. Navigate to its geometry.
+5. Display a success confirmation.
+6. Refresh relevant farm data.
+
+If saving fails, preserve the draft geometry so the user does not lose work.
+
+---
+
+# 16. BACKEND ARCHITECTURE
+
+The frontend should not be responsible for permanent farm storage, authoritative geometry calculations or health assessments.
+
+A recommended architecture:
+
+```text
+                  FIELD SHIFT FRONTEND
+                           |
+                           |
+                 Maps Workspace UI
+                           |
+               REST API / Application API
+                           |
+             ┌─────────────┼─────────────┐
+             |             |             |
+        Farm Service  Geometry Service  Map Service
+             |             |             |
+             └─────────────┼─────────────┘
+                           |
+                     PostgreSQL
+                       + PostGIS
+                           |
+              ┌────────────┼────────────┐
+              |            |            |
+         Farm Records  Geometry Data  Assessments
+              |            |            |
+              └────────────┼────────────┘
+                           |
+                  External Map Services
+                           |
+                 Imagery / Geocoding
+```
+
+## 16.1 Recommended backend stack
+
+One possible implementation:
+
+| Layer | Technology |
+|---|---|
+| Frontend | React + TypeScript |
+| Styling | Tailwind CSS or CSS modules |
+| Map engine | Mapbox GL JS or MapLibre |
+| Geometry operations | Turf.js |
+| Backend | Node.js + NestJS |
+| API | REST with optional WebSockets |
+| Database | PostgreSQL |
+| Spatial extension | PostGIS |
+| Authentication | Existing Field Shift authentication |
+| File storage | Object storage |
+| Validation | Zod or class-validator |
+| Background jobs | Queue worker |
+| Caching | Redis where required |
+
+This is a proposed architecture, not a requirement to replace technologies already used by the existing website.
+
+## 16.2 Database schema
+
+### farms
+
+```sql
+CREATE TABLE farms (
+
+  id UUID PRIMARY KEY,
+
+  user_id UUID NOT NULL,
+
+  name VARCHAR(150) NOT NULL,
+
+  crop VARCHAR(100),
+
+  location_label VARCHAR(255),
+
+  geometry GEOMETRY(
+    MULTIPOLYGON,
+    4326
+  ) NOT NULL,
+
+  area_m2 DOUBLE PRECISION NOT NULL,
+
+  perimeter_m DOUBLE PRECISION,
+
+  centroid GEOMETRY(
+    POINT,
+    4326
+  ),
+
+  health_status VARCHAR(30)
+    DEFAULT 'no_data',
+
+  created_at TIMESTAMPTZ
+    DEFAULT NOW(),
+
+  updated_at TIMESTAMPTZ
+    DEFAULT NOW(),
+
+  deleted_at TIMESTAMPTZ
+
+);
+```
+
+The geometry type may be adjusted if the application uses separate field and farm entities.
+
+### farm_assessments
+
+```sql
+CREATE TABLE farm_assessments (
+
+  id UUID PRIMARY KEY,
+
+  farm_id UUID NOT NULL
+    REFERENCES farms(id),
+
+  status VARCHAR(30) NOT NULL,
+
+  score DOUBLE PRECISION,
+
+  confidence DOUBLE PRECISION,
+
+  explanation TEXT,
+
+  assessment_version VARCHAR(50),
+
+  assessed_at TIMESTAMPTZ NOT NULL,
+
+  created_at TIMESTAMPTZ
+    DEFAULT NOW()
+
+);
+```
+
+### farm_crops
+
+```sql
+CREATE TABLE farm_crops (
+
+  id UUID PRIMARY KEY,
+
+  farm_id UUID NOT NULL
+    REFERENCES farms(id),
+
+  crop_name VARCHAR(100) NOT NULL,
+
+  season_start DATE,
+
+  season_end DATE,
+
+  is_current BOOLEAN DEFAULT FALSE
+
+);
+```
+
+### farm_boundary_versions
+
+```sql
+CREATE TABLE farm_boundary_versions (
+
+  id UUID PRIMARY KEY,
+
+  farm_id UUID NOT NULL
+    REFERENCES farms(id),
+
+  version_number INTEGER NOT NULL,
+
+  geometry GEOMETRY(
+    MULTIPOLYGON,
+    4326
+  ) NOT NULL,
+
+  area_m2 DOUBLE PRECISION NOT NULL,
+
+  changed_by UUID NOT NULL,
+
+  change_reason TEXT,
+
+  created_at TIMESTAMPTZ
+    DEFAULT NOW()
+
+);
+```
+
+This provides an audit trail for boundary edits.
+
+Do not silently overwrite historical geometry if the product needs to retain past farm boundaries.
+
+## 16.3 Spatial indexes
+
+PostGIS should use a spatial index.
+
+```sql
+CREATE INDEX farms_geometry_idx
+ON farms
+USING GIST (geometry);
+```
+
+This allows efficient geographic queries.
+
+For example:
+
+- Farms within the visible map bounds.
+- Farms intersecting a geographic region.
+- Farms near a selected coordinate.
+- Farms overlapping a proposed boundary.
+
+Also index user ownership and common filters:
+
+```sql
+CREATE INDEX farms_user_id_idx
+ON farms(user_id);
+```
+
+---
+
+# 17. BACKEND API CONTRACTS
+
+The frontend needs a clear API contract.
+
+## 17.1 Fetch all farms
+
+```http
+GET /api/farms
+```
+
+Response:
+
+```json
+{
+  "farms": [
+    {
+      "id": "farm-001",
+      "name": "Green Valley Farm",
+      "areaHa": 78.3,
+      "crop": "Wheat",
+      "healthStatus": "healthy",
+      "thumbnailUrl": "/media/farms/farm-001.jpg",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": []
+      }
+    }
+  ]
+}
+```
+
+The coordinates array above is intentionally abbreviated. The real response must contain valid GeoJSON coordinates.
+
+Only return farms belonging to the authenticated user.
+
+For large collections, use pagination or a compact farm-list endpoint.
+
+## 17.2 Fetch farms within the current map bounds
+
+```http
+GET /api/farms/map
+  ?west=...
+  &south=...
+  &east=...
+  &north=...
+```
+
+Backend query:
+
+```sql
+SELECT
+  id,
+  name,
+  geometry,
+  health_status,
+  area_m2
+
+FROM farms
+
+WHERE user_id = :authenticated_user
+
+AND deleted_at IS NULL
+
+AND ST_Intersects(
+  geometry,
+  ST_MakeEnvelope(
+    :west,
+    :south,
+    :east,
+    :north,
+    4326
+  )
+);
+```
+
+Use appropriate geographic handling when the bounds cross the international date line.
+
+For extremely large datasets, consider vector tiles instead of sending all GeoJSON coordinates to the browser.
+
+## 17.3 Fetch one farm
+
+```http
+GET /api/farms/:farmId
+```
+
+Returns:
+
+- Farm identity.
+- Geometry.
+- Calculated area.
+- Perimeter.
+- Centroid.
+- Current crop.
+- Latest assessment status.
+- Last updated timestamp.
+
+## 17.4 Create a farm
+
+```http
+POST /api/farms
+```
+
+Request:
+
+```json
+{
+  "name": "Green Valley Farm",
+  "crop": "Wheat",
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": []
+  }
+}
+```
+
+The server validates geometry, calculates area and perimeter, checks ownership and persists the record.
+
+## 17.5 Update farm boundary
+
+```http
+PATCH /api/farms/:farmId/boundary
+```
+
+Request:
+
+```json
+{
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": []
+  },
+  "expectedVersion": 3
+}
+```
+
+Use optimistic concurrency control.
+
+If another user has changed the geometry since version 3, return a conflict response instead of silently overwriting their work.
+
+## 17.6 Delete or archive a farm
+
+```http
+DELETE /api/farms/:farmId
+```
+
+Use a soft-delete strategy if the wider application requires auditability and recovery.
+
+Do not physically delete related analysis, evidence or historical data without an explicit retention policy.
+
+---
+
+# 18. MAP STATE MANAGEMENT
+
+The map should have one coherent source of truth for its selected farm, geographic viewport and active interactions.
+
+Recommended state:
+
+```ts
+interface MapsState {
+
+  selectedFarmId: string | null;
+
+  farms: Farm[];
+
+  searchQuery: string;
+
+  mapCenter: [number, number];
+
+  zoom: number;
+
+  bearing: number;
+
+  pitch: number;
+
+  basemap: BasemapStyle;
+
+  sidebarCollapsed: boolean;
+
+  isAddingFarm: boolean;
+
+  isEditingBoundary: boolean;
+
+  activeTool:
+    | "select"
+    | "draw"
+    | "edit"
+    | "measure";
+
+}
+```
+
+Use a state-management solution already established in Field Shift.
+
+React Context, Zustand or Redux can all work.
+
+Avoid maintaining duplicate copies of selected farm state in unrelated components.
+
+The map renderer can maintain its own internal rendering state, but application selection and farm identity should have one authoritative source.
+
+---
+
+# 19. GEOMETRY VALIDATION
+
+Before saving a farm boundary, validate it.
+
+Checks should include:
+
+1. Geometry type is supported.
+2. Coordinates are valid numbers.
+3. Longitude is between -180 and 180.
+4. Latitude is between -90 and 90.
+5. Polygon rings contain at least four coordinate entries, including closure.
+6. At least three distinct vertices exist.
+7. Polygon is closed.
+8. Polygon does not self-intersect.
+9. Polygon area is greater than zero.
+10. Geometry is not unexpectedly enormous.
+11. Holes are contained inside their outer rings.
+12. Geometry is valid according to PostGIS.
+
+Example:
+
+```ts
+function validateFarmGeometry(geometry) {
+
+  if (!geometry) {
+    throw new Error("Missing geometry");
+  }
+
+  if (!["Polygon", "MultiPolygon"].includes(
+    geometry.type
+  )) {
+    throw new Error("Unsupported geometry type");
+  }
+
+  if (!isValidCoordinateStructure(geometry)) {
+    throw new Error("Invalid coordinates");
+  }
+
+  if (!isPolygonClosed(geometry)) {
+    throw new Error("Boundary is not closed");
+  }
+
+  if (hasSelfIntersections(geometry)) {
+    throw new Error("Boundary intersects itself");
+  }
+
+  if (calculateAreaHa(geometry) <= 0) {
+    throw new Error("Invalid farm area");
+  }
+
+  return geometry;
+}
+```
+
+Use robust geometry libraries for these checks. Simple hand-written segment intersection tests are not sufficient for every geographic edge case.
+
+The server must validate independently.
+
+---
+
+# 20. PERFORMANCE AND LOADING STRATEGY
+
+The map must remain responsive even when a user owns many farms.
+
+Recommended strategy:
+
+### Initial loading
+
+1. Load the user's farm list.
+2. Load lightweight farm metadata.
+3. Initialize the basemap.
+4. Load geometries for visible farms.
+5. Render polygons.
+6. Generate or retrieve thumbnails.
+
+### Viewport loading
+
+When the map moves:
+
+```ts
+map.on("moveend", () => {
+
+  const bounds = map.getBounds();
+
+  loadFarmsWithinBounds(bounds);
+
+});
+```
+
+Debounce viewport queries and cancel outdated requests.
+
+### Caching
+
+Cache:
+
+- Farm metadata.
+- Farm geometry versions.
+- Thumbnails.
+- Geocoding results where permitted.
+- Map tile requests through the map provider.
+
+Do not cache private farm information in a shared cache without a user-specific authorization boundary.
+
+### Rendering
+
+For large numbers of farms:
+
+- Use vector tiles.
+- Cluster map markers if appropriate.
+- Hide labels at low zoom.
+- Simplify geometry for display only.
+- Preserve original geometry for measurements and editing.
+
+Never permanently simplify the authoritative farm boundary just to improve map rendering.
+
+---
+
+# 21. RESPONSIVE BEHAVIOUR
+
+## Desktop
+
+- Sidebar approximately 390–410px.
+- Map fills remaining space.
+- Farm list scrolls independently.
+- Add Farm stays fixed at bottom.
+- Search sits over the map.
+- Controls remain attached to map edges.
+
+## Tablet
+
+- Sidebar approximately 300–340px or collapsible.
+- Map remains the primary visual element.
+- Farm cards may reduce thumbnail size.
+
+## Mobile
+
+- Map fills the entire screen.
+- Farm list opens in a drawer or bottom sheet.
+- Add Farm remains accessible.
+- Map controls must not overlap search or important map labels.
+- Use touch-friendly control sizes.
+- Support pinch-to-zoom and drag gestures.
+
+---
+
+# 22. ACCESSIBILITY
+
+Required behaviour:
+
+- Every button has an accessible name.
+- Every interactive farm card supports keyboard selection.
+- Focus states are clearly visible.
+- Status is communicated with text and color, not color alone.
+- Search suggestions support arrow-key navigation.
+- Escape closes menus and dialogs.
+- Map controls have adequate touch targets.
+- Text contrast is sufficient.
+- Reduced-motion preferences are respected.
+
+The map itself must have an accessible alternative for users who cannot interact with geographic graphics.
+
+---
+
+# 23. ERROR AND EMPTY STATES
+
+The interface must account for real-world failures.
+
+### No farms
+
+```text
+No farms yet
+
+Add your first farm to begin mapping your land.
+
+[ + Add Farm ]
+```
+
+### Farm list loading
+
+Display compact skeleton cards.
+
+### Map loading
+
+Display a restrained loading indicator over the map.
+
+### Map provider unavailable
+
+Keep the sidebar usable and display a clear map error with a retry action.
+
+### Invalid boundary
+
+Display the validation error and preserve the user's draft.
+
+### Farm has no geometry
+
+Show the farm in the sidebar with a neutral status and provide an action to add its location.
+
+### No analysis data
+
+Show `No Data` in grey.
+
+Do not classify the farm as healthy or unhealthy without sufficient evidence.
+
+### Network failure
+
+Keep previously loaded data available where appropriate, mark it as potentially stale and offer retry.
+
+---
+
+# 24. SECURITY AND DATA OWNERSHIP
+
+Every farm operation must be authorized on the backend.
+
+The backend must check:
+
+```ts
+farm.userId === authenticatedUser.id
+```
+
+for all private farm read, edit and delete operations.
+
+Never rely on hiding another user's farm in the frontend.
+
+Additional protections:
+
+- Validate uploaded spatial files.
+- Limit upload sizes.
+- Restrict geometry complexity.
+- Validate all API input.
+- Rate-limit geocoding requests.
+- Protect API credentials.
+- Log boundary changes.
+- Prevent unauthorized farm ID enumeration.
+- Apply database ownership checks.
+- Use transactions when saving geometry and calculated metadata.
+
+---
+
+# 25. FINAL ACCEPTANCE CRITERIA
+
+The Maps workspace is considered functionally complete when all of the following work:
+
+| ID | Requirement | Expected result |
+|---|---|---|
+| MAP-001 | Load farm list | Only the authenticated user's farms appear |
+| MAP-002 | Farm search | Filters farms instantly |
+| MAP-003 | Scroll list | Any number of farms can be navigated |
+| MAP-004 | Add Farm | Opens farm creation flow |
+| MAP-005 | Fixed footer | Add Farm remains at sidebar bottom |
+| MAP-006 | Map initialization | Real interactive basemap loads |
+| MAP-007 | Geographic search | Navigates to selected place |
+| MAP-008 | Locate me | Navigates to permitted user location |
+| MAP-009 | Farm polygons | Stored geometries render accurately |
+| MAP-010 | Status colors | Reflect latest valid farm assessment |
+| MAP-011 | Area labels | Display calculated farm area |
+| MAP-012 | Sidebar selection | Highlights and fits selected farm |
+| MAP-013 | Map selection | Selects corresponding sidebar farm |
+| MAP-014 | Zoom controls | Change map zoom |
+| MAP-015 | Layer selector | Changes basemap without losing geometry |
+| MAP-016 | Fullscreen | Expands map and resizes correctly |
+| MAP-017 | Scale bar | Displays real geographic distance |
+| MAP-018 | Attribution | Displays correct provider attribution |
+| MAP-019 | Geometry validation | Rejects invalid boundaries |
+| MAP-020 | Save farm | Persists valid farm geometry |
+| MAP-021 | Ownership | Prevents access to another user's private farms |
+| MAP-022 | Responsive layout | Works on desktop, tablet and mobile |
+| MAP-023 | Error handling | Handles loading, failure and empty states |
+| MAP-024 | Performance | Maintains responsive rendering with large farm collections |
+
+---
+
+# 26. FINAL DESIGN PRINCIPLES
+
+The screenshot should be treated as the visual reference for the implementation.
+
+The following principles must remain intact:
+
+**1. The map is the main workspace.**  
+It should occupy as much available screen space as possible.
+
+**2. The sidebar has one responsibility.**  
+It is exclusively for locating and selecting the user's farms.
+
+**3. The farm cards are compact.**  
+They communicate identity, area, crop and condition without turning into analytics dashboards.
+
+**4. The Add Farm action is always accessible.**  
+It remains fixed at the bottom of the sidebar.
+
+**5. The map is genuinely interactive.**  
+Satellite imagery, search, zoom, location, polygons and farm selection must all work.
+
+**6. The farm boundaries are real geographic data.**  
+Area, perimeter and location must be calculated from stored geometry.
+
+**7. Farm health colors are evidence-driven.**  
+The map must not manufacture agricultural conclusions from satellite appearance alone.
+
+**8. The right panel remains removed.**  
+Detailed analytics belong to Deep Analysis, crop information belongs to Crop Rotation, and supporting evidence belongs to Evidence.
+
+**9. The interface stays visually restrained.**  
+Use dark charcoal/navy surfaces, crisp borders, subtle teal accents, natural satellite imagery and clear typography.
+
+**10. No decorative functionality.**  
+Every visible button, card, status, measurement and control must correspond to a real application feature.
+
+The result should be a dedicated geographic workspace inside Field Shift: visually focused, technically reliable, and integrated with the rest of the agricultural platform without duplicating its other pages.

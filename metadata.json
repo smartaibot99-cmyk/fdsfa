@@ -1,0 +1,10 @@
+{
+  "name": "Remix Remix Remix Remix Remix Remix Remix Remix Remix Remix Remix Field Shift — Multi-Season Crop Rotation with NASA Data",
+  "description": "Multi-season crop rotation decision support web app powered by NASA Earth observation data with climate resilience modeling and What-If simulation.",
+  "requestFramePermissions": [
+    "geolocation"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
