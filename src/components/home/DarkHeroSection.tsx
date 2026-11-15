@@ -214,13 +214,13 @@ export const DarkHeroSection: React.FC<HeroShowcaseProps> = ({
           variantClass: 'fs-feature-card-light fs-feature-card-light--1',
           title: 'Explore Sources',
           description: 'Access trusted geospatial data across the web.',
-          contourColor: '#00AEEB',
+          contourColor: '#0284C7',
           icon: Globe,
-          iconColor: '#078DEB',
-          iconBg: '#B9E9FA',
-          iconBorder: '#45B8F9',
+          iconColor: '#075985',
+          iconBg: '#E0F2FE',
+          iconBorder: 'rgba(7, 89, 133, 0.30)',
           iconGlow:
-            '0 0 12px rgba(0, 153, 255, 0.24), inset 0 1px 3px rgba(255, 255, 255, 0.65)',
+            '0 2px 10px rgba(7, 89, 133, 0.14), inset 0 1px 2px rgba(255, 255, 255, 0.85)',
           onClick: () => navigate('/data'),
         },
         {
@@ -228,41 +228,41 @@ export const DarkHeroSection: React.FC<HeroShowcaseProps> = ({
           variantClass: 'fs-feature-card-light fs-feature-card-light--2',
           title: 'Check Claims',
           description: 'Verify information with AI precision.',
-          contourColor: '#00CFC1',
+          contourColor: '#047857',
           icon: ShieldCheck,
-          iconColor: '#00464C',
-          iconBg: '#A7E8D9',
-          iconBorder: '#2DE1BC',
+          iconColor: '#065F46',
+          iconBg: '#D1FAE5',
+          iconBorder: 'rgba(4, 120, 87, 0.30)',
           iconGlow:
-            '0 0 12px rgba(0, 226, 184, 0.30), inset 0 1px 3px rgba(255, 255, 255, 0.65)',
-          onClick: () => navigate('/analyze'),
+            '0 2px 10px rgba(4, 120, 87, 0.14), inset 0 1px 2px rgba(255, 255, 255, 0.85)',
+          onClick: () => navigate('/my-farms'),
         },
         {
           id: 'see-evidence',
           variantClass: 'fs-feature-card-light fs-feature-card-light--3',
           title: 'See Evidence',
           description: 'Get clear, visual proof and insights.',
-          contourColor: '#168AFF',
+          contourColor: '#0369A1',
           icon: BarChart3,
-          iconColor: '#075DAE',
-          iconBg: '#B6DDF5',
-          iconBorder: '#48B6FA',
+          iconColor: '#075985',
+          iconBg: '#DBEAFE',
+          iconBorder: 'rgba(7, 89, 133, 0.28)',
           iconGlow:
-            '0 0 12px rgba(0, 149, 245, 0.23), inset 0 1px 3px rgba(255, 255, 255, 0.65)',
-          onClick: () => navigate('/compare'),
+            '0 2px 10px rgba(7, 89, 133, 0.14), inset 0 1px 2px rgba(255, 255, 255, 0.85)',
+          onClick: () => navigate('/maps'),
         },
         {
           id: 'stay-informed',
           variantClass: 'fs-feature-card-light fs-feature-card-light--4',
           title: 'Stay Informed',
           description: 'Make confident decisions.',
-          contourColor: '#3EB868',
+          contourColor: '#047857',
           icon: Zap,
-          iconColor: '#F39A00',
-          iconBg: '#E5EAB5',
-          iconBorder: '#F1CF46',
+          iconColor: '#92400E',
+          iconBg: '#FEF3C7',
+          iconBorder: 'rgba(180, 83, 9, 0.30)',
           iconGlow:
-            '0 0 12px rgba(255, 190, 36, 0.30), inset 0 1px 3px rgba(255, 255, 255, 0.65)',
+            '0 2px 10px rgba(180, 83, 9, 0.14), inset 0 1px 2px rgba(255, 255, 255, 0.85)',
           onClick: onScrollToDashboard,
         },
       ]
@@ -293,7 +293,7 @@ export const DarkHeroSection: React.FC<HeroShowcaseProps> = ({
           iconBorder: 'rgba(0, 224, 186, 0.54)',
           iconGlow:
             '0 0 18px rgba(0, 224, 186, 0.30), inset 0 1px 2px rgba(132, 255, 234, 0.24)',
-          onClick: () => navigate('/analyze'),
+          onClick: () => navigate('/my-farms'),
         },
         {
           id: 'see-evidence',
@@ -307,7 +307,7 @@ export const DarkHeroSection: React.FC<HeroShowcaseProps> = ({
           iconBorder: 'rgba(28, 174, 245, 0.54)',
           iconGlow:
             '0 0 18px rgba(22, 166, 245, 0.30), inset 0 1px 2px rgba(128, 220, 255, 0.22)',
-          onClick: () => navigate('/compare'),
+          onClick: () => navigate('/maps'),
         },
         {
           id: 'stay-informed',
@@ -336,10 +336,10 @@ export const DarkHeroSection: React.FC<HeroShowcaseProps> = ({
             isLight
               ? {
                   background:
-                    'linear-gradient(100deg, rgba(223, 255, 249, 0.70), rgba(218, 245, 255, 0.64))',
-                  border: '1px solid rgba(49, 219, 201, 0.72)',
+                    'linear-gradient(100deg, rgba(255, 255, 255, 0.86), rgba(224, 245, 254, 0.82))',
+                  border: '1px solid rgba(7, 89, 133, 0.26)',
                   boxShadow:
-                    '0 0 12px rgba(0, 215, 185, 0.12), inset 0 1px 2px rgba(255, 255, 255, 0.70)',
+                    '0 2px 12px rgba(7, 89, 133, 0.10), inset 0 1px 2px rgba(255, 255, 255, 0.90)',
                   backdropFilter: 'blur(12px)',
                   WebkitBackdropFilter: 'blur(12px)',
                 }
@@ -356,8 +356,8 @@ export const DarkHeroSection: React.FC<HeroShowcaseProps> = ({
         >
           <ConditionsLeafIcon className="w-[17px] h-[17px] shrink-0" dark={isLight} />
           <span
-            className={`text-[12px] sm:text-[13px] font-normal tracking-[0.01em] whitespace-nowrap ${
-              isLight ? 'text-[#092B42]' : 'text-[#E5F4FF]'
+            className={`text-[12px] sm:text-[13px] font-medium tracking-[0.01em] whitespace-nowrap ${
+              isLight ? 'text-[#102A43]' : 'text-[#E5F4FF]'
             }`}
           >
             Geospatial Intelligence for a Sustainable Tomorrow.
@@ -366,14 +366,14 @@ export const DarkHeroSection: React.FC<HeroShowcaseProps> = ({
 
         {/* Main Hero Heading */}
         <h1 className="text-[44px] sm:text-[58px] lg:text-[70px] xl:text-[78px] font-extrabold leading-[0.99] tracking-[-0.042em] m-0">
-          <span className={`block ${isLight ? 'text-[#071D42]' : 'text-[#F3F6FF]'}`}>
+          <span className={`block ${isLight ? 'text-[#102A43]' : 'text-[#F3F6FF]'}`}>
             Smarter decisions.
           </span>
           <span
             className="block bg-clip-text text-transparent pb-1"
             style={{
               backgroundImage: isLight
-                ? 'linear-gradient(95deg, #168AFF 0%, #00AEEB 34%, #00CFC1 65%, #00D89C 100%)'
+                ? 'linear-gradient(95deg, #075985 0%, #047857 100%)'
                 : 'linear-gradient(95deg, #168BFF 0%, #00B6F0 35%, #00D6B7 67%, #00E9A7 100%)',
             }}
           >
@@ -384,7 +384,7 @@ export const DarkHeroSection: React.FC<HeroShowcaseProps> = ({
         {/* Supporting Description */}
         <p
           className={`mt-4 max-w-[540px] text-[16px] sm:text-[18px] xl:text-[19px] font-normal leading-[1.55] ${
-            isLight ? 'text-[#344C6C]' : 'text-[rgba(218,231,249,0.91)]'
+            isLight ? 'text-[#334155]' : 'text-[rgba(218,231,249,0.91)]'
           }`}
         >
           Harness the power of geospatial intelligence to
@@ -401,11 +401,11 @@ export const DarkHeroSection: React.FC<HeroShowcaseProps> = ({
               isLight
                 ? {
                     background:
-                      'linear-gradient(105deg, #08B9FF 0%, #00D5D2 57%, #39EFA9 100%)',
-                    border: '1px solid rgba(255, 255, 255, 0.34)',
-                    color: '#071D42',
+                      'linear-gradient(105deg, #075985 0%, #0E7490 52%, #047857 100%)',
+                    border: '1px solid rgba(255, 255, 255, 0.36)',
+                    color: '#FFFFFF',
                     boxShadow:
-                      '0 4px 12px rgba(0, 159, 235, 0.25), 0 0 19px rgba(0, 198, 220, 0.20), 0 0 30px rgba(0, 225, 170, 0.13), inset 0 1px 2px rgba(255, 255, 255, 0.40)',
+                      '0 8px 20px rgba(7, 89, 133, 0.28), 0 2px 6px rgba(4, 120, 87, 0.22), inset 0 1px 1px rgba(255, 255, 255, 0.30)',
                   }
                 : {
                     background:
@@ -417,21 +417,21 @@ export const DarkHeroSection: React.FC<HeroShowcaseProps> = ({
             }
           >
             <span className="inline-flex items-center gap-2.5">
-              <ConditionsLeafIcon className="w-[22px] h-[22px] shrink-0" dark />
+              <ConditionsLeafIcon className="w-[22px] h-[22px] shrink-0" dark={!isLight} />
               <span>Explore the Platform</span>
             </span>
             <ArrowRight
-              className={`w-[18px] h-[18px] ${isLight ? 'text-[#071D42]' : 'text-[#031F2C]'}`}
+              className={`w-[18px] h-[18px] ${isLight ? 'text-white' : 'text-[#031F2C]'}`}
               strokeWidth={2.2}
             />
           </button>
 
           <button
             type="button"
-            onClick={() => navigate('/analyze?demo=1&activity=farming')}
+            onClick={onScrollToDashboard}
             className={`group inline-flex items-center gap-3.5 text-[15px] font-medium transition-colors cursor-pointer ${
               isLight
-                ? 'text-[#071D42] hover:text-[#04122B]'
+                ? 'text-[#102A43] hover:text-[#075985]'
                 : 'text-[#ECF4FF] hover:text-white'
             }`}
           >
@@ -440,12 +440,12 @@ export const DarkHeroSection: React.FC<HeroShowcaseProps> = ({
               style={
                 isLight
                   ? {
-                      background: 'rgba(220, 243, 255, 0.57)',
-                      border: '1px solid rgba(63, 169, 244, 0.74)',
+                      background: 'rgba(255, 255, 255, 0.86)',
+                      border: '1px solid rgba(7, 89, 133, 0.32)',
                       backdropFilter: 'blur(10px)',
                       WebkitBackdropFilter: 'blur(10px)',
                       boxShadow:
-                        'inset 0 1px 2px rgba(255, 255, 255, 0.65), 0 2px 9px rgba(31, 132, 215, 0.10)',
+                        'inset 0 1px 2px rgba(255, 255, 255, 0.90), 0 4px 12px rgba(7, 89, 133, 0.14)',
                     }
                   : {
                       background: 'rgba(3, 37, 65, 0.68)',
@@ -458,7 +458,7 @@ export const DarkHeroSection: React.FC<HeroShowcaseProps> = ({
             >
               <Play
                 className={`w-[18px] h-[18px] fill-current ml-0.5 ${
-                  isLight ? 'text-[#071D42]' : 'text-white'
+                  isLight ? 'text-[#075985]' : 'text-white'
                 }`}
               />
             </span>
@@ -505,14 +505,14 @@ export const DarkHeroSection: React.FC<HeroShowcaseProps> = ({
                   <div className="flex-1 min-w-0">
                     <div
                       className={`text-[16px] xl:text-[16.5px] font-semibold leading-[1.3] ${
-                        isLight ? 'text-[#071E3A]' : 'text-[#F4F8FF]'
+                        isLight ? 'text-[#102A43]' : 'text-[#F4F8FF]'
                       }`}
                     >
                       {card.title}
                     </div>
                     <p
                       className={`mt-1.5 text-[12.5px] xl:text-[13px] font-normal leading-[1.48] max-w-[172px] ${
-                        isLight ? 'text-[#29435B]' : 'text-[#B8CDE2]'
+                        isLight ? 'text-[#334155]' : 'text-[#B8CDE2]'
                       }`}
                     >
                       {card.description}
@@ -526,10 +526,10 @@ export const DarkHeroSection: React.FC<HeroShowcaseProps> = ({
                     style={
                       isLight
                         ? {
-                            background: 'rgba(195, 229, 238, 0.53)',
-                            border: '1px solid rgba(108, 169, 190, 0.48)',
-                            color: '#29475D',
-                            boxShadow: 'inset 0 1px 2px rgba(255, 255, 255, 0.55)',
+                            background: 'rgba(255, 255, 255, 0.78)',
+                            border: '1px solid rgba(7, 89, 133, 0.26)',
+                            color: '#102A43',
+                            boxShadow: 'inset 0 1px 2px rgba(255, 255, 255, 0.90)',
                           }
                         : {
                             background: 'rgba(3, 44, 73, 0.58)',

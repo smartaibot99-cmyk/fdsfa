@@ -20,9 +20,6 @@ export const Footer: React.FC = () => {
           <Link to="/about" className="hover:text-[var(--text-primary)] transition-colors">
             AI Disclosure
           </Link>
-          <Link to="/compare" className="hover:text-[var(--text-primary)] transition-colors">
-            Compare Locations
-          </Link>
         </div>
       </div>
     </footer>

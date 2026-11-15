@@ -2,7 +2,6 @@ import React, { useMemo, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   AlertTriangle,
-  BarChart3,
   Bell,
   Database,
   Home,
@@ -10,7 +9,6 @@ import {
   Map as MapIcon,
   Menu,
   Moon,
-  Scale,
   Settings,
   Sprout,
   Sun,
@@ -35,8 +33,6 @@ const NAV_ITEMS = [
   { to: '/', label: 'Home', Icon: Home },
   { to: '/my-farms', label: 'My Farms', Icon: Sprout },
   { to: '/maps', label: 'Maps', Icon: MapIcon },
-  { to: '/analyze', label: 'Analyze', Icon: BarChart3 },
-  { to: '/compare', label: 'Compare', Icon: Scale },
   { to: '/data', label: 'Data Sources', Icon: Database },
   { to: '/about', label: 'About', Icon: Info },
 ] as const;
@@ -78,7 +74,7 @@ export const Header: React.FC<HeaderProps> = ({ theme, onToggleTheme, overlay = 
         : 'Coordinates not set')
     : 'No active farm';
 
-  const handleOpenWorkspace = (path = '/analyze?mode=farm') => {
+  const handleOpenWorkspace = (path = '/my-farms') => {
     if (currentFarm) {
       setActiveFarmId(currentFarm.id);
     }
@@ -111,7 +107,7 @@ export const Header: React.FC<HeaderProps> = ({ theme, onToggleTheme, overlay = 
               <FieldShiftLogoLeaf className="w-[44px] h-[44px] sm:w-[49px] sm:h-[49px] shrink-0 transition-transform duration-200 group-hover:scale-105" />
               <span
                 className={`text-[19px] sm:text-[22px] font-extrabold leading-none tracking-[0.9px] uppercase ${
-                  isLight ? 'text-[#071C39]' : 'text-[#F3F6FF]'
+                  isLight ? 'text-[#102A43]' : 'text-[#F3F6FF]'
                 }`}
               >
                 ANCHOR
@@ -126,12 +122,12 @@ export const Header: React.FC<HeaderProps> = ({ theme, onToggleTheme, overlay = 
                 isLight
                   ? {
                       background:
-                        'linear-gradient(110deg, rgba(225, 246, 255, 0.65), rgba(199, 232, 252, 0.74), rgba(227, 246, 255, 0.67))',
-                      border: '1px solid rgba(130, 218, 255, 0.65)',
+                        'linear-gradient(110deg, rgba(255, 255, 255, 0.80), rgba(232, 246, 255, 0.86), rgba(255, 255, 255, 0.80))',
+                      border: '1px solid rgba(7, 89, 133, 0.20)',
                       backdropFilter: 'blur(20px) saturate(140%)',
                       WebkitBackdropFilter: 'blur(20px) saturate(140%)',
                       boxShadow:
-                        '0 4px 20px rgba(42, 143, 214, 0.12), inset 0 1px 2px rgba(255, 255, 255, 0.75)',
+                        '0 4px 20px rgba(7, 89, 133, 0.12), inset 0 1px 2px rgba(255, 255, 255, 0.90)',
                     }
                   : {
                       background:
@@ -155,16 +151,16 @@ export const Header: React.FC<HeaderProps> = ({ theme, onToggleTheme, overlay = 
                       key={to}
                       to={to}
                       className={`relative inline-flex items-center justify-center gap-2 h-[43px] px-4 xl:px-5 rounded-full text-[13.5px] xl:text-[14px] font-medium whitespace-nowrap shrink-0 transition-all ${
-                        isLight ? 'text-[#071D42]' : 'text-white'
+                        isLight ? 'text-[#075985] font-semibold' : 'text-white'
                       }`}
                       style={
                         isLight
                           ? {
                               background:
-                                'linear-gradient(120deg, rgba(175, 243, 255, 0.90), rgba(179, 255, 239, 0.80))',
-                              border: '1px solid rgba(0, 212, 205, 0.34)',
+                                'linear-gradient(120deg, rgba(224, 242, 254, 0.95), rgba(209, 250, 229, 0.88))',
+                              border: '1px solid rgba(7, 89, 133, 0.26)',
                               boxShadow:
-                                '0 0 13px rgba(0, 220, 220, 0.23), inset 0 1px 2px rgba(255, 255, 255, 0.75)',
+                                '0 2px 10px rgba(7, 89, 133, 0.12), inset 0 1px 2px rgba(255, 255, 255, 0.90)',
                             }
                           : {
                               background:
@@ -177,7 +173,7 @@ export const Header: React.FC<HeaderProps> = ({ theme, onToggleTheme, overlay = 
                     >
                       <Icon
                         className={`w-[19px] h-[19px] ${
-                          isLight ? 'text-[#071D42]' : 'text-[#E9FFF7]'
+                          isLight ? 'text-[#075985]' : 'text-[#E9FFF7]'
                         }`}
                         strokeWidth={2}
                       />
@@ -185,11 +181,11 @@ export const Header: React.FC<HeaderProps> = ({ theme, onToggleTheme, overlay = 
                       <span
                         aria-hidden="true"
                         className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-[56%] h-[2px] rounded-full ${
-                          isLight ? 'bg-[#00E5C1]' : 'bg-[#00E9C4]'
+                          isLight ? 'bg-[#047857]' : 'bg-[#00E9C4]'
                         }`}
                         style={{
                           boxShadow: isLight
-                            ? '0 0 8px rgba(0, 226, 190, 0.85)'
+                            ? '0 0 6px rgba(4, 120, 87, 0.45)'
                             : '0 0 7px #00E9C4, 0 0 14px rgba(0, 233, 196, 0.78)',
                         }}
                       />
@@ -203,13 +199,13 @@ export const Header: React.FC<HeaderProps> = ({ theme, onToggleTheme, overlay = 
                     to={to}
                     className={`inline-flex items-center gap-1.5 xl:gap-2 px-2.5 xl:px-3.5 h-[43px] rounded-full text-[13.5px] xl:text-[14px] font-medium transition-colors whitespace-nowrap shrink-0 ${
                       isLight
-                        ? 'text-[#071D42] hover:bg-white/35'
+                        ? 'text-[#1E3A5F] hover:text-[#102A43] hover:bg-white/65'
                         : 'text-[#DCE9F7] hover:text-white hover:bg-white/[0.06]'
                     }`}
                   >
                     <Icon
                       className={`w-[18px] h-[18px] ${
-                        isLight ? 'text-[#071D42]' : 'text-[#DCE9F7]'
+                        isLight ? 'text-[#1E3A5F]' : 'text-[#DCE9F7]'
                       }`}
                       strokeWidth={1.9}
                     />
@@ -228,19 +224,19 @@ export const Header: React.FC<HeaderProps> = ({ theme, onToggleTheme, overlay = 
                 title={isLight ? 'Switch to Dark Mode' : 'Switch to Light Mode'}
                 className={`relative inline-flex items-center justify-center w-[42px] h-[42px] sm:w-[46px] sm:h-[46px] rounded-full transition-all duration-500 cursor-pointer overflow-hidden ${
                   isLight
-                    ? 'bg-[rgba(216,241,255,0.62)] hover:bg-[rgba(228,246,255,0.86)] text-[#071D42] border border-[rgba(126,214,255,0.62)]'
+                    ? 'bg-[rgba(255,255,255,0.80)] hover:bg-white text-[#102A43] border border-[rgba(7,89,133,0.22)]'
                     : 'text-[#F1F7FF] hover:bg-[#063B66]/70 border border-[rgba(48,162,235,0.34)] bg-[rgba(3,33,60,0.58)]'
                 }`}
                 style={{
                   backdropFilter: 'blur(14px)',
                   boxShadow: isLight
-                    ? '0 2px 10px rgba(31, 132, 215, 0.10), inset 0 1px 2px rgba(255, 255, 255, 0.75)'
+                    ? '0 2px 10px rgba(7, 89, 133, 0.12), inset 0 1px 2px rgba(255, 255, 255, 0.90)'
                     : '0 0 12px rgba(0, 128, 220, 0.14), inset 0 1px 1px rgba(170, 225, 255, 0.10)',
                 }}
               >
                 <Sun
                   className={`w-[20px] h-[20px] transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
-                    isLight ? 'text-[#071D42] rotate-0 scale-100' : 'text-[#F1F7FF] rotate-0 scale-100'
+                    isLight ? 'text-[#102A43] rotate-0 scale-100' : 'text-[#F1F7FF] rotate-0 scale-100'
                   }`}
                   strokeWidth={1.9}
                 />
@@ -258,13 +254,13 @@ export const Header: React.FC<HeaderProps> = ({ theme, onToggleTheme, overlay = 
                 title="Display Preferences"
                 className={`inline-flex items-center justify-center w-[42px] h-[42px] sm:w-[46px] sm:h-[46px] rounded-full transition-colors cursor-pointer ${
                   isLight
-                    ? 'bg-[rgba(216,241,255,0.62)] hover:bg-[rgba(228,246,255,0.86)] text-[#071D42] border border-[rgba(126,214,255,0.62)]'
+                    ? 'bg-[rgba(255,255,255,0.80)] hover:bg-white text-[#102A43] border border-[rgba(7,89,133,0.22)]'
                     : 'text-[#F1F7FF] hover:bg-[#063B66]/70 border border-[rgba(48,162,235,0.34)] bg-[rgba(3,33,60,0.58)]'
                 }`}
                 style={{
                   backdropFilter: 'blur(14px)',
                   boxShadow: isLight
-                    ? '0 2px 10px rgba(31, 132, 215, 0.10), inset 0 1px 2px rgba(255, 255, 255, 0.75)'
+                    ? '0 2px 10px rgba(7, 89, 133, 0.12), inset 0 1px 2px rgba(255, 255, 255, 0.90)'
                     : '0 0 12px rgba(0, 128, 220, 0.14), inset 0 1px 1px rgba(170, 225, 255, 0.10)',
                 }}
               >
@@ -281,26 +277,30 @@ export const Header: React.FC<HeaderProps> = ({ theme, onToggleTheme, overlay = 
                 aria-label="View farm notifications"
                 className={`relative inline-flex items-center justify-center w-[42px] h-[42px] sm:w-[46px] sm:h-[46px] rounded-full transition-colors cursor-pointer ${
                   isLight
-                    ? 'bg-[rgba(216,241,255,0.62)] hover:bg-[rgba(228,246,255,0.86)] text-[#071D42] border border-[rgba(126,214,255,0.62)]'
+                    ? 'bg-[rgba(255,255,255,0.80)] hover:bg-white text-[#102A43] border border-[rgba(7,89,133,0.22)]'
                     : 'text-[#F1F7FF] hover:bg-[#063B66]/70 border border-[rgba(48,162,235,0.34)] bg-[rgba(3,33,60,0.58)]'
                 }`}
                 style={{
                   backdropFilter: 'blur(14px)',
                   boxShadow: isLight
-                    ? '0 2px 10px rgba(31, 132, 215, 0.10), inset 0 1px 2px rgba(255, 255, 255, 0.75)'
+                    ? '0 2px 10px rgba(7, 89, 133, 0.12), inset 0 1px 2px rgba(255, 255, 255, 0.90)'
                     : '0 0 12px rgba(0, 128, 220, 0.14), inset 0 1px 1px rgba(170, 225, 255, 0.10)',
                 }}
               >
                 <Bell
-                  className={`w-[20px] h-[20px] ${isLight ? 'text-[#071D42]' : 'text-[#F1F7FF]'}`}
+                  className={`w-[20px] h-[20px] ${isLight ? 'text-[#102A43]' : 'text-[#F1F7FF]'}`}
                   strokeWidth={1.9}
                 />
                 {activeAlerts.length > 0 && (
                   <span
                     aria-hidden="true"
-                    className="absolute top-1.5 right-1.5 w-[8px] h-[8px] rounded-full bg-[#00E5C1] border border-[#03442E]"
+                    className={`absolute top-1.5 right-1.5 w-[8px] h-[8px] rounded-full ${
+                      isLight ? 'bg-[#047857] border border-white' : 'bg-[#00E5C1] border border-[#03442E]'
+                    }`}
                     style={{
-                      boxShadow: '0 0 8px rgba(0, 229, 193, 0.90)',
+                      boxShadow: isLight
+                        ? '0 0 4px rgba(4, 120, 87, 0.50)'
+                        : '0 0 8px rgba(0, 229, 193, 0.90)',
                     }}
                   />
                 )}
@@ -319,11 +319,11 @@ export const Header: React.FC<HeaderProps> = ({ theme, onToggleTheme, overlay = 
                   isLight
                     ? {
                         background:
-                          'linear-gradient(145deg, rgba(208, 236, 255, 0.78), rgba(182, 224, 250, 0.74))',
-                        border: '1.5px solid rgba(116, 206, 248, 0.72)',
+                          'linear-gradient(145deg, rgba(255, 255, 255, 0.88), rgba(224, 242, 254, 0.84))',
+                        border: '1.5px solid rgba(7, 89, 133, 0.28)',
                         backdropFilter: 'blur(14px)',
                         boxShadow:
-                          '0 2px 10px rgba(31, 132, 215, 0.12), inset 0 1px 2px rgba(255, 255, 255, 0.78)',
+                          '0 2px 10px rgba(7, 89, 133, 0.14), inset 0 1px 2px rgba(255, 255, 255, 0.90)',
                       }
                     : {
                         background:
@@ -337,18 +337,20 @@ export const Header: React.FC<HeaderProps> = ({ theme, onToggleTheme, overlay = 
               >
                 <span
                   className={`text-[16px] font-semibold leading-none ${
-                    isLight ? 'text-[#071D42]' : 'text-[#F4F9FF]'
+                    isLight ? 'text-[#102A43]' : 'text-[#F4F9FF]'
                   }`}
                 >
                   B
                 </span>
                 <span
                   aria-hidden="true"
-                  className={`absolute bottom-0.5 right-0.5 w-[9px] h-[9px] rounded-full bg-[#00E5C1] border-[1.5px] ${
-                    isLight ? 'border-[#D9F1FF]' : 'border-[#032645]'
+                  className={`absolute bottom-0.5 right-0.5 w-[9px] h-[9px] rounded-full border-[1.5px] ${
+                    isLight ? 'bg-[#047857] border-white' : 'bg-[#00E5C1] border-[#032645]'
                   }`}
                   style={{
-                    boxShadow: '0 0 8px rgba(0, 229, 193, 0.85)',
+                    boxShadow: isLight
+                      ? '0 0 4px rgba(4, 120, 87, 0.50)'
+                      : '0 0 8px rgba(0, 229, 193, 0.85)',
                   }}
                 />
               </button>
@@ -359,12 +361,12 @@ export const Header: React.FC<HeaderProps> = ({ theme, onToggleTheme, overlay = 
                 aria-label="Toggle navigation menu"
                 aria-expanded={mobileNavOpen}
                 className={`lg:hidden inline-flex items-center justify-center w-10 h-10 rounded-full cursor-pointer ${
-                  isLight ? 'text-[#071D42]' : 'text-[#EAF4FF]'
+                  isLight ? 'text-[#102A43]' : 'text-[#EAF4FF]'
                 }`}
                 style={{
-                  background: isLight ? 'rgba(218, 242, 255, 0.72)' : 'rgba(0, 42, 82, 0.55)',
+                  background: isLight ? 'rgba(255, 255, 255, 0.82)' : 'rgba(0, 42, 82, 0.55)',
                   border: isLight
-                    ? '1px solid rgba(130, 218, 255, 0.75)'
+                    ? '1px solid rgba(7, 89, 133, 0.24)'
                     : '1px solid rgba(45, 160, 255, 0.25)',
                   backdropFilter: 'blur(14px)',
                 }}
@@ -691,10 +693,10 @@ export const Header: React.FC<HeaderProps> = ({ theme, onToggleTheme, overlay = 
                   </div>
                   <button
                     type="button"
-                    onClick={() => handleOpenWorkspace('/analyze?mode=farm')}
+                    onClick={() => handleOpenWorkspace(currentFarm ? `/my-farms/${encodeURIComponent(currentFarm.id)}` : '/my-farms')}
                     className="w-full mt-1 py-2 px-3 rounded-xl text-xs font-semibold text-[#05281A] bg-[#20EDA0] hover:brightness-105 transition cursor-pointer"
                   >
-                    Open Smart Farm Workspace
+                    Open My Farms Workspace
                   </button>
                 </div>
               )}
@@ -819,10 +821,10 @@ export const Header: React.FC<HeaderProps> = ({ theme, onToggleTheme, overlay = 
               </button>
               <button
                 type="button"
-                onClick={() => handleOpenWorkspace('/analyze?mode=farm')}
+                onClick={() => handleOpenWorkspace(currentFarm ? `/my-farms/${encodeURIComponent(currentFarm.id)}` : '/my-farms')}
                 className="px-4 py-2 rounded-full text-xs font-semibold text-[#04281B] bg-[#20EDA0] hover:brightness-110 cursor-pointer"
               >
-                Run Full Farm Analysis →
+                Open Farm Workspace →
               </button>
             </div>
           </div>

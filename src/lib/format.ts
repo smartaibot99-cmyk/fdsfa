@@ -75,7 +75,7 @@ export function buildCsvExport(analysis: AnchorAnalysis): string {
   }
   rows.push('');
   rows.push('Historical NASA POWER Calendar Window Daily Samples');
-  rows.push('Date,Year,T2M_MAX (C),T2M_MIN (C),T2M (C),PRECTOTCORR (mm),WS10M (m/s),RH2M (%),ALLSKY_SFC_SW_DWN (kWh/m2)');
+  rows.push('Date,Year,T2M_MAX (C),T2M_MIN (C),T2M (C),PRECTOTCORR (mm),WS10M (m/s),RH2M (%),ALLSKY_SFC_SW_DWN (kWh/m2/day)');
   for (const pt of analysis.power?.windowDays ?? []) {
     rows.push(
       `${pt.date},${pt.year},${pt.tMaxC ?? ''},${pt.tMinC ?? ''},${pt.tMeanC ?? ''},${pt.precipMm ?? ''},${pt.windMs ?? ''},${pt.humidityPct ?? ''},${pt.solarKwhM2 ?? ''}`

@@ -11,6 +11,15 @@ import {
   getWaterQualityState,
   parseImportedFarmProfilesJson,
 } from '../src/lib/farmStorage';
+import {
+  NASA_SOLAR_PHYSICAL_MAX_KWH_M2_DAY,
+  PowerApiResponse,
+  fetchNasaPowerClimatology,
+  fetchNasaPowerRecent30Days,
+  parseNasaPowerClimatologyPayload,
+  parseNasaPowerRecent30Payload,
+  validateAndConvertNasaSolar,
+} from '../src/services/nasaPower';
 import { FarmProfile, PowerClimateResult } from '../src/types';
 
 let passed = 0;
@@ -441,4 +450,248 @@ test('Legacy profiles missing moistureUnit/moistureDepth deserialize and analyze
   assertEqual(rep.completenessPct, 87, 'Legacy Apex Farms completeness preserved at 87%');
 });
 
-console.log(`\nAll ${passed} deterministic verification tests passed.`);
+// ---------------------------------------------------------------------------
+// 8–18. NASA POWER solar irradiation conversion & validation (11 required tests)
+// ---------------------------------------------------------------------------
+function makeMockPowerPayload(
+  dailySolarByYmd: Record<string, number>,
+  solarUnit: string = 'MJ/m^2/day'
+): PowerApiResponse {
+  const T2M: Record<string, number> = {};
+  const T2M_MAX: Record<string, number> = {};
+  const T2M_MIN: Record<string, number> = {};
+  const PRECTOTCORR: Record<string, number> = {};
+  const WS10M: Record<string, number> = {};
+  const RH2M: Record<string, number> = {};
+  for (const key of Object.keys(dailySolarByYmd)) {
+    T2M[key] = 20.0;
+    T2M_MAX[key] = 26.0;
+    T2M_MIN[key] = 14.0;
+    PRECTOTCORR[key] = 0.5;
+    WS10M[key] = 2.5;
+    RH2M[key] = 50;
+  }
+  return {
+    parameters: {
+      ALLSKY_SFC_SW_DWN: {
+        units: solarUnit,
+        longname: 'All Sky Surface Shortwave Downward Irradiance',
+      },
+    },
+    properties: {
+      parameter: {
+        T2M,
+        T2M_MAX,
+        T2M_MIN,
+        PRECTOTCORR,
+        WS10M,
+        RH2M,
+        ALLSKY_SFC_SW_DWN: dailySolarByYmd,
+      },
+    },
+  };
+}
+
+test('Solar 1: 14.5 MJ/m²/day converts to approximately 4.03 kWh/m²/day', () => {
+  const res = validateAndConvertNasaSolar(14.5, 'MJ/m^2/day');
+  assertEqual(res.status, 'valid', '14.5 MJ/m²/day status is valid');
+  assertEqual(res.valueKwhM2, 4.03, '14.5 / 3.6 rounds after conversion to 4.03 kWh/m²/day');
+  assertEqual(res.isZero, false, '14.5 is not zero');
+});
+
+test('Solar 2: A valid zero remains zero and is distinct from missing/rejected', () => {
+  const res = validateAndConvertNasaSolar(0, 'MJ/m^2/day');
+  assertEqual(res.status, 'valid', '0 solar status is valid');
+  assertEqual(res.valueKwhM2, 0, '0 remains 0');
+  assertEqual(res.isZero, true, 'isZero flag distinguishes valid 0 from missing');
+
+  const payload = makeMockPowerPayload({ '20240415': 0 });
+  const parsed = parseNasaPowerClimatologyPayload(payload, {
+    lat: 31.95,
+    lon: 35.91,
+    targetDate: '2026-04-15',
+  });
+  assertEqual(parsed.windowDays[0].solarKwhM2, 0, 'windowDays preserves 0');
+  assertEqual(parsed.windowDays[0].solarStatus, 'valid', 'windowDays marks 0 as valid');
+  assertEqual(parsed.meanSolarKwhM2, 0, 'meanSolarKwhM2 equals 0 when valid day is 0');
+  assertEqual(parsed.solarValidation?.zeroDays, 1, 'solarValidation counts valid zeroDays');
+  assertEqual(parsed.solarValidation?.rejectedDays, 0, '0 is not counted as rejected');
+});
+
+test('Solar 3: Missing values (null and undefined) are rejected', () => {
+  const rNull = validateAndConvertNasaSolar(null, 'MJ/m^2/day');
+  assertEqual(rNull.valueKwhM2, null, 'null rejected');
+  assertEqual(rNull.status, 'missing', 'null flagged as missing');
+
+  const rUndef = validateAndConvertNasaSolar(undefined, 'MJ/m^2/day');
+  assertEqual(rUndef.valueKwhM2, null, 'undefined rejected');
+  assertEqual(rUndef.status, 'missing', 'undefined flagged as missing');
+});
+
+test('Solar 4: NaN and Infinity are rejected', () => {
+  for (const bad of [Number.NaN, Number.POSITIVE_INFINITY, Number.NEGATIVE_INFINITY]) {
+    const r = validateAndConvertNasaSolar(bad, 'MJ/m^2/day');
+    assertEqual(r.valueKwhM2, null, `${String(bad)} returns null`);
+    assertEqual(r.status, 'invalid', `${String(bad)} status is invalid`);
+  }
+});
+
+test('Solar 5: NASA sentinel values (-999, -999.0) are rejected', () => {
+  for (const sentinel of [-999, -999.0, -900]) {
+    const r = validateAndConvertNasaSolar(sentinel, 'MJ/m^2/day');
+    assertEqual(r.valueKwhM2, null, `sentinel ${sentinel} returns null`);
+    assertEqual(r.status, 'missing', `sentinel ${sentinel} marked missing`);
+  }
+});
+
+test('Solar 6: Negative solar values are rejected', () => {
+  for (const neg of [-0.01, -3.5, -14.5]) {
+    const r = validateAndConvertNasaSolar(neg, 'MJ/m^2/day');
+    assertEqual(r.valueKwhM2, null, `negative ${neg} returns null`);
+    assertEqual(r.status, 'invalid', `negative ${neg} marked invalid`);
+  }
+});
+
+test('Solar 7: Invalid values do not affect the calculated mean', () => {
+  const payload = makeMockPowerPayload({
+    '20240413': 14.5, // -> 4.03
+    '20240414': -999, // sentinel -> excluded
+    '20240415': -4.2, // negative -> excluded
+    '20240416': Number.NaN, // NaN -> excluded
+    '20240417': 7.2, // -> 2.00
+  });
+  const parsed = parseNasaPowerClimatologyPayload(payload, {
+    lat: 31.95,
+    lon: 35.91,
+    targetDate: '2026-04-15',
+  });
+  // Mean of valid converted days (4.03 and 2.00) = 3.015 -> 3.02
+  assertEqual(parsed.meanSolarKwhM2, 3.02, 'Invalid values excluded from meanSolarKwhM2');
+  assertEqual(parsed.solarValidation?.validDays, 2, 'Only 2 valid days included');
+  assertEqual(parsed.solarValidation?.rejectedDays, 3, '3 invalid/sentinel days excluded');
+});
+
+async function runAsyncSolarTests() {
+  // Solar 8: Both historical and recent 30-day functions use the same conversion
+  const originalFetch = globalThis.fetch;
+  try {
+    const mockClimPayload = makeMockPowerPayload({
+      '20240415': 14.5,
+      '20240416': 18.0,
+    });
+    const todayMinus6 = new Date(Date.now() - 6 * 86400000).toISOString().slice(0, 10).replace(/-/g, '');
+    const todayMinus7 = new Date(Date.now() - 7 * 86400000).toISOString().slice(0, 10).replace(/-/g, '');
+    const mockRecentPayload = makeMockPowerPayload({
+      [todayMinus7]: 14.5,
+      [todayMinus6]: 18.0,
+    });
+
+    globalThis.fetch = (async (input: RequestInfo | URL) => {
+      const url = String(input);
+      const isRecent = url.includes(`start=${todayMinus7}`) || !url.includes('0101');
+      const body = isRecent ? mockRecentPayload : mockClimPayload;
+      return new Response(JSON.stringify(body), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }) as typeof fetch;
+
+    const clim = await fetchNasaPowerClimatology(32.111, 35.111, '2026-04-15');
+    const recent = await fetchNasaPowerRecent30Days(32.111, 35.111);
+
+    assertEqual(clim.windowDays[0].solarKwhM2, 4.03, 'fetchNasaPowerClimatology converts 14.5 MJ/m²/day -> 4.03 kWh/m²/day');
+    assertEqual(recent.windowDays[0].solarKwhM2, 4.03, 'fetchNasaPowerRecent30Days converts 14.5 MJ/m²/day -> 4.03 kWh/m²/day');
+    // Mean of 4.03 and 5.00 = 4.515 -> 4.52
+    assertEqual(clim.meanSolarKwhM2, 4.52, 'Climatology mean uses converted values');
+    assertEqual(recent.meanSolarKwhM2, 4.52, 'Recent 30d mean matches climatology conversion');
+    assertEqual(clim.solarUnit, 'kWh/m²/day', 'Climatology solarUnit is kWh/m²/day');
+    assertEqual(recent.solarUnit, 'kWh/m²/day', 'Recent 30d solarUnit is kWh/m²/day');
+    passed++;
+    console.log('PASS: Solar 8: Both fetchNasaPowerClimatology() and fetchNasaPowerRecent30Days() use identical conversion');
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+
+  // Solar 9: Report displays corrected value and correct terminology
+  {
+    const apex = makeApexFarmsProfile();
+    const clim = parseNasaPowerClimatologyPayload(
+      makeMockPowerPayload({ '20240415': 14.5 }),
+      { lat: 31.95, lon: 35.91, targetDate: '2026-04-15' }
+    );
+    const report = generateDeterministicFarmAnalysis(apex, clim, null);
+    const summary = report.externalDataStatus.powerSummary ?? '';
+    assert(summary.includes('mean daily solar irradiation 4.03 kWh/m²/day'), 'Report summary displays converted value and terminology');
+    assert(!/solar irradiance/i.test(summary), 'Report summary never uses instantaneous solar irradiance wording');
+
+    const secF = report.sections.find((s) => s.key === 'F')!;
+    assert(secF.items[0].detail.includes('mean daily solar irradiation 4.03 kWh/m²/day'), 'Section F detail uses corrected value and terminology');
+    assert(
+      secF.items[0].supportingExternalData.some((s) => s.includes('mean daily solar irradiation 4.03 kWh/m²/day')),
+      'Section F supportingExternalData uses corrected value and terminology'
+    );
+    passed++;
+    console.log('PASS: Solar 9: Report displays corrected value (4.03 kWh/m²/day) and "mean daily solar irradiation" terminology');
+  }
+
+  // Solar 10: No duplicate conversion occurs
+  {
+    const apex = makeApexFarmsProfile();
+    const clim = parseNasaPowerClimatologyPayload(
+      makeMockPowerPayload({ '20240415': 14.5 }, 'MJ/m^2/day'),
+      { lat: 31.95, lon: 35.91, targetDate: '2026-04-15' }
+    );
+    const report = generateDeterministicFarmAnalysis(apex, clim, null);
+    const summary = report.externalDataStatus.powerSummary ?? '';
+    assert(!summary.includes('1.12'), 'Value 4.03 must not be divided by 3.6 a second time into 1.12');
+    assert(summary.includes('4.03 kWh/m²/day'), 'Single conversion 4.03 preserved into report');
+
+    // Also if API explicitly reports units in kW-hr/m^2/day, it must NOT divide by 3.6
+    const alreadyKwh = parseNasaPowerRecent30Payload(
+      makeMockPowerPayload({ '20240415': 4.03 }, 'kW-hr/m^2/day'),
+      { lat: 31.95, lon: 35.91, targetDate: '2026-04-15', yearsAnalyzed: [2024] }
+    );
+    assertEqual(alreadyKwh.meanSolarKwhM2, 4.03, 'Payloads already reporting kW-hr/m^2/day are not divided again');
+    passed++;
+    console.log('PASS: Solar 10: No duplicate conversion occurs across fetchers, parsers, or report engine');
+  }
+
+  // Solar 11: Physically implausible values are flagged appropriately
+  {
+    const implausibleRawMj = 50.0; // 50 / 3.6 = 13.89 kWh/m²/day (> 12.0 kWh/m²/day physical bound)
+    const direct = validateAndConvertNasaSolar(implausibleRawMj, 'MJ/m^2/day');
+    assertEqual(direct.status, 'implausible', '50 MJ/m²/day (13.89 kWh/m²/day) flagged as implausible');
+    assertEqual(direct.valueKwhM2, null, 'Implausible value returns null');
+    assert(direct.reason?.includes(String(NASA_SOLAR_PHYSICAL_MAX_KWH_M2_DAY)), 'Implausible reason cites physical bound');
+
+    const payload = makeMockPowerPayload({
+      '20240414': 14.5, // valid 4.03
+      '20240415': 50.0, // implausible 13.89 -> excluded
+    });
+    const parsed = parseNasaPowerClimatologyPayload(payload, {
+      lat: 31.95,
+      lon: 35.91,
+      targetDate: '2026-04-15',
+    });
+    assertEqual(parsed.meanSolarKwhM2, 4.03, 'Implausible reading excluded from meanSolarKwhM2');
+    assertEqual(parsed.solarValidation?.implausibleDays, 1, 'solarValidation counts implausibleDays');
+    assert((parsed.solarValidation?.flags.length ?? 0) > 0, 'solarValidation populates flags');
+
+    const report = generateDeterministicFarmAnalysis(makeApexFarmsProfile(), parsed, null);
+    assert(
+      report.externalDataStatus.powerSummary?.includes('implausible daily solar reading(s) excluded'),
+      'Report summary surfaces implausible reading exclusion flag'
+    );
+    passed++;
+    console.log('PASS: Solar 11: Physically implausible values (>12.0 kWh/m²/day) are flagged and excluded from mean');
+  }
+}
+
+runAsyncSolarTests()
+  .then(() => {
+    console.log(`\nAll ${passed} deterministic verification tests passed.`);
+  })
+  .catch((err) => {
+    console.error(err);
+    process.exit(1);
+  });

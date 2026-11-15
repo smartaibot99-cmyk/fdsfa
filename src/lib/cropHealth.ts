@@ -39,7 +39,7 @@ export function computeCropHealthScore(
   const totalPrecip30d = precips.length ? precips.reduce((a, b) => a + b, 0) : null;
   // Convert 30d precip to annualized equivalent (mm/yr) for comparison against annualRainfallMm
   const annualizedPrecip = totalPrecip30d !== null ? (totalPrecip30d / precips.length) * 365 : null;
-  // Approximate bright sunlight hours/day from solar irradiance (kWh/m2/day * 1.45)
+  // Approximate bright sunlight hours/day from mean daily solar irradiation (kWh/m2/day * 1.45)
   const avgSolarKwh = solars.length ? solars.reduce((a, b) => a + b, 0) / solars.length : null;
   const approxSunHours = avgSolarKwh !== null ? avgSolarKwh * 1.45 : null;
   const avgHumidity = humidities.length ? humidities.reduce((a, b) => a + b, 0) / humidities.length : null;
@@ -85,7 +85,7 @@ export function computeCropHealthScore(
     sunScore = rangeFitScore(approxSunHours, ideal.sunlightHoursMin, ideal.sunlightHoursMax, 5);
     sunInRange = approxSunHours >= ideal.sunlightHoursMin && approxSunHours <= ideal.sunlightHoursMax;
   } else {
-    dataGaps.push('Surface solar irradiance (ALLSKY_SFC_SW_DWN) unavailable.');
+    dataGaps.push('Surface daily solar irradiation (ALLSKY_SFC_SW_DWN) unavailable.');
   }
 
   // Humidity / fungal vs desiccation balance (general healthy crop range 40-80%, higher for cocoa/rice/tea)

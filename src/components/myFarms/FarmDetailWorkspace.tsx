@@ -534,7 +534,7 @@ export const FarmDetailWorkspace: React.FC<FarmDetailWorkspaceProps> = ({
             className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[var(--accent)] text-white font-semibold hover:brightness-110 cursor-pointer"
           >
             <Play className="w-3.5 h-3.5" />
-            Deep Analysis
+            Assessment Reports
           </button>
         </div>
       </div>
@@ -1422,8 +1422,14 @@ export const FarmDetailWorkspace: React.FC<FarmDetailWorkspaceProps> = ({
                     </div>
                     <div className="text-[11px] text-[var(--text-secondary)]">
                       {climateResult?.meanSolarKwhM2 !== null && climateResult?.meanSolarKwhM2 !== undefined
-                        ? `Solar ${climateResult.meanSolarKwhM2.toFixed(1)} kWh/m²/d`
-                        : 'NASA POWER AG community'}
+                        ? `Mean daily solar irradiation ${climateResult.meanSolarKwhM2.toFixed(2)} kWh/m²/day${
+                            climateResult.solarValidation?.implausibleDays
+                              ? ` (${climateResult.solarValidation.implausibleDays} implausible reading excluded)`
+                              : ''
+                          }`
+                        : climateResult?.solarValidation?.flags?.length
+                          ? 'Solar irradiation excluded (invalid/implausible)'
+                          : 'NASA POWER AG community'}
                     </div>
                   </div>
                 </div>
@@ -1747,7 +1753,7 @@ export const FarmDetailWorkspace: React.FC<FarmDetailWorkspaceProps> = ({
               <div className="space-y-2.5">
                 {farmSnapshots.length === 0 ? (
                   <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-surface)] p-6 text-center text-[var(--text-secondary)]">
-                    No saved report snapshots yet. Click “Generate Fresh Snapshot” above or run Deep Analysis.
+                    No saved report snapshots yet. Click “Generate Fresh Snapshot” above to create one.
                   </div>
                 ) : (
                   farmSnapshots.map((s) => (

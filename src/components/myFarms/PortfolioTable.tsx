@@ -183,7 +183,7 @@ export const PortfolioTable: React.FC<PortfolioTableProps> = ({
             className="w-full px-3.5 py-2 text-left flex items-center gap-2.5 text-[var(--text-primary)] hover:bg-[var(--bg-elevated)] cursor-pointer"
           >
             <Play className="w-3.5 h-3.5 text-[var(--text-secondary)]" />
-            Run Deep Analysis
+            View Assessment Reports
           </button>
           <button
             type="button"

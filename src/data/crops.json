@@ -273,7 +273,7 @@
     ],
     "producingCountries": ["China", "India", "Kenya", "Sri Lanka", "Turkey"],
     "nutritionHighlights": "Rich in catechins (EGCG), L-theanine amino acids, polyphenols, and fluoride.",
-    "nasaMonitoring": "NASA POWER humidity and solar irradiance track flush cadence, while EONET and GPM alert river-valley estates to flood peaks."
+    "nasaMonitoring": "NASA POWER humidity and daily solar irradiation track flush cadence, while EONET and GPM alert river-valley estates to flood peaks."
   },
   {
     "id": "cotton",
@@ -583,7 +583,7 @@
     },
     "producingCountries": ["Ukraine", "Russia", "Argentina", "China", "United States"],
     "nutritionHighlights": "Rich in vitamin E (alpha-tocopherol), selenium, magnesium, and heart-healthy polyunsaturated fats.",
-    "nasaMonitoring": "NASA POWER solar irradiance (ALLSKY_SFC_SW_DWN) predicts oil content and seed-fill rates, while MODIS NDVI maps peak golden bloom."
+    "nasaMonitoring": "NASA POWER daily solar irradiation (ALLSKY_SFC_SW_DWN) predicts oil content and seed-fill rates, while MODIS NDVI maps peak golden bloom."
   },
   {
     "id": "tomatoes",
@@ -1289,6 +1289,6 @@
     },
     "producingCountries": ["Global Open NASA POWER Coverage (0.5° × 0.5° Grid)"],
     "nutritionHighlights": "Solar photons drive 100% of crop photosynthesis (PAR) and clean farm irrigation power.",
-    "nasaMonitoring": "NASA POWER ALLSKY_SFC_SW_DWN (CERES FLASHFlux) delivers daily surface solar irradiance in kWh/m²/day for any field on Earth."
+    "nasaMonitoring": "NASA POWER ALLSKY_SFC_SW_DWN (CERES FLASHFlux) delivers daily surface solar irradiation in kWh/m²/day for any field on Earth."
   }
 ]

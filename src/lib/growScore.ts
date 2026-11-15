@@ -118,7 +118,7 @@ export function computeGrowScore(
   // 3. Sunlight hours fit
   const sunRes = daysInRangeScore(sunHours, ideal.sunlightHoursMin, ideal.sunlightHoursMax, 4);
   if (avgSunHours === null) {
-    dataGaps.push('Surface solar irradiance (ALLSKY_SFC_SW_DWN) unavailable.');
+    dataGaps.push('Surface daily solar irradiation (ALLSKY_SFC_SW_DWN) unavailable.');
   }
 
   // 4. Relative Humidity balance

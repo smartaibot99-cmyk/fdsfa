@@ -605,7 +605,8 @@ export const MyFarms: React.FC = () => {
   const handleRunDeepAnalysis = (farm: MyFarmRecord) => {
     syncFarmToLocalProfiles(farm);
     setActiveFarmId(farm.id);
-    navigate('/analyze?mode=farm');
+    setDetailTab('reports');
+    navigate(`/my-farms/${encodeURIComponent(farm.id)}`);
   };
 
   const hasActiveFilters =

@@ -188,14 +188,16 @@ app.post('/api/gemini/score', async (req, res) => {
 Rules:
 1. NEVER invent numbers or cite measurements not present in the input JSON.
 2. You may adjust deterministic.dataScore by at most +/- 10 points total, and every adjustment must state a specific data-backed reason.
-3. Keep "summary" under 60 words in plain, calm language.
-4. Provide 3 keyDrivers and 3-5 practical recommendations for the farmer.`
+3. Refer to NASA POWER ALLSKY_SFC_SW_DWN (meanSolarKwhM2) strictly as "mean daily solar irradiation" in kWh/m²/day (already converted from MJ/m²/day); never call daily accumulated energy instantaneous irradiance and never re-divide or re-convert it.
+4. Keep "summary" under 60 words in plain, calm language.
+5. Provide 3 keyDrivers and 3-5 practical recommendations for the farmer.`
       : `You are Anchor, a transparent Earth-observation decision analyst grounded strictly in the provided NASA POWER 20+ year climatology and NASA EONET v3 natural hazard events.
 Rules:
 1. NEVER invent weather numbers, locations, or events not present in the input JSON.
 2. You may adjust deterministic.dataScore by at most +/- 10 points total (for interactions like combined heat+humidity, extreme nearby hazard compounding, or activity sensitivity), and every adjustment must cite a specific metric from the input.
-3. Keep "summary" under 60 words in plain language answering how suitable the place and date are and why.
-4. Provide top 3 keyDrivers and 3-5 actionable recommendations.`;
+3. Refer to NASA POWER ALLSKY_SFC_SW_DWN (meanSolarKwhM2) strictly as "mean daily solar irradiation" in kWh/m²/day (already converted from MJ/m²/day); never call daily accumulated energy instantaneous irradiance and never re-divide or re-convert it.
+4. Keep "summary" under 60 words in plain language answering how suitable the place and date are and why.
+5. Provide top 3 keyDrivers and 3-5 actionable recommendations.`;
 
   const promptText = `Evaluate this NASA Earth observation payload and Stage 1 deterministic sub-scores:\n${JSON.stringify(body)}`;
 
@@ -405,9 +407,10 @@ STRICT SCIENTIFIC INTEGRITY RULES:
 1. You are ONLY explaining the pre-computed deterministic farm analysis and farmer-provided profile JSON below.
 2. NEVER invent soil measurements, pH numbers, water quantities, crop yields, suitability scores, or scientific thresholds not explicitly present in the input.
 3. NEVER recommend any crop listed in excludedRestrictedCrops.
-4. NEVER contradict deterministic findings or claim missing/unknown data is favourable.
-5. Keep language calm, clear, and easy for any farmer to understand.
-6. Provide plainLanguageSummary (max 90 words), questionnaireRecap (max 70 words), sectionHighlights for sections A-H (1-2 concise sentences each), and 3 practical questionsForLocalAdvisor.`;
+4. NEVER contradict deterministic findings or claim missing/unknown/flagged data is favourable.
+5. Refer to NASA POWER ALLSKY_SFC_SW_DWN values strictly as "mean daily solar irradiation" in kWh/m²/day (already converted from MJ/m²/day). Never describe daily accumulated energy as instantaneous irradiance, and never alter or re-convert the supplied solar number.
+6. Keep language calm, clear, and easy for any farmer to understand.
+7. Provide plainLanguageSummary (max 90 words), questionnaireRecap (max 70 words), sectionHighlights for sections A-H (1-2 concise sentences each), and 3 practical questionsForLocalAdvisor.`;
 
   const promptText = `Explain this saved farmer profile and deterministic farm analysis without changing any deterministic facts:\n${JSON.stringify(body)}`;
 
@@ -494,8 +497,9 @@ STRICT GROUNDING RULES:
 1. Answer ONLY from the farmer's saved profile, deterministic Farm Analysis sections (A-H), and NASA POWER/EONET context provided below.
 2. Distinguish clearly between farmer-reported inputs, NASA regional data, and general agricultural guidance.
 3. NEVER invent soil measurements, nutrient levels, crop yields, irrigation quantities, or recommend any restricted crop.
-4. If information is missing or untested in the context, state clearly what is missing and suggest verifying via testing rather than guessing.
-5. Keep answers clear, farmer-friendly, and under 130 words.
+4. Refer to NASA POWER ALLSKY_SFC_SW_DWN strictly as "mean daily solar irradiation" in kWh/m²/day (never instantaneous irradiance, and never re-convert or alter the provided numbers). If solar irradiation is marked unavailable or flagged as implausible, state that honestly.
+5. If information is missing or untested in the context, state clearly what is missing and suggest verifying via testing rather than guessing.
+6. Keep answers clear, farmer-friendly, and under 130 words.
 
 VERIFIED FARM CONTEXT:
 ${JSON.stringify(context ?? {})}`
@@ -504,8 +508,9 @@ ${JSON.stringify(context ?? {})}`
 STRICT GROUNDING RULES:
 1. Answer ONLY from the provided curated crop biology and NASA POWER 30-day data context below.
 2. Cite which dataset or source each claim comes from (e.g., "NASA POWER (T2M)", "Curated Crop Profile").
-3. If the user asks about something not covered by the context (e.g., local market prices, unlisted chemicals, or missing telemetry), say "I don't have data for that" instead of guessing.
-4. Keep answers concise (under 110 words).
+3. Refer to NASA POWER ALLSKY_SFC_SW_DWN (meanSolarKwhM2) strictly as "mean daily solar irradiation" in kWh/m²/day (never instantaneous irradiance, and never re-convert the number).
+4. If the user asks about something not covered by the context (e.g., local market prices, unlisted chemicals, or missing telemetry), say "I don't have data for that" instead of guessing.
+5. Keep answers concise (under 110 words).
 
 VERIFIED CONTEXT:
 ${JSON.stringify(context ?? {})}`
@@ -513,8 +518,9 @@ ${JSON.stringify(context ?? {})}`
 STRICT GROUNDING RULES:
 1. Answer ONLY from the provided NASA POWER climatology, NASA EONET natural hazard events, and Anchor Score breakdown below.
 2. Cite which NASA dataset each numeric claim comes from (e.g., "NASA POWER (PRECTOTCORR)", "NASA EONET v3").
-3. If asked about data outside the provided context (e.g. hourly forecasts, local venue rules, unmeasured pollutants), explicitly say "I don't have data for that" instead of guessing.
-4. Keep answers clear, direct, and under 120 words.
+3. Refer to NASA POWER ALLSKY_SFC_SW_DWN (meanSolarKwhM2) strictly as "mean daily solar irradiation" in kWh/m²/day (never instantaneous irradiance, and never re-convert the number).
+4. If asked about data outside the provided context (e.g. hourly forecasts, local venue rules, unmeasured pollutants), explicitly say "I don't have data for that" instead of guessing.
+5. Keep answers clear, direct, and under 120 words.
 
 VERIFIED ANALYSIS CONTEXT:
 ${JSON.stringify(context ?? {})}`;

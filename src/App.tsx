@@ -9,8 +9,6 @@ import { GrowthRevealTransition } from './components/plantmode/GrowthRevealTrans
 import { ThemeMorphOverlay } from './components/home/ThemeMorphOverlay';
 import { loadSavedTheme, saveTheme } from './lib/storage';
 import { Landing } from './pages/Landing';
-import { Analyze } from './pages/Analyze';
-import { Compare } from './pages/Compare';
 import { DataSources } from './pages/DataSources';
 import { About } from './pages/About';
 import { Maps } from './pages/Maps';
@@ -105,11 +103,9 @@ const AppShell: React.FC = () => {
       <main className="flex-1 flex flex-col">
         <Routes>
           <Route path="/" element={<Landing theme={theme} onToggleTheme={toggleTheme} />} />
-          <Route path="/analyze" element={<Analyze />} />
           <Route path="/my-farms" element={<MyFarms />} />
           <Route path="/my-farms/:farmId" element={<MyFarms />} />
           <Route path="/maps" element={<Maps />} />
-          <Route path="/compare" element={<Compare />} />
           <Route path="/data" element={<DataSources />} />
           <Route path="/about" element={<About />} />
           <Route path="*" element={<Navigate to="/" replace />} />

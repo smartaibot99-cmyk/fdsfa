@@ -197,7 +197,7 @@ export const Landing: React.FC<LandingProps> = ({ theme }) => {
     setRefreshSpinning(false);
   };
 
-  const handleOpenWorkspace = (path = '/analyze?mode=farm') => {
+  const handleOpenWorkspace = (path = '/my-farms') => {
     setActiveFarmId(currentFarm.id);
     navigate(path);
   };
@@ -251,7 +251,7 @@ export const Landing: React.FC<LandingProps> = ({ theme }) => {
             className="absolute inset-0 transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]"
             style={{
               background: isLight
-                ? 'linear-gradient(90deg, rgba(225, 244, 255, 0.22) 0%, rgba(220, 242, 255, 0.10) 34%, transparent 66%), linear-gradient(180deg, rgba(255, 255, 255, 0.025) 0%, transparent 50%, rgba(0, 35, 25, 0.12) 100%)'
+                ? 'radial-gradient(ellipse 62% 72% at 22% 42%, rgba(248, 252, 255, 0.74) 0%, rgba(235, 247, 255, 0.46) 48%, transparent 80%), linear-gradient(90deg, rgba(245, 251, 255, 0.80) 0%, rgba(234, 246, 255, 0.56) 30%, rgba(224, 242, 254, 0.16) 54%, transparent 74%), linear-gradient(180deg, rgba(255, 255, 255, 0.06) 0%, transparent 50%, rgba(0, 35, 25, 0.14) 100%)'
                 : 'linear-gradient(90deg, rgba(0, 8, 20, 0.72) 0%, rgba(0, 12, 29, 0.48) 28%, rgba(0, 14, 32, 0.08) 46%, rgba(0, 12, 27, 0.04) 68%, rgba(0, 12, 27, 0.18) 100%), linear-gradient(180deg, rgba(0, 7, 18, 0.56) 0%, rgba(0, 12, 27, 0.12) 26%, rgba(0, 12, 22, 0.02) 50%, rgba(0, 12, 19, 0.18) 70%, rgba(0, 9, 15, 0.56) 100%)',
             }}
           />
@@ -262,7 +262,7 @@ export const Landing: React.FC<LandingProps> = ({ theme }) => {
 
         <DarkHeroSection
           isLight={isLight}
-          onExplorePlatform={() => handleOpenWorkspace('/analyze?mode=farm')}
+          onExplorePlatform={() => handleOpenWorkspace('/my-farms')}
           onScrollToDashboard={scrollToDashboard}
         />
       </div>
@@ -343,8 +343,8 @@ export const Landing: React.FC<LandingProps> = ({ theme }) => {
           onSelectAlert={setActiveAlert}
           onDismissAlert={handleDismissAlert}
           onSelectField={setActiveField}
-          onViewAllFields={() => handleOpenWorkspace('/analyze?mode=farm')}
-          onOpenWorkspace={() => handleOpenWorkspace('/analyze?mode=farm')}
+          onViewAllFields={() => handleOpenWorkspace('/my-farms')}
+          onOpenWorkspace={() => handleOpenWorkspace('/my-farms')}
         />
       </div>
 
@@ -441,11 +441,11 @@ export const Landing: React.FC<LandingProps> = ({ theme }) => {
                 type="button"
                 onClick={() => {
                   setBreakdownOpen(false);
-                  handleOpenWorkspace('/analyze?mode=farm');
+                  handleOpenWorkspace(`/my-farms/${encodeURIComponent(currentFarm.id)}`);
                 }}
                 className="px-4 py-2 rounded-full text-xs font-semibold text-[#04281B] bg-[#20EDA0] hover:brightness-110 cursor-pointer"
               >
-                Open Full Farm Report →
+                Open Farm Workspace →
               </button>
             </div>
           </div>
@@ -540,11 +540,11 @@ export const Landing: React.FC<LandingProps> = ({ theme }) => {
                 type="button"
                 onClick={() => {
                   setActiveAlert(null);
-                  handleOpenWorkspace('/analyze?mode=farm');
+                  handleOpenWorkspace(`/my-farms/${encodeURIComponent(currentFarm.id)}`);
                 }}
                 className="px-4 py-2 rounded-full text-xs font-semibold text-[#04281B] bg-[#20EDA0] hover:brightness-110 cursor-pointer"
               >
-                Run Full Farm Analysis →
+                Open Farm Workspace →
               </button>
             </div>
           </div>
@@ -652,11 +652,11 @@ export const Landing: React.FC<LandingProps> = ({ theme }) => {
                   type="button"
                   onClick={() => {
                     setActiveField(null);
-                    handleOpenWorkspace('/analyze?mode=farm');
+                    handleOpenWorkspace(`/my-farms/${encodeURIComponent(currentFarm.id)}`);
                   }}
                   className="px-4 py-2 rounded-full text-xs font-semibold text-[#04281B] bg-[#20EDA0] hover:brightness-110 cursor-pointer"
                 >
-                  Plan Rotation for {activeField.name} →
+                  View {activeField.name} in My Farms →
                 </button>
               </div>
             </div>

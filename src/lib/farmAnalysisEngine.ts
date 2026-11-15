@@ -108,7 +108,13 @@ function buildClimateSummary(power: PowerClimateResult | null): string | null {
     parts.push(`mean humidity ${Math.round(power.meanHumidityPct)}%`);
   }
   if (power.meanSolarKwhM2 !== null) {
-    parts.push(`solar irradiance ${power.meanSolarKwhM2.toFixed(1)} kWh/m²/day`);
+    const flagSuffix =
+      power.solarValidation?.implausibleDays && power.solarValidation.implausibleDays > 0
+        ? ` (${power.solarValidation.implausibleDays} implausible daily solar reading(s) excluded)`
+        : '';
+    parts.push(`mean daily solar irradiation ${power.meanSolarKwhM2.toFixed(2)} kWh/m²/day${flagSuffix}`);
+  } else if (power.solarValidation?.flags?.length) {
+    parts.push(`mean daily solar irradiation unavailable (${power.solarValidation.flags[0]})`);
   }
   return parts.length > 0
     ? `NASA POWER (${win.yearsLabel}; 7-day calendar window ${win.windowLabel}, ${win.sampleCount} daily samples): ${parts.join(', ')}.`
@@ -759,7 +765,13 @@ export function generateDeterministicFarmAnalysis(
       title: `Seasonal cadence (${selectedSeasons.join(', ') || 'Seasons unspecified'})`,
       detail: `Planning horizon: ${profile.planning.horizon || 'Not specified'}; Annual cycles: ${profile.planning.annualCycles || 'Not specified'}. ${
         power && windowInfo
-          ? `Available NASA POWER snapshot covers ${windowInfo.yearsLabel} strictly for the 7-day calendar window ${windowInfo.windowLabel} (${windowInfo.sampleCount} daily samples): ${resolvedMean ? `${resolvedMean.label}, ` : ''}mean high ${power.meanMaxC?.toFixed(1) ?? '?'} °C, mean low ${power.meanMinC?.toFixed(1) ?? '?'} °C, average rainfall ${power.meanPrecipMm?.toFixed(2) ?? '?'} mm/day. Limitation: a single 7-day reference window does not represent full-season or winter-long conditions and cannot verify ${selectedSeasons.length > 0 ? selectedSeasons.join('/') : 'seasonal'} suitability on its own.`
+          ? `Available NASA POWER snapshot covers ${windowInfo.yearsLabel} strictly for the 7-day calendar window ${windowInfo.windowLabel} (${windowInfo.sampleCount} daily samples): ${resolvedMean ? `${resolvedMean.label}, ` : ''}mean high ${power.meanMaxC?.toFixed(1) ?? '?'} °C, mean low ${power.meanMinC?.toFixed(1) ?? '?'} °C, average rainfall ${power.meanPrecipMm?.toFixed(2) ?? '?'} mm/day${
+              power.meanSolarKwhM2 !== null
+                ? `, mean daily solar irradiation ${power.meanSolarKwhM2.toFixed(2)} kWh/m²/day`
+                : power.solarValidation?.flags?.length
+                  ? ', mean daily solar irradiation unavailable (flagged/excluded)'
+                  : ''
+            }. Limitation: a single 7-day reference window does not represent full-season or winter-long conditions and cannot verify ${selectedSeasons.length > 0 ? selectedSeasons.join('/') : 'seasonal'} suitability on its own.`
           : 'Add map coordinates to retrieve NASA POWER historical climate data; note that the default lookup uses a 7-day target calendar window and full-season climate checks are still needed.'
       } ${
         eonet && eonet.nearbyEvents.length > 0

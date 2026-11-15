@@ -34,6 +34,18 @@ export interface PlaceSelection {
   country?: string;
 }
 
+export type SolarValidationStatus = 'valid' | 'missing' | 'invalid' | 'implausible';
+
+export interface PowerSolarValidationSummary {
+  sourceUnit: string | null;
+  conversionFactor: number;
+  validDays: number;
+  zeroDays: number;
+  rejectedDays: number;
+  implausibleDays: number;
+  flags: string[];
+}
+
 export interface PowerDailyPoint {
   date: string; // YYYY-MM-DD
   year: number;
@@ -45,6 +57,8 @@ export interface PowerDailyPoint {
   windMs: number | null;
   humidityPct: number | null;
   solarKwhM2: number | null;
+  solarStatus?: SolarValidationStatus;
+  solarValidationNote?: string;
 }
 
 export interface PowerYearlySummary {
@@ -79,6 +93,8 @@ export interface PowerClimateResult {
   meanWindMs: number | null;
   meanHumidityPct: number | null;
   meanSolarKwhM2: number | null;
+  solarUnit?: 'kWh/m²/day';
+  solarValidation?: PowerSolarValidationSummary;
 }
 
 export interface EonetEvent {

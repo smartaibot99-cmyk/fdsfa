@@ -15,7 +15,7 @@ export function getStage1LocationOverview(profile: FarmProfile): ContextualOverv
   if (hasCoords) {
     return {
       title: 'Regional climate lookup ready',
-      body: `Coordinates (${profile.location.lat!.toFixed(3)}°, ${profile.location.lon!.toFixed(3)}°) allow Anchor to match your farm with 20+ years of NASA POWER historical temperature, rainfall, humidity, and solar irradiance data plus nearby NASA EONET hazard alerts. Regional satellite grid cells cover broad areas and do not replace on-farm microclimate readings.`,
+      body: `Coordinates (${profile.location.lat!.toFixed(3)}°, ${profile.location.lon!.toFixed(3)}°) allow Anchor to match your farm with 20+ years of NASA POWER historical temperature, rainfall, humidity, and solar irradiation data plus nearby NASA EONET hazard alerts. Regional satellite grid cells cover broad areas and do not replace on-farm microclimate readings.`,
       provenanceNote: 'Farmer-provided location · Enables NASA regional context',
     };
   }

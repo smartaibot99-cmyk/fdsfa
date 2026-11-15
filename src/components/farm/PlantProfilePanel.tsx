@@ -157,14 +157,7 @@ export const PlantProfilePanel: React.FC<PlantProfilePanelProps> = ({
   }, [crop.id]);
 
   const handleAnalyzeMyFarm = () => {
-    const sp = new URLSearchParams({
-      name: `${crop.regionName} (${crop.name})`,
-      display: `${crop.regionName}, ${crop.country}`,
-      lat: crop.lat.toFixed(4),
-      lon: crop.lon.toFixed(4),
-      activity: 'farming',
-    });
-    navigate(`/analyze?${sp.toString()}`);
+    navigate('/my-farms');
   };
 
   const tabs: Array<{ id: ProfileTab; label: string }> = [

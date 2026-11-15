@@ -135,13 +135,11 @@ export const FarmLandscape: React.FC = () => {
 
   const handleCheckField = async (e?: React.FormEvent) => {
     e?.preventDefault();
-    let target = selectedPlace;
     if (searchQuery.trim().length >= 2 && searchQuery.trim() !== selectedPlace.name) {
       setSearching(true);
       try {
         const res = await searchPlaces(searchQuery);
         if (res.length > 0) {
-          target = res[0];
           setSelectedPlace(res[0]);
         }
       } catch {
@@ -150,14 +148,7 @@ export const FarmLandscape: React.FC = () => {
         setSearching(false);
       }
     }
-    const sp = new URLSearchParams({
-      name: target.name,
-      display: target.displayName,
-      lat: target.lat.toFixed(4),
-      lon: target.lon.toFixed(4),
-      activity: 'farming',
-    });
-    navigate(`/analyze?${sp.toString()}`);
+    navigate('/my-farms');
   };
 
   const triggerShowAllPlants = () => {

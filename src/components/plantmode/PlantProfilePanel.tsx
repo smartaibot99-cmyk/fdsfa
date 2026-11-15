@@ -196,14 +196,7 @@ export const PlantProfilePanel: React.FC<PlantProfilePanelProps> = ({
   const humSeries = power30d?.windowDays.map((d) => d.humidityPct) ?? [];
 
   const handleCheckField = () => {
-    const sp = new URLSearchParams({
-      name: location.name,
-      display: location.displayName,
-      lat: location.lat.toFixed(4),
-      lon: location.lon.toFixed(4),
-      activity: 'farming',
-    });
-    navigate(`/analyze?${sp.toString()}`);
+    navigate('/my-farms');
   };
 
   return (
